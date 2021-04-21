@@ -15,12 +15,12 @@ namespace Sentral.API.Test
         [TestMethod]
         public void TestMethod1()
         {
-            EnrolmentAPI enrolments = new EnrolmentAPI(
+            SentralAPI sapi = new SentralAPI(
                 settings.BaseUrl,
                 settings.ApiKey,
                 settings.ApiTenant);
         
-            var x = enrolments.GetPerson();
+            var x = sapi.Enrolments.GetPerson();
         }
     }
 }

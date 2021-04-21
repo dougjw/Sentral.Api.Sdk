@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Model\Common\APIDataPage.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="JsonApiSerializer" Version="1.7.4" />
   </ItemGroup>
 

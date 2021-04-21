@@ -7,15 +7,12 @@ using JsonApiSerializer;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.Model.Common;
 
-namespace Sentral.API.Client
+namespace Sentral.API.Client.ActionNamespace
 {
     public class EnrolmentAPI : AbstractAPI
     {
-        private readonly APIHeader _header;
-        private readonly string _baseUrl;
-        private const int MaxPageSize = 200;
 
-        public EnrolmentAPI(string baseUrl, string apiKey, string tenantCode) : 
+        internal EnrolmentAPI(string baseUrl, string apiKey, string tenantCode) : 
                 base (baseUrl, apiKey, tenantCode) { }
 
         public Person GetPerson(int id)

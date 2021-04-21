@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using JsonApiSerializer;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.Model.Common;
+using JsonApiSerializer.JsonApi;
 
 namespace Sentral.API.DataAccess
 {
@@ -14,6 +15,7 @@ namespace Sentral.API.DataAccess
         private readonly APIHeader _header;
         private readonly string _baseUrl;
         private const int MaxPageSize = 200;
+        private const string NextLinkKey = "next";
 
         public AbstractAPI(string baseUrl, string apiKey, string tenantCode) {
             _baseUrl = baseUrl;
@@ -33,13 +35,21 @@ namespace Sentral.API.DataAccess
             string separtor = endpoint.Contains("?") ? "&" : "?";
             string next = string.Format("{0}{1}limit={2}", endpoint, separtor, pageSize);
 
+            // Loop through and get all data pages.
             do
             {
-                var dataPage = InvokeRestMethod<APIDataPage<T>>(next);
+                var dataPage = InvokeRestMethod<DocumentRoot<List<T>>>(next);
                 data.AddRange(dataPage.Data);
-                // get first page only until object binding works correctly
-                next = null;
-                //next = dataPage.Links.Next;
+                                
+                if (dataPage.Links.ContainsKey(NextLinkKey))
+                {
+                    next = dataPage.Links[NextLinkKey].Href;
+                }
+                else
+                {
+                    next = null;
+                }
+                  
                 
             }
             while (next != null);
