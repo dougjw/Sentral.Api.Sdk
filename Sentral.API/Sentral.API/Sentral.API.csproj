@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataAccess\AbstractAPI.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonApiSerializer" Version="1.7.4" />
+  </ItemGroup>
+
+</Project>
