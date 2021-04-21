@@ -20,7 +20,7 @@ namespace Sentral.API.Test
                 settings.ApiKey,
                 settings.ApiTenant);
         
-            var x = enrolments.GetPerson(1);
+            var x = enrolments.GetPerson();
         }
     }
 }
