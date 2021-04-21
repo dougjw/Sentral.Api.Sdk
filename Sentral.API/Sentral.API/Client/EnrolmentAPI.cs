@@ -5,6 +5,7 @@ using Sentral.API.DataAccess;
 using Newtonsoft.Json;
 using JsonApiSerializer;
 using Sentral.API.Model.Enrolments;
+using Sentral.API.Model.Common;
 
 namespace Sentral.API.Client
 {
@@ -20,20 +21,38 @@ namespace Sentral.API.Client
 
         public Person GetPerson(int id)
         {
-            return (Person)InvokeRestMethod<Person>(string.Format("/v1/enrolments/person/{0}",id));
+            return InvokeRestMethod<Person>(string.Format("/v1/enrolments/person/{0}",id));
         }
 
-        private object InvokeRestMethod<T>(string endpoint)
+
+
+        //private T GetAllData<T>(string endpoint)
+        //{
+        //    var data = new List<T>();
+        //    var next = endpoint;
+
+        //    do
+        //    {
+        //        var dataPage = InvokeRestMethod<APIDataPage<List<T>>>(endpoint);
+        //        //dataPage.Data.CopyTo(data);
+        //    }
+        //    while (next != null)
+
+            
+        //    return null;
+        //}
+
+        private T InvokeRestMethod<T>(string endpoint)
         {
             return InvokeRestMethod<T>(endpoint, APIMethod.GET, "");
         }
 
-        private object InvokeRestMethod<T>(string endpoint, APIMethod method)
+        private T InvokeRestMethod<T>(string endpoint, APIMethod method)
         {
             return InvokeRestMethod<T>(endpoint, method, "");
         }
 
-        private object InvokeRestMethod<T>(string endpoint, APIMethod method, string payload)
+        private T InvokeRestMethod<T>(string endpoint, APIMethod method, string payload)
         {
             var client = new SentralRestClient(GetUri(endpoint), _header, method, payload);
             var response = client.Invoke();
