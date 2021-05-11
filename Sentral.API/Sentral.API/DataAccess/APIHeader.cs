@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 
 namespace Sentral.API.DataAccess
 {
-    public class APIHeader
+    public class ApiHeader
     {
-        public APIHeader(string key, string tenant)
+        public ApiHeader(string key, string tenant)
         {
             Key = key;
             Tenant = tenant;

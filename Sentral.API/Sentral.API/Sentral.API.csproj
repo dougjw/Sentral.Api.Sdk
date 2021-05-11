@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="Model\Common\APIDataPage.cs" />
+    <Compile Remove="Model\Common\APILinks.cs" />
   </ItemGroup>
 
   <ItemGroup>

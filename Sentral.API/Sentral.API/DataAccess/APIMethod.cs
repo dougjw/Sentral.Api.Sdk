@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sentral.API.DataAccess
 {
-    public enum APIMethod
+    public enum ApiMethod
     {
         GET,
         POST,

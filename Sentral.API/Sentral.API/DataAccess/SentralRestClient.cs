@@ -1,9 +1,11 @@
 ﻿
 using Sentral.API.DataAccess.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace Sentral.API.DataAccess
 {
@@ -11,24 +13,25 @@ namespace Sentral.API.DataAccess
     internal class SentralRestClient
     {
 
-        private APIHeader headers = null;
+        private readonly ApiHeader headers = null;
 
         // The only supported MIME Type in Sentral is application/json
-        internal const string ContentType = "application/json";
+        internal const string ContentType = "application/vnd.api+json";
         internal string Uri { get; set; }
-        internal APIMethod Method { get; set; }
+        internal ApiMethod Method { get; set; }
         internal string PostData { get; set; }
+        private const int MAX_TRIES = 3;
 
-        internal SentralRestClient(string uri, APIHeader header)
+        internal SentralRestClient(string uri, ApiHeader header)
         {
             Uri = uri;
-            Method = APIMethod.GET;
+            Method = ApiMethod.GET;
             PostData = "";
             headers = header;
         }
 
 
-        internal SentralRestClient(string uri, APIHeader header, APIMethod method)
+        internal SentralRestClient(string uri, ApiHeader header, ApiMethod method)
         {
             Uri = uri;
             Method = method;
@@ -36,7 +39,7 @@ namespace Sentral.API.DataAccess
             headers = header;
         }
 
-        internal SentralRestClient(string uri, APIHeader header, APIMethod method, string postData)
+        internal SentralRestClient(string uri, ApiHeader header, ApiMethod method, string postData)
         {
             Uri = uri;
             Method = method;
@@ -46,18 +49,28 @@ namespace Sentral.API.DataAccess
 
         internal string Invoke()
         {
+            return Invoke(1);
+        }
+
+        private string Invoke(int retryNumber)
+        {
             try
             {
                 var request = (HttpWebRequest)WebRequest.Create(Uri);
 
                 request.Headers.Add("X-API-KEY", headers.Key);
                 request.Headers.Add("X-API-TENANT", headers.Tenant);
-                
+
                 request.Method = Method.ToString();
                 request.ContentLength = 0;
                 request.ContentType = ContentType;
 
-                if (!string.IsNullOrEmpty(PostData) && Method == APIMethod.POST)
+                if (
+                        !string.IsNullOrEmpty(PostData) && 
+                        (
+                            Method == ApiMethod.POST || Method == ApiMethod.PATCH
+                        )
+                )
                 {
                     var bytes = Encoding.UTF8.GetBytes(PostData);
                     request.ContentLength = bytes.Length;
@@ -92,14 +105,25 @@ namespace Sentral.API.DataAccess
             }
             catch (WebException webex)
             {
-                throw GetRestClientException(null, webex);
+                if (retryNumber > MAX_TRIES)
+                {
+                    throw GetRestClientException(null, webex);
+                }
 
+                PauseExecution(retryNumber);
+                return Invoke(retryNumber + 1);
             }
+        }
+
+        private void PauseExecution(int cycleNumber)
+        {
+            int exponentialBackoff =  cycleNumber ^ cycleNumber * 1000;
+            Thread.Sleep(exponentialBackoff);
         }
 
         private RestClientException GetRestClientException(HttpWebResponse res, WebException webex)
         {
-            string message = "";
+            string message;
 
             if (res == null && webex != null)
                 res = (HttpWebResponse)webex.Response;

@@ -5,12 +5,14 @@ using Sentral.API.Client.ActionNamespace;
 
 namespace Sentral.API.Client
 {
-    public class SentralAPI
+    public class SentralApi
     {
-        public EnrolmentAPI Enrolments { get; }
-        public SentralAPI (string baseUrl, string apiKey, string tenantCode)
+        public EnrolmentApi Enrolments { get; }
+        public CoreApi Core { get; }
+        public SentralApi (string baseUrl, string apiKey, string tenantCode)
         {
-            Enrolments = new EnrolmentAPI(baseUrl, apiKey, tenantCode);
+            Enrolments = new EnrolmentApi(baseUrl, apiKey, tenantCode);
+            Core = new CoreApi(baseUrl, apiKey, tenantCode);
         }
 
     }

@@ -1,55 +1,93 @@
 ﻿using System;
+using System.Collections.Generic;
 using JsonApiSerializer.JsonApi;
 using Newtonsoft.Json;
 using Sentral.API.Model.Common;
+using Sentral.API.Model.Enrolments.Update;
 
 namespace Sentral.API.Model.Enrolments
 {
-    public class Person : PersonUpdate
+    public class Person : IToUpdatable<UpdatePerson>
     {
+        public int ID { get; set; }
 
-        [JsonProperty(propertyName: "externalId")]
+        public string ContactCode { get; set; }
+
+        public string Title { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string MiddleNames { get; set; }
+        public string LastName { get; set; }
+
+        public string LegalLastName { get; set; }
+
+        public string PreferredName { get; set; }
+
+        public string GenderCode { get; set; }
+
+        [JsonProperty(propertyName: "crn")]
+        public string CRN { get; set; }
+
+        public string LanguageSpokenAtHomeCode { get; set; }
+
         public string ExternalId { get; set; }
 
-        [JsonProperty(propertyName: "refId")]
         public string RefID { get; set; }
         
-        [JsonProperty(propertyName: "email")]
         public string Email { get; set; }
 
-        [JsonProperty(propertyName: "gender")]
         public string Gender { get; set; }
 
-
-        [JsonProperty(propertyName: "dateOfBirth")]
         public DateTime? DateOfBirth { get; set; }
 
-
-        [JsonProperty(propertyName: "languageSpokenAtHome")]
         public string LanguageSpokenAtHome { get; set; }
    
-
-        [JsonProperty(propertyName: "CountryOfCitizenship")]
         public string CountryOfCitizenship { get; set; }
 
-        [JsonProperty(propertyName: "religion")]
         public string Religion { get; set; }
 
-        [JsonProperty(propertyName: "residentialStatus")]
         public string ResidentialStatus { get; set; }
 
-        [JsonProperty(propertyName: "isDeceased")]
         public bool IsDeceased { get; set; }
 
-        [JsonProperty(propertyName: "createdAt")]
         public SentralDateTime CreatedAt { get; set; }
 
-        [JsonProperty(propertyName: "updatedAt")]
         public SentralDateTime UpdatedAt { get; set; }
 
-        [JsonProperty(propertyName: "isActive")]
         public bool IsActive { get; set; }
 
-        public Relationship<PersonEmail>[] Emails { get; set; }
+        /*
+         * Related Data
+         */ 
+
+        [JsonProperty(propertyName: "emails")]
+        public List<PersonEmail> Emails { get; set; }
+
+        [JsonProperty(propertyName: "phoneNumbers")]
+        public List<PersonPhone> PhoneNumbers { get; set; }
+
+        [JsonProperty(propertyName: "primaryHousehold")]
+        public Household PrimaryHousehold { get; set; }
+
+        [JsonProperty(propertyName: "otherHouseholds")]
+        public List<Household> OtherHouseholds { get; set; }
+
+        public UpdatePerson ToUpdatable()
+        {
+            return new UpdatePerson(ID)
+            {
+                ContactCode = ContactCode,
+                Title = Title,
+                FirstName = FirstName,
+                MiddleNames = MiddleNames,
+                LastName = LastName,
+                LegalLastName = LegalLastName,
+                PreferredName = PreferredName,
+                GenderCode = GenderCode,
+                CRN = CRN,
+                LanguageSpokenAtHomeCode = LanguageSpokenAtHomeCode,
+            };
+        }
     }
 }

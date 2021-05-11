@@ -8,7 +8,7 @@ namespace Sentral.API.Test
 {
     public class TestSettings
     {
-        private const string TestSettingsFile = "./Test.config";
+        private const string TestSettingsFile = "./TestConfig.json";
 
         public string BaseUrl { get; set; }
         public string ApiKey { get; set; }
