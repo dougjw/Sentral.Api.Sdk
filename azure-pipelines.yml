@@ -38,8 +38,8 @@ steps:
     command: 'pack'
     packagesToPack: '**\*.csproj;!**\*.Test.csproj'
     versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
+    majorVersion: '0'
+    minorVersion: '1'
     patchVersion: '0'
 
 - task: NuGetCommand@2
