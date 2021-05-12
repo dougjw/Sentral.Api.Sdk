@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageProjectUrl>https://github.com/dougjw/Sentral.Api.Sdk</PackageProjectUrl>
+    <Version>0.1.0</Version>
+    <Description>Provides a DotNet SDK into the Sentral Enterprise API</Description>
   </PropertyGroup>
 
   <ItemGroup>

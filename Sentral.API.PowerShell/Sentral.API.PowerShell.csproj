@@ -4,6 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Sentral.API.PowerShell</AssemblyName>
     <SignAssembly>false</SignAssembly>
+    <Version>0.1.0</Version>
+    <PackageProjectUrl>https://github.com/dougjw/Sentral.Api.Sdk</PackageProjectUrl>
+    <Description>Provides PowerShell Cmdlets into the Sentral Enterprise API</Description>
   </PropertyGroup>
 
   <ItemGroup>
