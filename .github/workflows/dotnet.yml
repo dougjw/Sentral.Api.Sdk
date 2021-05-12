@@ -39,7 +39,7 @@ jobs:
         VERSION_FILE_PATH: PackageVersion
         VERSION_REGEX: ^(.*)$    
     - name: "Github PreRelease"
-    - uses: "marvinpinto/action-automatic-releases@latest"
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: true
