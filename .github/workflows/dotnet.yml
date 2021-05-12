@@ -52,7 +52,7 @@ jobs:
         
     - name: Package dlls from build
       run: |
-        find . | egrep "\.(dll)$" | zip -@ Sentral.API.Artefacts.zip
+        find ./Sentral.API.PowerShell/bin/Release/ | egrep "\Sentral.*(dll|json|pdb|psd1)$" | zip -@ Sentral.API.zip
         
     - name: Upload Release Asset 
       id: upload-release-asset
