@@ -12,7 +12,7 @@ namespace Sentral.API.Model.Enrolments.Update
         private const string _type = "enrolment";
 
         private bool? _isBoarding;
-        private bool _isBoardingSpecified;
+        private bool _isBoardingIncludeInSerialize;
 
 
         public UpdateEnrolment(int id) :base(id, _type)
@@ -29,13 +29,13 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _isBoarding = value;
-                _isBoardingSpecified = true;
+                _isBoardingIncludeInSerialize = true;
             } }
 
 
         public bool ShouldSerializeIsBoarding()
         {
-            return _isBoardingSpecified;
+            return _isBoardingIncludeInSerialize;
         }
     }
 }

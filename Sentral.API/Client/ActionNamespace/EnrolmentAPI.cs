@@ -778,6 +778,35 @@ namespace Sentral.API.Client.ActionNamespace
             return GetAllData<PersonEmail>("/v1/enrolments/person-email");
         }
 
+
+
+        public PersonEmail UpdatePersonEmail(UpdatePersonEmail updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<PersonEmail>(
+                    string.Format("/v1/enrolments/person-email/{0}", updateData.ID),
+                    ApiMethod.PATCH,
+                    updateData
+                );
+        }
+
+
+        public PersonEmail CreatePersonEmail(UpdatePersonEmail updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<PersonEmail>(
+                    string.Format("/v1/enrolments/person-email", updateData.ID),
+                    ApiMethod.POST,
+                    updateData
+                );
+        }
+
+        public void DeletePersonEmail(int id)
+        {
+            GetApiResponse(string.Format("/v1/enrolments/person-email/{0}", id), ApiMethod.DELETE);
+        }
+
+
         public List<PersonField> GetPersonField(int[] ids = null, int[] schoolIds = null)
         {
             var p = new Dictionary<string, object>

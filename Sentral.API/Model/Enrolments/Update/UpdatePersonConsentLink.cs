@@ -19,10 +19,10 @@ namespace Sentral.API.Model.Enrolments.Update
         private Relationship<Consent> _consent;
 
 
-        private bool _consentGivenSpecified;
-        private bool _consentedBySpecified;
-        private bool _personSpecified;
-        private bool _consentSpecified;
+        private bool _consentGivenIncludeInSerialize;
+        private bool _consentedByIncludeInSerialize;
+        private bool _personIncludeInSerialize;
+        private bool _consentIncludeInSerialize;
 
 
         // Patch Model - With ID
@@ -47,14 +47,14 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _consentGiven = value;
-                _consentGivenSpecified = true;
+                _consentGivenIncludeInSerialize = true;
             } 
         }
 
 
         public bool ShouldSerializeConsentGiven()
         {
-            return _consentGivenSpecified;
+            return _consentGivenIncludeInSerialize;
         }
 
 
@@ -69,14 +69,14 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _consentedBy = value;
-                _consentedBySpecified = true;
+                _consentedByIncludeInSerialize = true;
             }
         }
 
 
         public bool ShouldSerializeConsentedBy()
         {
-            return _consentedBySpecified;
+            return _consentedByIncludeInSerialize;
         }
 
 
@@ -92,13 +92,13 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _person = value;
-                _personSpecified = IsPostModel();
+                _personIncludeInSerialize = IsPostModel();
             }
         }
 
         public bool ShouldSerializePerson()
         {
-            return _personSpecified;
+            return _personIncludeInSerialize;
         }
 
 
@@ -115,14 +115,14 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _consent = value;
-                _consentSpecified = IsPostModel();
+                _consentIncludeInSerialize = IsPostModel();
             }
         }
 
 
         public bool ShouldSerializeConsent()
         {
-            return _consentSpecified;
+            return _consentIncludeInSerialize;
         }
     }
 }

@@ -15,8 +15,8 @@ namespace Sentral.API.Model.Enrolments.Update
         private string _details;
 
 
-        private bool _consentGivenSpecified;
-        private bool _detailsSpecified;
+        private bool _consentGivenIncludeInSerialize;
+        private bool _detailsIncludeInSerialize;
 
         // Patch model
         public UpdateConsent(int id) :base(id, _type)
@@ -38,13 +38,13 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _consentGiven = value;
-                _consentGivenSpecified = true;
+                _consentGivenIncludeInSerialize = true;
             } }
 
 
         public bool ShouldSerializeConsentGiven()
         {
-            return _consentGivenSpecified;
+            return _consentGivenIncludeInSerialize;
         }
 
 
@@ -59,14 +59,14 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _details = value;
-                _detailsSpecified = true;
+                _detailsIncludeInSerialize = true;
             }
         }
 
 
         public bool ShouldSerializeDetails()
         {
-            return _detailsSpecified;
+            return _detailsIncludeInSerialize;
         }
     }
 }

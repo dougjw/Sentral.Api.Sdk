@@ -111,7 +111,7 @@ namespace Sentral.API.Test
 
             string valueEnrolmentJson = JsonConvert.SerializeObject(personConsent, _settings);
 
-            Assert.AreEqual(valueEnrolmentJson, "{\"data\":{\"id\":\"0\",\"type\":\"personConsentLink\",\"attributes\":{\"consentGiven\":true},\"relationships\":{\"consentedBy\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"person\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"consent\":{\"data\":{\"id\":\"1\",\"type\":\"consent\"}}}}}", "Actual Property value test");
+            Assert.AreEqual(valueEnrolmentJson, "{\"data\":{\"type\":\"personConsentLink\",\"attributes\":{\"consentGiven\":true},\"relationships\":{\"consentedBy\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"person\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"consent\":{\"data\":{\"id\":\"1\",\"type\":\"consent\"}}}}}", "Actual Property value test");
         }
     }
 }

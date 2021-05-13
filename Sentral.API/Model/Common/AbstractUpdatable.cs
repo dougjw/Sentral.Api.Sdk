@@ -38,11 +38,9 @@ namespace Sentral.API.Model.Common
 
         public bool ShouldSerializeID()
         {
-            return IntendedUpdateMethod != ApiMethod.POST;
+            return !IsPostModel();
         }
 
-        [JsonIgnore()]
-        public ApiMethod IntendedUpdateMethod { get;  }
 
         public bool IsPostModel()
         {
