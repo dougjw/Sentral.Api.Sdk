@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -38,22 +38,27 @@ jobs:
         NUGET_KEY: ${{secrets.NUGET}}
         VERSION_FILE_PATH: PackageVersion
         VERSION_REGEX: ^(.*)$    
-
+      
+    - name: Delete Previous Latest Release
+      uses: larryjoelane/delete-release-action@v1.0.24
+      with:
+        release-name: latest
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
+        tag_name: latest
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: true
         
     - name: Package dlls from build
-      run: |
-        find ./Sentral.API.PowerShell/bin/Release/ | egrep "\Sentral.*(dll|json|pdb|psd1)$" | zip -@ Sentral.API.zip
-        
+      run: Get-ChildItem -Recurse |where {$_.Directory.Name -eq "Release" -and $_.Name -like "*.nupkg" } | Compress-Archive -DestinationPath ./Sentral.API.zip
+      shell: powershell
     - name: Upload Release Asset 
       id: upload-release-asset
       uses: actions/upload-release-asset@v1
