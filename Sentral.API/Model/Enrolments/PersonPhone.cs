@@ -1,31 +1,41 @@
 ﻿using Newtonsoft.Json;
+using Sentral.API.Model.Common;
+using Sentral.API.Model.Enrolments.Update;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Sentral.API.Model.Enrolments
 {
-    public class PersonPhone
+    public class PersonPhone :IToUpdatable<UpdatePersonPhone>
     {
         [JsonProperty(propertyName: "id")]
         public int ID { get; set; }
 
-        [JsonProperty(propertyName: "number")]
         public string Number { get; set; }
 
-        [JsonProperty(propertyName: "extension")]
         public string Extension { get; set; }
 
         [JsonProperty(propertyName: "type")]
-        public string Type { get; set; }
+        public string PhoneType { get; set; }
 
         [JsonProperty(propertyName: "typeName")]
         public string TypeName { get; set; }
 
-        [JsonProperty(propertyName: "isListed")]
         public bool IsListed { get; set; }
 
-        [JsonProperty(propertyName: "canContact")]
         public bool CanContact { get; set; }
+
+        public UpdatePersonPhone ToUpdatable()
+        {
+            return new UpdatePersonPhone(ID)
+            {
+                Number = Number,
+                Extension = Extension,
+                PhoneType = PhoneType,
+                IsListed = IsListed,
+                CanContact = CanContact
+            };
+        }
     }
 }

@@ -73,7 +73,7 @@ namespace Sentral.API.Model.Enrolments.Update
         }
 
 
-        [JsonProperty(propertyName: "type", NullValueHandling = NullValueHandling.Include)]
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public Relationship<Person> Owner
         {
             get

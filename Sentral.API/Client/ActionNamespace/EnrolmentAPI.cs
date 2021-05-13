@@ -877,6 +877,34 @@ namespace Sentral.API.Client.ActionNamespace
             return GetAllData<PersonPhone>("/v1/enrolments/person-phone");
         }
 
+
+
+        public PersonPhone UpdatePersonPhone(UpdatePersonPhone updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<PersonPhone>(
+                    string.Format("/v1/enrolments/person-phone/{0}", updateData.ID),
+                    ApiMethod.PATCH,
+                    updateData
+                );
+        }
+
+
+        public PersonPhone CreatePersonPhone(UpdatePersonPhone updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<PersonPhone>(
+                    string.Format("/v1/enrolments/person-phone", updateData.ID),
+                    ApiMethod.POST,
+                    updateData
+                );
+        }
+
+        public void DeletePersonPhone(int id)
+        {
+            GetApiResponse(string.Format("/v1/enrolments/person-phone/{0}", id), ApiMethod.DELETE);
+        }
+
         public List<PrescribedMedication> GetPrescribedMedication()
         {
             return GetAllData<PrescribedMedication>("/v1/enrolments/prescribed-medication");
