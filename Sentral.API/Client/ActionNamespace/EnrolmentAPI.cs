@@ -121,6 +121,31 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<Consent>(string.Format("/v1/enrolments/consent/{0}", id));
         }
 
+        public Consent UpdateConsent(UpdateConsent updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<Consent>(
+                    string.Format("/v1/enrolments/consent/{0}", updateData.ID),
+                    ApiMethod.PATCH,
+                    updateData
+                );
+        }
+
+
+        public Consent CreateConsent(UpdateConsent updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<Consent>(
+                    string.Format("/v1/enrolments/consent", updateData.ID),
+                    ApiMethod.POST,
+                    updateData
+                );
+        }
+
+        public void DeleteConsent(int id)
+        {
+            GetApiResponse(string.Format("/v1/enrolments/consent/{0}", id), ApiMethod.DELETE);
+        }
 
         public List<ConsentLink> GetPersonConsentLink(PersonConsentIncludeOptions include = null,
             int[] ids = null, int[] personIds = null, bool? includeInactive = null)
@@ -148,7 +173,21 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<ConsentLink>(uri);
         }
 
-        // TODO: Add POST/PATCH/DEL Endpoints
+        public ConsentLink UpdatePersonConsentLink(UpdatePersonConsentLink updateData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ConsentLink CreatePersonConsentLink(UpdatePersonConsentLink updateData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeletePersonConsentLink(int id)
+        {
+            var uri = string.Format("/v1/enrolments/person-consent-link/{0}", id);
+            GetApiResponse(uri, ApiMethod.DELETE);
+        }
 
         public List<Disability> GetDisabilityOthers(int[] ids = null, int[] personIds = null)
         {
@@ -584,7 +623,6 @@ namespace Sentral.API.Client.ActionNamespace
         {
             ValidateModelIsNotNullOrZero(updateData);
             string uri = string.Format("/v1/enrolments/person/{0}", updateData.ID);
-
 
             return GetApiResponse<Person>(uri, ApiMethod.PATCH, updateData);
         }

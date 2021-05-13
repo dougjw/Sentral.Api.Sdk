@@ -75,7 +75,7 @@ namespace Sentral.API.Test
 
             var x = SAPI.Enrolments.GetConsent(1);
 
-            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.Type));
+            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.ConsentType));
         }
 
         [TestMethod]

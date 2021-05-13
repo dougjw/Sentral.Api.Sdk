@@ -8,6 +8,8 @@ namespace Sentral.API.Model.Enrolments.Update
     public class UpdatePerson : AbstractUpdatable
     {
 
+        private const string _type = "person";
+
         private string _contactCode;
         private string _title;
         private string _firstName;
@@ -32,21 +34,13 @@ namespace Sentral.API.Model.Enrolments.Update
         private bool _languageSpokenAtHomeCodeSpecified;
 
 
-        private const string _type = "person";
 
-        public UpdatePerson(int id) : base (id)
+        public UpdatePerson(int id) : base (id, _type)
         {
         }
    
-        public string Type
-        {
-            get
-            {
-                return _type;
-            }
 
-        }
-
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string ContactCode { 
             get {
                 return _contactCode;
@@ -61,6 +55,7 @@ namespace Sentral.API.Model.Enrolments.Update
             return _contactCodeSpecified;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string Title
         {
             get
@@ -78,6 +73,7 @@ namespace Sentral.API.Model.Enrolments.Update
             return _titleSpecified;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string FirstName
         {
             get
@@ -95,6 +91,7 @@ namespace Sentral.API.Model.Enrolments.Update
             return _firstNameSpecified;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string MiddleNames
         {
             get
@@ -112,6 +109,9 @@ namespace Sentral.API.Model.Enrolments.Update
         {
             return _middleNamesSpecified;
         }
+
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string LastName
         {
             get
@@ -129,6 +129,8 @@ namespace Sentral.API.Model.Enrolments.Update
             return _lastNameSpecified;
         }
 
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string LegalLastName
         {
             get
@@ -146,6 +148,7 @@ namespace Sentral.API.Model.Enrolments.Update
             return _legalLastNameSpecified;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string PreferredName
         {
             get
@@ -163,6 +166,7 @@ namespace Sentral.API.Model.Enrolments.Update
             return _preferredNameSpecified;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string GenderCode
         {
             get
@@ -180,7 +184,8 @@ namespace Sentral.API.Model.Enrolments.Update
         {
             return _genderCodeSpecified;
         }
-        [JsonProperty(propertyName: "crn")]
+
+        [JsonProperty(propertyName: "crn", NullValueHandling = NullValueHandling.Include)]
         public string CRN
         {
             get
@@ -198,6 +203,7 @@ namespace Sentral.API.Model.Enrolments.Update
             return _crnSpecified;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string LanguageSpokenAtHomeCode
         {
             get

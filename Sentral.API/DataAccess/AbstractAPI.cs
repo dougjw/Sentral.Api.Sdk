@@ -82,6 +82,14 @@ namespace Sentral.API.DataAccess
             return JsonConvert.DeserializeObject<T>(response, _settings);
         }
 
+
+        internal string GetApiResponse(string endpoint, ApiMethod method)
+        {
+            var client = new SentralRestClient(GetUri(endpoint), _header, method, null);
+            var response = client.Invoke();
+            return response;
+        }
+
         private string GetUri(string endpoint)
         {
             if(endpoint.StartsWith(_baseUrl))

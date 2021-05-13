@@ -7,6 +7,8 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.Model.Enrolments.Update;
 using Newtonsoft.Json;
 using JsonApiSerializer;
+using Sentral.API.Model.Enrolments;
+using JsonApiSerializer.JsonApi;
 
 namespace Sentral.API.Test
 {
@@ -71,6 +73,45 @@ namespace Sentral.API.Test
             string valueEnrolmentJson = JsonConvert.SerializeObject(enrolment, _settings);
 
             Assert.AreEqual(valueEnrolmentJson, "{\"data\":{\"id\":\"1\",\"type\":\"enrolment\",\"attributes\":{\"isBoarding\":true}}}", "Actual Property value test");
+        }
+
+        [TestMethod]
+        public void UpdateObjectSerialisationOmmitPostAttributeValueTest()
+        {
+            var personConsent = new UpdatePersonConsentLink(1)
+            {
+                 ConsentGiven = true,
+                 ConsentedBy = new Relationship<Person>(),
+                 Person = new Relationship<Person>(),
+                 Consent = new Relationship<Consent>()
+            };
+
+            personConsent.ConsentedBy.Data = new Person() { ID = 1 };
+            personConsent.Person.Data = new Person() { ID = 1 };
+            personConsent.Consent.Data = new Consent() { ID = 1 };
+
+            string valueEnrolmentJson = JsonConvert.SerializeObject(personConsent, _settings);
+
+            Assert.AreEqual(valueEnrolmentJson, "{\"data\":{\"id\":\"1\",\"type\":\"personConsentLink\",\"attributes\":{\"consentGiven\":true},\"relationships\":{\"consentedBy\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}}}}}", "Actual Property value test");
+        }
+        [TestMethod]
+        public void CreateObjectSerialisationInclPostAttributeValueTest()
+        {
+            var personConsent = new UpdatePersonConsentLink()
+            {
+                ConsentGiven = true,
+                ConsentedBy = new Relationship<Person>(),
+                Person = new Relationship<Person>(),
+                Consent = new Relationship<Consent>()
+            };
+
+            personConsent.ConsentedBy.Data = new Person() { ID = 1 };
+            personConsent.Person.Data = new Person() { ID = 1 };
+            personConsent.Consent.Data = new Consent() { ID = 1 };
+
+            string valueEnrolmentJson = JsonConvert.SerializeObject(personConsent, _settings);
+
+            Assert.AreEqual(valueEnrolmentJson, "{\"data\":{\"id\":\"0\",\"type\":\"personConsentLink\",\"attributes\":{\"consentGiven\":true},\"relationships\":{\"consentedBy\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"person\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"consent\":{\"data\":{\"id\":\"1\",\"type\":\"consent\"}}}}}", "Actual Property value test");
         }
     }
 }
