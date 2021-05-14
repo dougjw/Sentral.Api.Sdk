@@ -479,6 +479,28 @@ namespace Sentral.API.Test
             Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.StudentCode));
         }
 
+
+
+        [TestMethod]
+        public void GetOneStudentsAbsencesTest()
+        {
+            var knownStudentIdWithAbsence = 9613;
+            var x = SAPI.Enrolments.GetStudentAbsences(knownStudentIdWithAbsence);
+
+            Assert.IsTrue(x != null && x.Count >= 1);
+        }
+
+
+        [TestMethod]
+        public void GetOneStudentsRelatedAcademicReportTest()
+        {
+            var knownStudentIdWithReport = 10061;
+            var x = SAPI.Enrolments.GetStudentRelatedAcademicReports(knownStudentIdWithReport,
+                new Model.Reports.Include.StudentAcademicReportIncludeOptions(period: true));
+
+            Assert.IsTrue(x != null && x.Count >= 1);
+        }
+
         [TestMethod]
         public void GetOneStudentDocumentFileTest()
         {

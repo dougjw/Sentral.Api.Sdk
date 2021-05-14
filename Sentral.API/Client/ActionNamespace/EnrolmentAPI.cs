@@ -1094,13 +1094,13 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
         // TODO Finish /student/:id/xxx endpoints
-        // TODO Implement Absnces
-        //public List<Model.Attendance.Absence> GetStudentAbsences(int id)
-        //{
-        //    
-        //    return GetAllData<Model.Attendance.Absence(string.Format("/v1/enrolments/student/{0}/absences", id));
-        //
-        //}
+
+        public List<Model.Attendance.Absence> GetStudentAbsences(int id)
+        {
+
+            return GetAllData <Model.Attendance.Absence>(string.Format("/v1/enrolments/student/{0}/absences", id));
+
+        }
 
         public List<Enrolment> GetStudentEnrolment(int studentId, EnrolmentIncludeOptions include = null)
         {
@@ -1176,6 +1176,22 @@ namespace Sentral.API.Client.ActionNamespace
             var uri = GetEndpointParameters(endpoint, p);
 
             return GetData<Enrolment>(uri);
+        }
+
+
+        public List<Model.Reports.StudentAcademicReport> GetStudentRelatedAcademicReports(int studentId,
+                Model.Reports.Include.StudentAcademicReportIncludeOptions include = null)
+        {
+            var p = new Dictionary<string, object>
+            {
+                ["include"] = include
+            };
+
+            var endpoint = string.Format("/v1/enrolments/student/{0}/academic-reports", studentId);
+            var uri = GetEndpointParameters(endpoint, p);
+
+            return GetAllData<Model.Reports.StudentAcademicReport>(uri);
+
         }
 
         public List<SpecialNeedsProgram> GetStudentSpecialNeedsProgram(int studentId, SpecialNeedsProgramIncludeOptions include = null)
