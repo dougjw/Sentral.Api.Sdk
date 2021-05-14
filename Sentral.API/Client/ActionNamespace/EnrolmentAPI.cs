@@ -1021,7 +1021,15 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<Staff>(uri);
         }
 
-        // TODO Add Patch Staff
+        public Staff UpdateStaff(UpdateStaff updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<Staff>(
+                    string.Format("/v1/enrolments/staff/{0}", updateData.ID),
+                    ApiMethod.PATCH,
+                    updateData
+                );
+        }
 
 
         public List<StaffAbsence> GetStaffAbsences(int id)
