@@ -28,7 +28,7 @@ namespace Sentral.API.Model.Enrolments.Update
 
 
 
-        [JsonProperty(propertyName: "type", NullValueHandling = NullValueHandling.Include)]
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string ConsentGiven {
             get
             {
@@ -39,7 +39,8 @@ namespace Sentral.API.Model.Enrolments.Update
             {
                 _consentGiven = value;
                 _consentGivenIncludeInSerialize = true;
-            } }
+            } 
+        }
 
 
         public bool ShouldSerializeConsentGiven()

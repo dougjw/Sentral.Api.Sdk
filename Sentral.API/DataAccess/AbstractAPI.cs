@@ -82,6 +82,12 @@ namespace Sentral.API.DataAccess
             return JsonConvert.DeserializeObject<T>(response, _settings);
         }
 
+        internal byte[] GetBinaryData(string endpoint)
+        {
+            var client = new SentralRestClient(GetUri(endpoint), _header, ApiMethod.GET, null);
+            return client.InvokeBinary();
+        }
+
 
         internal string GetApiResponse(string endpoint, ApiMethod method)
         {
@@ -111,6 +117,32 @@ namespace Sentral.API.DataAccess
             {
                 throw new RestClientException("Enrolment object null or has ID of zero (0).");
             }
+        }
+
+
+        internal T UpdateData<T>(string endpoint, AbstractUpdatable updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<T>(
+                    string.Format(endpoint + "/{0}", updateData.ID),
+                    ApiMethod.PATCH,
+                    updateData
+                );
+        }
+
+
+        public T CreateData<T>(string endpoint, AbstractUpdatable updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<T>(
+                    endpoint,
+                    ApiMethod.POST,
+                    updateData
+                );
+        }
+        public void DeleteData(string endpoint, int id)
+        {
+            GetApiResponse(string.Format(endpoint + "/{0}", id), ApiMethod.DELETE);
         }
     }
 }

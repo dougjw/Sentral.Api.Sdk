@@ -123,28 +123,18 @@ namespace Sentral.API.Client.ActionNamespace
 
         public Consent UpdateConsent(UpdateConsent updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            return GetApiResponse<Consent>(
-                    string.Format("/v1/enrolments/consent/{0}", updateData.ID),
-                    ApiMethod.PATCH,
-                    updateData
-                );
+            return UpdateData<Consent>("/v1/enrolments/consent", updateData);
         }
 
 
         public Consent CreateConsent(UpdateConsent updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            return GetApiResponse<Consent>(
-                    string.Format("/v1/enrolments/consent", updateData.ID),
-                    ApiMethod.POST,
-                    updateData
-                );
+            return CreateData<Consent>("/v1/enrolments/consent", updateData);
         }
 
         public void DeleteConsent(int id)
         {
-            GetApiResponse(string.Format("/v1/enrolments/consent/{0}", id), ApiMethod.DELETE);
+            DeleteData("/v1/enrolments/consent", id);
         }
 
         public List<ConsentLink> GetPersonConsentLink(PersonConsentIncludeOptions include = null,
@@ -173,20 +163,21 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<ConsentLink>(uri);
         }
 
+
         public ConsentLink UpdatePersonConsentLink(UpdatePersonConsentLink updateData)
         {
-            throw new NotImplementedException();
+            return UpdateData<ConsentLink>("/v1/enrolments/person-consent-link", updateData);
         }
+
 
         public ConsentLink CreatePersonConsentLink(UpdatePersonConsentLink updateData)
         {
-            throw new NotImplementedException();
+            return CreateData<ConsentLink>("/v1/enrolments/person-consent-link", updateData);
         }
 
         public void DeletePersonConsentLink(int id)
         {
-            var uri = string.Format("/v1/enrolments/person-consent-link/{0}", id);
-            GetApiResponse(uri, ApiMethod.DELETE);
+            DeleteData("/v1/enrolments/person-consent-link", id);
         }
 
         public List<Disability> GetDisabilityOthers(int[] ids = null, int[] personIds = null)
@@ -274,9 +265,7 @@ namespace Sentral.API.Client.ActionNamespace
         
         public Enrolment UpdateEnrolment(UpdateEnrolment updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            var uri = string.Format("/v1/enrolments/enrolment/{0}", updateData.ID);
-            return GetApiResponse<Enrolment>(uri, ApiMethod.PATCH, updateData);
+            return UpdateData<Enrolment>("/v1/enrolments/enrolment", updateData);
         }
 
         public List<Class> GetEnrolmentClasses(int enrolmentId)
@@ -617,14 +606,9 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-
-
-        public Person UpdatePerson(UpdatePerson updateData)
+        public Person UpdatePerson (UpdatePerson updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            string uri = string.Format("/v1/enrolments/person/{0}", updateData.ID);
-
-            return GetApiResponse<Person>(uri, ApiMethod.PATCH, updateData);
+            return UpdateData<Person>("/v1/enrolments/person", updateData);
         }
 
 
@@ -782,28 +766,18 @@ namespace Sentral.API.Client.ActionNamespace
 
         public PersonEmail UpdatePersonEmail(UpdatePersonEmail updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            return GetApiResponse<PersonEmail>(
-                    string.Format("/v1/enrolments/person-email/{0}", updateData.ID),
-                    ApiMethod.PATCH,
-                    updateData
-                );
+            return UpdateData<PersonEmail>("/v1/enrolments/person-email", updateData);
         }
 
 
         public PersonEmail CreatePersonEmail(UpdatePersonEmail updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            return GetApiResponse<PersonEmail>(
-                    string.Format("/v1/enrolments/person-email", updateData.ID),
-                    ApiMethod.POST,
-                    updateData
-                );
+            return CreateData<PersonEmail>("/v1/enrolments/person-email", updateData);
         }
 
         public void DeletePersonEmail(int id)
         {
-            GetApiResponse(string.Format("/v1/enrolments/person-email/{0}", id), ApiMethod.DELETE);
+            DeleteData("/v1/enrolments/person-email", id);
         }
 
 
@@ -878,32 +852,21 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-
         public PersonPhone UpdatePersonPhone(UpdatePersonPhone updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            return GetApiResponse<PersonPhone>(
-                    string.Format("/v1/enrolments/person-phone/{0}", updateData.ID),
-                    ApiMethod.PATCH,
-                    updateData
-                );
+            return UpdateData<PersonPhone>("/v1/enrolments/person-phone", updateData);
         }
-
 
         public PersonPhone CreatePersonPhone(UpdatePersonPhone updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            return GetApiResponse<PersonPhone>(
-                    string.Format("/v1/enrolments/person-phone", updateData.ID),
-                    ApiMethod.POST,
-                    updateData
-                );
+            return CreateData<PersonPhone>("/v1/enrolments/person-phone", updateData);
         }
 
         public void DeletePersonPhone(int id)
         {
-            GetApiResponse(string.Format("/v1/enrolments/person-phone/{0}", id), ApiMethod.DELETE);
+            DeleteData("/v1/enrolments/person-phone", id);
         }
+
 
         public List<PrescribedMedication> GetPrescribedMedication()
         {
@@ -1023,12 +986,7 @@ namespace Sentral.API.Client.ActionNamespace
 
         public Staff UpdateStaff(UpdateStaff updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
-            return GetApiResponse<Staff>(
-                    string.Format("/v1/enrolments/staff/{0}", updateData.ID),
-                    ApiMethod.PATCH,
-                    updateData
-                );
+            return UpdateData<Staff>("/v1/enrolments/staff", updateData);
         }
 
 
@@ -1078,7 +1036,22 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<StaffQualification>(string.Format("/v1/enrolments/staff-qualification/{0}", id));
         }
 
-        // TODO: Add POST/PATCH and DEL
+
+        public StaffQualification UpdateQualification(UpdateStaffQualification updateData)
+        {
+            return UpdateData<StaffQualification>("/v1/enrolments/staff-qualification", updateData);
+        }
+
+        public StaffQualification CreateQualification(UpdateStaffQualification updateData)
+        {
+            return CreateData<StaffQualification>("/v1/enrolments/staff-qualification", updateData);
+        }
+
+        public void DeleteQualification(int id)
+        {
+            DeleteData("/v1/enrolments/staff-qualification", id);
+        }
+
 
         public List<Student> GetStudent(StudentIncludeOptions include = null, int[] ids = null,
                 string[] studentCodes = null, string[] examCodes = null, string[] refIds = null,
@@ -1112,8 +1085,14 @@ namespace Sentral.API.Client.ActionNamespace
             var uri = GetEndpointParameters(endpoint, p);
 
             return GetData<Student>(uri);
-
         }
+
+
+        public Student UpdateStudent(UpdateStudent updateData)
+        {
+            return UpdateData<Student>("/v1/enrolments/student", updateData);
+        }
+
         // TODO Finish /student/:id/xxx endpoints
         // TODO Implement Absnces
         //public List<Model.Attendance.Absence> GetStudentAbsences(int id)
@@ -1256,6 +1235,42 @@ namespace Sentral.API.Client.ActionNamespace
 
             return GetData<Student>(uri);
         }
+
+
+        public List<StudentDocument> GetStudentDocument()
+        {
+            return GetAllData<StudentDocument>("/v1/enrolments/student-document");
+        }
+
+        public StudentDocument GetStudentDocument(int id)
+        {
+            var uri = string.Format("/v1/enrolments/student-document/{0}", id);
+
+            return GetData<StudentDocument>(uri);
+        }
+
+        public StudentDocumentFile GetStudentDocumentFile(int id)
+        {
+            var uri = string.Format("/v1/enrolments/student-document/{0}/file", id);
+
+            var docMetaData = GetStudentDocument(id);
+
+            byte[] fileData = GetBinaryData(uri);
+
+            return new StudentDocumentFile()
+            {
+                ID = docMetaData.ID,
+                FileName = docMetaData.FileName,
+                IsConfidential = docMetaData.IsConfidential,
+                FileData = fileData
+            };
+        }
+
+        public void DeleteStudentDocument(int id)
+        {
+            DeleteData("/v1/enrolments/student-document", id);
+        }
+
 
         // TODO Implement Student Document, Document Category
 

@@ -47,6 +47,7 @@ namespace Sentral.API.DataAccess
             headers = header;
         }
 
+
         internal string Invoke()
         {
             return Invoke(1);
@@ -112,6 +113,91 @@ namespace Sentral.API.DataAccess
 
                 PauseExecution(retryNumber);
                 return Invoke(retryNumber + 1);
+            }
+        }
+
+
+        public byte[] InvokeBinary()
+        {
+            return InvokeBinary(1);
+        }
+
+
+        // Deal with code clones later
+        private byte[] InvokeBinary(int retryNumber)
+        {
+            try
+            {
+                byte[] result = null;
+                var request = (HttpWebRequest)WebRequest.Create(Uri);
+
+                request.Headers.Add("X-API-KEY", headers.Key);
+                request.Headers.Add("X-API-TENANT", headers.Tenant);
+
+                request.Method = Method.ToString();
+                request.ContentLength = 0;
+                request.ContentType = ContentType;
+
+                if (
+                        !string.IsNullOrEmpty(PostData) &&
+                        (
+                            Method == ApiMethod.POST || Method == ApiMethod.PATCH
+                        )
+                )
+                {
+                    var bytes = Encoding.UTF8.GetBytes(PostData);
+                    request.ContentLength = bytes.Length;
+
+                    using (var writeStream = request.GetRequestStream())
+                    {
+                        writeStream.Write(bytes, 0, bytes.Length);
+                    }
+                }
+
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    var responseValue = string.Empty;
+
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        throw GetRestClientException(response, null);
+                    }
+
+                    // grab the response
+                    using (var responseStream = response.GetResponseStream())
+                    {
+                        if (responseStream != null)
+                        {
+                            byte[] buffer = new byte[4096];
+                            using (MemoryStream memoryStream = new MemoryStream())
+                            {
+                                int count = 0;
+                                do
+                                {
+                                    count = responseStream.Read(buffer, 0, buffer.Length);
+                                    memoryStream.Write(buffer, 0, count);
+
+                                } while (count != 0);
+
+                                result = memoryStream.ToArray();
+
+                            }
+                        }
+
+                    }
+
+                    return result;
+                }
+            }
+            catch (WebException webex)
+            {
+                if (retryNumber > MAX_TRIES)
+                {
+                    throw GetRestClientException(null, webex);
+                }
+
+                PauseExecution(retryNumber);
+                return InvokeBinary(retryNumber + 1);
             }
         }
 

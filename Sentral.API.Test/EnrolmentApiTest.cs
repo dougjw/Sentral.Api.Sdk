@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sentral.API.Client;
 using Sentral.API.Model.Enrolments.Include;
 using System.Text;
-
+using Sentral.API.Common;
 namespace Sentral.API.Test
 {
     [TestClass]
@@ -465,7 +465,7 @@ namespace Sentral.API.Test
 
             var x = SAPI.Enrolments.GetQualification(1);
 
-            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.Type));
+            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.QualificationType));
         }
 
 
@@ -479,7 +479,23 @@ namespace Sentral.API.Test
             Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.StudentCode));
         }
 
+        [TestMethod]
+        public void GetOneStudentDocumentFileTest()
+        {
 
+            var x = SAPI.Enrolments.GetStudentDocumentFile(1);
+
+            Assert.IsTrue(x != null && x.ID == 1 && x.FileData.Length>0);
+        }
+
+        [TestMethod]
+        public void WriteOneStudentDocumentFileTest()
+        {
+
+            var x = SAPI.Enrolments.GetStudentDocumentFile(1);
+
+            x.SaveDocument("C:\\Temp");
+        }
 
         [TestMethod]
         public void GetOneStudentFlagTest()

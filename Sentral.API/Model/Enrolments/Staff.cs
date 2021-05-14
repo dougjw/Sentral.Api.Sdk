@@ -103,19 +103,7 @@ namespace Sentral.API.Model.Enrolments
                 ResuscitationExpiryDate = ResuscitationExpiryDate,
                 PublicLiabilityExpiryDate = PublicLiabilityExpiryDate,
                 AGSNumber = AGSNumber
-
-
-
-
-
-
-
-
-
-
-
-
-            }
+            };
         }
     }
 }
