@@ -1,6 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sentral.API.Client;
+using Sentral.API.Common;
 using Sentral.API.Model.Enrolments.Include;
+using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Sentral.API.Test
@@ -32,5 +35,6 @@ namespace Sentral.API.Test
                 return _isTestSite;
             }
         }
+
     }
 }

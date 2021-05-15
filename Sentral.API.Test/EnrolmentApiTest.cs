@@ -3,6 +3,9 @@ using Sentral.API.Client;
 using Sentral.API.Model.Enrolments.Include;
 using System.Text;
 using Sentral.API.Common;
+using Sentral.API.Model.Reports.Include;
+using System.Collections.Generic;
+
 namespace Sentral.API.Test
 {
     [TestClass]
@@ -492,13 +495,19 @@ namespace Sentral.API.Test
 
 
         [TestMethod]
-        public void GetOneStudentsRelatedAcademicReportTest()
+        public void GetOneStudentsRelatedAcademicReportWithSideloadTest()
         {
-            var knownStudentIdWithReport = 10061;
-            var x = SAPI.Enrolments.GetStudentRelatedAcademicReports(knownStudentIdWithReport,
-                new Model.Reports.Include.StudentAcademicReportIncludeOptions(period: true));
+           var knownStudentIdWithReport = 10061;
 
-            Assert.IsTrue(x != null && x.Count >= 1);
+
+
+            var incl = new StudentAcademicReportIncludeOptions(period: true);
+
+            AbstractIncludeOptions<EnumReportsIncludeOptions> incl2 = incl;
+
+            var x = SAPI.Enrolments.GetStudentRelatedAcademicReports(knownStudentIdWithReport, incl);
+
+            Assert.IsTrue(x != null && x.Count >= 1 && !string.IsNullOrWhiteSpace(x[0].Period.Data.Name));
         }
 
         [TestMethod]
@@ -621,5 +630,8 @@ namespace Sentral.API.Test
 
             Assert.IsTrue(x != null && x.ID == studentId && x.Contacts.Data.Count >=1);
         }
+
+
+
     }
 }

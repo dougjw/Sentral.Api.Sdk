@@ -10,6 +10,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.Model.StaffAbsences;
 using Sentral.API.Model.Enrolments.Update;
 using Sentral.API.DataAccess.Exceptions;
+using Sentral.API.Common;
 
 namespace Sentral.API.Client.ActionNamespace
 {
@@ -1188,7 +1189,11 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student/{0}/academic-reports", studentId);
-            var uri = GetEndpointParameters(endpoint, p);
+
+            // Use reports include helper 
+            var queryStringHelper = new ApiQueryStringHelper<Model.Reports.Include.EnumReportsIncludeOptions>();
+
+            var uri = GetEndpointParameters(endpoint, p, queryStringHelper);
 
             return GetAllData<Model.Reports.StudentAcademicReport>(uri);
 
@@ -1426,6 +1431,18 @@ namespace Sentral.API.Client.ActionNamespace
         public YearLevel GetYearLevel(int id)
         {
             return GetData<YearLevel>(string.Format("/v1/enrolments/year-level/{0}", id));
+        }
+
+
+
+        private string GetEndpointParameters(
+                string endpoint,
+                Dictionary<string, object> parameters
+        )
+        {
+            var queryStringHelper = new ApiQueryStringHelper<EnumEnrolmentsIncludeOptions>();
+
+            return GetEndpointParameters(endpoint, parameters, queryStringHelper);
         }
     }
 }

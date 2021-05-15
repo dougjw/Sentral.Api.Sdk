@@ -6,6 +6,7 @@ using Sentral.API.Common;
 using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.Model.Common;
 using Sentral.API.DataAccess.Exceptions;
+using System;
 
 namespace Sentral.API.DataAccess
 {
@@ -15,13 +16,14 @@ namespace Sentral.API.DataAccess
         private readonly string _baseUrl;
         private const int MaxPageSize = 200;
         private const string NextLinkKey = "next";
-        private readonly ApiQueryStringHelper<EnumEnrolmentsIncludeOptions> _queryStringHelper;
+
+        // TODO: Need more flexibility here? Enrolments Inc breaking other areas. This might need to be generic.
+
         private static readonly JsonApiSerializerSettings _settings = new JsonApiSerializerSettings(new SentralResourceObjectConverter());
 
         public AbstractApi(string baseUrl, string apiKey, string tenantCode) {
             _baseUrl = baseUrl;
             _header = new ApiHeader(apiKey, tenantCode);
-            _queryStringHelper = new ApiQueryStringHelper<EnumEnrolmentsIncludeOptions>();
         }
 
         internal List<T> GetAllData<T>(string endpoint)
@@ -105,9 +107,13 @@ namespace Sentral.API.DataAccess
             return _baseUrl + endpoint;
         }
 
-        internal string GetEndpointParameters(string endpoint, Dictionary<string, object> parameters)
+        internal string GetEndpointParameters<T>(
+                string endpoint,
+                Dictionary<string, object> parameters,
+                ApiQueryStringHelper<T> queryStringHelper
+        ) where T : Enum
         {
-            return _queryStringHelper.GetQueryString(endpoint, parameters);
+            return queryStringHelper.GetQueryString(endpoint, parameters);
         }
 
         internal void ValidateModelIsNotNullOrZero(AbstractUpdatable updateData)

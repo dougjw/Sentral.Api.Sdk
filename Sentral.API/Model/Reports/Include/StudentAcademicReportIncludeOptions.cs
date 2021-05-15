@@ -8,16 +8,9 @@ namespace Sentral.API.Model.Reports.Include
     public class StudentAcademicReportIncludeOptions : AbstractIncludeOptions<EnumReportsIncludeOptions>
     {
         
-        public StudentAcademicReportIncludeOptions(
-                bool period = false
+        public StudentAcademicReportIncludeOptions( bool period = false) : base(GetIncludeOptionList( period )) {}
 
-            ) : base(GetIncludeOptionList(
-                    period
-                )) {}
-
-        private static EnumReportsIncludeOptions[] GetIncludeOptionList(
-                bool period = false
-            )
+        private static EnumReportsIncludeOptions[] GetIncludeOptionList( bool period )
         {
             List<EnumReportsIncludeOptions> inclOptions = new List<EnumReportsIncludeOptions>();
 

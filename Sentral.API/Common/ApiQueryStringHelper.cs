@@ -67,7 +67,7 @@ namespace Sentral.API.Common
                             {
                                 paramValue = GetParameterValueString((AbstractIncludeOptions<T>)param.Value);
                             }
-                            catch
+                            catch(Exception ex)
                             {
                                 // Skip if param type is unknown
                                 continue;

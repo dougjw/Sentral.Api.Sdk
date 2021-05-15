@@ -8,6 +8,8 @@ using Sentral.API.Model.Core;
 using Sentral.API.Model.Common;
 using Sentral.API.Model.Core.Include;
 using Sentral.API.Model.StaffAbsences;
+using Sentral.API.Common;
+using Sentral.API.Model.Enrolments.Include;
 
 namespace Sentral.API.Client.ActionNamespace
 {
@@ -295,6 +297,18 @@ namespace Sentral.API.Client.ActionNamespace
         public CoreTerm GetTerm(int year, int term)
         {
             return GetData<CoreTerm>(string.Format("/v1/core/core-term/{0}-{1}", year, term));
+        }
+
+
+
+        private string GetEndpointParameters(
+                string endpoint,
+                Dictionary<string, object> parameters
+        )
+        {
+            var queryStringHelper = new ApiQueryStringHelper<EnumCoreIncludeOptions>();
+
+            return GetEndpointParameters(endpoint, parameters, queryStringHelper);
         }
     }
 }
