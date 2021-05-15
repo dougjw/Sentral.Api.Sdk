@@ -522,6 +522,17 @@ namespace Sentral.API.Test
         }
 
         [TestMethod]
+        public void GetOneStudentsRelatedActivityAttendanceLinkTest()
+        {
+            var knownStudentIdWithActivity = 9587;
+
+
+            var x = SAPI.Enrolments.GetStudentActivityAttendeeLinks(knownStudentIdWithActivity);
+
+            Assert.IsTrue(x != null && x.Count >= 1);
+        }
+
+        [TestMethod]
         public void GetOneStudentDocumentFileTest()
         {
 

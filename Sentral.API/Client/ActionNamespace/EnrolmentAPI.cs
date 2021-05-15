@@ -1121,6 +1121,14 @@ namespace Sentral.API.Client.ActionNamespace
             return GetAllData<Model.Activities.Activity>(uri);
         }
 
+        public List<Model.Activities.AttendeeLink> GetStudentActivityAttendeeLinks(int studentId)
+        {
+
+            var uri = string.Format("/v1/enrolments/student/{0}/activity-links", studentId);
+
+            return GetAllData<Model.Activities.AttendeeLink>(uri);
+        }
+
         public List<Enrolment> GetStudentEnrolment(int studentId, EnrolmentIncludeOptions include = null)
         {
             var p = new Dictionary<string, object>
