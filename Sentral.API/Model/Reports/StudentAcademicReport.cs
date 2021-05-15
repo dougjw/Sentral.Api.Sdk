@@ -9,7 +9,7 @@ namespace Sentral.API.Model.Reports
     {
         public int ID { get; set; }
 
-        public DateTime? PublishedDateTime { get; set; }
+        public SentralDateTime PublishedDateTime { get; set; }
 
         public int Year { get; set; }
         public int Semester { get; set; }

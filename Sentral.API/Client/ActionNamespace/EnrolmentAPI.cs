@@ -5,7 +5,7 @@ using Sentral.API.DataAccess;
 using Newtonsoft.Json;
 using JsonApiSerializer;
 using Sentral.API.Model.Enrolments;
-using Sentral.API.Model.Common;
+using Sentral.API.Model;
 using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.Model.StaffAbsences;
 using Sentral.API.Model.Enrolments.Update;
@@ -865,7 +865,7 @@ namespace Sentral.API.Client.ActionNamespace
 
         public void DeletePersonPhone(int id)
         {
-            DeleteData("/v1/enrolments/person-phone", id);
+            DeleteData("/v1/enrolments/person-phones", id);
         }
 
 
@@ -1099,8 +1099,26 @@ namespace Sentral.API.Client.ActionNamespace
         public List<Model.Attendance.Absence> GetStudentAbsences(int id)
         {
 
+
             return GetAllData <Model.Attendance.Absence>(string.Format("/v1/enrolments/student/{0}/absences", id));
 
+        }
+
+        public List<Model.Activities.Activity> GetStudentActivities(int studentId,
+            Model.Activities.Include.ActivityIncludeOptions include = null)
+        {
+            var p = new Dictionary<string, object>
+            {
+                ["include"] = include
+            };
+
+            // Use Activites API query string helper
+            var apiQueryStringHelper = new ApiQueryStringHelper<Model.Activities.Include.EnumActivitiesIncludeOptions>();
+
+            var endpoint = string.Format("/v1/enrolments/student/{0}/activities", studentId);
+            var uri = GetEndpointParameters(endpoint, p, apiQueryStringHelper);
+
+            return GetAllData<Model.Activities.Activity>(uri);
         }
 
         public List<Enrolment> GetStudentEnrolment(int studentId, EnrolmentIncludeOptions include = null)

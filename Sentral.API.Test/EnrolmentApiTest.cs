@@ -503,11 +503,22 @@ namespace Sentral.API.Test
 
             var incl = new StudentAcademicReportIncludeOptions(period: true);
 
-            AbstractIncludeOptions<EnumReportsIncludeOptions> incl2 = incl;
-
             var x = SAPI.Enrolments.GetStudentRelatedAcademicReports(knownStudentIdWithReport, incl);
 
             Assert.IsTrue(x != null && x.Count >= 1 && !string.IsNullOrWhiteSpace(x[0].Period.Data.Name));
+        }
+
+        [TestMethod]
+        public void GetOneStudentsRelatedActivitiesWithSideloadTest()
+        {
+            var knownStudentIdWithActivity = 9587;
+
+
+            var incl = new Model.Activities.Include.ActivityIncludeOptions(venue: true);
+
+            var x = SAPI.Enrolments.GetStudentActivities(knownStudentIdWithActivity, incl);
+
+            Assert.IsTrue(x != null && x.Count >= 1);
         }
 
         [TestMethod]
