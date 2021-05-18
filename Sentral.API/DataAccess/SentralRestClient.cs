@@ -106,10 +106,19 @@ namespace Sentral.API.DataAccess
             }
             catch (WebException webex)
             {
-                if (retryNumber > MAX_TRIES)
+
+                var webResponse = (HttpWebResponse)webex.Response;
+
+                // Max timeout tries or Error Response received.
+                if (
+                        webResponse == null || 
+                        webResponse.StatusCode != HttpStatusCode.RequestTimeout ||
+                        retryNumber > MAX_TRIES)
                 {
                     throw GetRestClientException(null, webex);
                 }
+
+                // retry if timeout
 
                 PauseExecution(retryNumber);
                 return Invoke(retryNumber + 1);

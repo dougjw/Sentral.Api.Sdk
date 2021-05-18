@@ -139,7 +139,6 @@ namespace Sentral.API.DataAccess
 
         public T CreateData<T>(string endpoint, AbstractUpdatable updateData)
         {
-            ValidateModelIsNotNullOrZero(updateData);
             return GetApiResponse<T>(
                     endpoint,
                     ApiMethod.POST,

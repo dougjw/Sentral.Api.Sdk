@@ -5,6 +5,9 @@ using System.Text;
 using Sentral.API.Common;
 using Sentral.API.Model.Reports.Include;
 using System.Collections.Generic;
+using Sentral.API.Model.Enrolments;
+using Sentral.API.Model.Enrolments.Update;
+using JsonApiSerializer.JsonApi;
 
 namespace Sentral.API.Test
 {
@@ -323,7 +326,8 @@ namespace Sentral.API.Test
             // Only run test on sandbox
             if (IsTestSite)
             {
-                var personPreUpdate = SAPI.Enrolments.GetPerson(2);
+                var include = new PersonIncludeOptions(phoneNumbers: true);
+                var personPreUpdate = SAPI.Enrolments.GetPerson(2, include);
 
                 string updatePersonName = personPreUpdate.FirstName == "Sharron" ? "Jane" : "Sharron";
 
@@ -345,7 +349,7 @@ namespace Sentral.API.Test
         }
 
         [TestMethod]
-        public void GetPersonEmailTest()
+        public void GetOnePersonEmailTest()
         {
 
             var x = SAPI.Enrolments.GetPersonEmail(1);
@@ -353,6 +357,32 @@ namespace Sentral.API.Test
             Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.Email));
         }
 
+        [TestMethod]
+        public void CreateAndDeleteOnePersonEmailTest()
+        {
+            // Only run test on sandbox
+            if (IsTestSite)
+            {
+                var email = new UpdatePersonEmail()
+                {
+                    Email = "test@somewhere.com",
+                    EmailType = "01",
+                    Owner = new Relationship<Person>()
+
+                };
+
+                email.Owner.Data = new Person() { ID = 1 };
+
+
+                var response = SAPI.Enrolments.CreatePersonEmail(email);
+
+                Assert.IsTrue(response != null && email.Email == response.Email);
+
+                SAPI.Enrolments.DeletePersonEmail(response.ID);
+
+
+            }
+        }
 
 
         [TestMethod]
