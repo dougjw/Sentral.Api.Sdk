@@ -9,6 +9,7 @@ using Sentral.API.Model.Enrolments;
 using Sentral.API.Model.Enrolments.Update;
 using JsonApiSerializer.JsonApi;
 using Sentral.API.Model.Common;
+using System;
 
 namespace Sentral.API.Test
 {
@@ -416,7 +417,7 @@ namespace Sentral.API.Test
 
                 };
 
-                email.Owner.Data = new SimpleRelationshipLink() { ID = 1 };
+                email.Owner.Data.ID = 1;
 
 
                 var response = SAPI.Enrolments.CreatePersonEmail(email);
@@ -548,6 +549,35 @@ namespace Sentral.API.Test
             Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.QualificationType));
         }
 
+
+
+        [TestMethod]
+        public void CreateAndDeleteOneStaffQualificatioest()
+        {
+            // Only run test on sandbox
+            if (IsTestSite)
+            {
+                var qualification = new UpdateStaffQualification()
+                {
+                    Qualification = "Some Qualification",
+                    QualificationType = EnumStaffQualificiationType.bachelors_degree,
+                    DateAchieved  = new DateTime(2010,10,1),
+                    Staff = new Relationship<SimpleRelationshipLink>()
+
+                };
+
+
+                qualification.Staff.Data.ID = 1;
+
+                var response = SAPI.Enrolments.CreateQualification(qualification);
+
+                Assert.IsTrue(response != null && qualification.Qualification == response.Qualification);
+
+                SAPI.Enrolments.DeletePersonEmail(response.ID);
+
+
+            }
+        }
 
 
         [TestMethod]

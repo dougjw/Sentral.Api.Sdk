@@ -22,7 +22,7 @@ namespace Sentral.API.Model.Enrolments.Update
         { }
 
         private string _qualification;
-        private string _qualificationType;
+        private EnumStaffQualificiationType _qualificationType;
         private string _from;
         private string _aitslTeacherAccreditationLevel;
         private string _nextAitslTeacherAccreditationLevel;
@@ -30,9 +30,8 @@ namespace Sentral.API.Model.Enrolments.Update
         private Relationship<SimpleRelationshipLink> _staff;
 
 
-
         private bool _qualificationIncludeInSerialize;
-        private bool _typeIncludeInSerialize;
+        private bool _qualificationTypeIncludeInSerialize;
         private bool _fromIncludeInSerialize;
         private bool _aitslTeacherAccreditationLevelIncludeInSerialize;
         private bool _nextAitslTeacherAccreditationLevelIncludeInSerialize;
@@ -62,25 +61,37 @@ namespace Sentral.API.Model.Enrolments.Update
         }
 
 
-        [JsonProperty(propertyName:"type", NullValueHandling = NullValueHandling.Include)]
-        public string QualificationType
-        {
+        [JsonIgnore]
+        public EnumStaffQualificiationType QualificationType  {
+
             get
             {
+
                 return _qualificationType;
             }
 
             set
             {
                 _qualificationType = value;
-                _typeIncludeInSerialize = true;
+                _qualificationTypeIncludeInSerialize = true;
             }
+
+        }
+
+         [JsonProperty(propertyName:"type", NullValueHandling = NullValueHandling.Include)]
+        public string SerializeQualificationType
+        {
+            get
+            {
+                return _qualificationType.ToString();
+            }
+
         }
 
 
         public bool ShouldSerializeQualificationType()
         {
-            return _typeIncludeInSerialize;
+            return _qualificationTypeIncludeInSerialize;
         }
 
 
@@ -170,6 +181,8 @@ namespace Sentral.API.Model.Enrolments.Update
         {
             return _dateAchievedIncludeInSerialize;
         }
+
+
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public Relationship<SimpleRelationshipLink> Staff

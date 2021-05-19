@@ -32,10 +32,32 @@ namespace Sentral.API.Model.Enrolments
 
         public UpdateStaffQualification ToUpdatable()
         {
+            EnumStaffQualificiationType qualificiationType;
+
+            switch(QualificationType)
+            {
+                case "bachelors_degree":
+                    qualificiationType = EnumStaffQualificiationType.bachelors_degree;
+                    break;
+                case "doctoral_degree":
+                    qualificiationType = EnumStaffQualificiationType.doctoral_degree;
+                    break;
+                case "masters_degree":
+                    qualificiationType = EnumStaffQualificiationType.masters_degree;
+                    break;
+                case "tafe_certificate":
+                    qualificiationType = EnumStaffQualificiationType.tafe_certificate;
+                    break;
+                default:
+                    qualificiationType = EnumStaffQualificiationType.certificate;
+                    break;
+            }
+
+
             return new UpdateStaffQualification(ID)
             {
                 Qualification = Qualification,
-                QualificationType = QualificationType,
+                QualificationType = qualificiationType,
                 From = From,
                 AitslTeacherAccreditationLevel = AitslTeacherAccreditationLevel,
                 NextAitslTeacherAccreditationLevel = NextAitslTeacherAccreditationLevel,
