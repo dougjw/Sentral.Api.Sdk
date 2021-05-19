@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using JsonApiSerializer;
 using Sentral.API.Model.Enrolments;
 using JsonApiSerializer.JsonApi;
+using Sentral.API.Model.Common;
 
 namespace Sentral.API.Test
 {
@@ -81,14 +82,14 @@ namespace Sentral.API.Test
             var personConsent = new UpdatePersonConsentLink(1)
             {
                  ConsentGiven = true,
-                 ConsentedBy = new Relationship<Person>(),
-                 Person = new Relationship<Person>(),
-                 Consent = new Relationship<Consent>()
+                 ConsentedBy = new Relationship<SimpleRelationshipLink>(),
+                 Person = new Relationship<SimpleRelationshipLink>(),
+                 Consent = new Relationship<SimpleRelationshipLink>()
             };
 
-            personConsent.ConsentedBy.Data = new Person() { ID = 1 };
-            personConsent.Person.Data = new Person() { ID = 1 };
-            personConsent.Consent.Data = new Consent() { ID = 1 };
+            personConsent.ConsentedBy.Data = new SimpleRelationshipLink() { ID = 1 };
+            personConsent.Person.Data = new SimpleRelationshipLink() { ID = 1 };
+            personConsent.Consent.Data = new SimpleRelationshipLink() { ID = 1 };
 
             string valueEnrolmentJson = JsonConvert.SerializeObject(personConsent, _settings);
 
@@ -100,14 +101,14 @@ namespace Sentral.API.Test
             var personConsent = new UpdatePersonConsentLink()
             {
                 ConsentGiven = true,
-                ConsentedBy = new Relationship<Person>(),
-                Person = new Relationship<Person>(),
-                Consent = new Relationship<Consent>()
+                ConsentedBy = new Relationship<SimpleRelationshipLink>(),
+                Person = new Relationship<SimpleRelationshipLink>(),
+                Consent = new Relationship<SimpleRelationshipLink>()
             };
 
-            personConsent.ConsentedBy.Data = new Person() { ID = 1 };
-            personConsent.Person.Data = new Person() { ID = 1 };
-            personConsent.Consent.Data = new Consent() { ID = 1 };
+            personConsent.ConsentedBy.Data = new SimpleRelationshipLink() { ID = 1 };
+            personConsent.Person.Data = new SimpleRelationshipLink() { ID = 1 };
+            personConsent.Consent.Data = new SimpleRelationshipLink() { ID = 1 };
 
             string valueEnrolmentJson = JsonConvert.SerializeObject(personConsent, _settings);
 

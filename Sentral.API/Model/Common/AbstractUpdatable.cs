@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using JsonApiSerializer.JsonApi;
+using Newtonsoft.Json;
 using Sentral.API.DataAccess;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,19 @@ namespace Sentral.API.Model.Common
         public bool IsPostModel()
         {
             return ID == 0;
+        }
+
+
+        internal void SetRelationshipLinkType(string type, Relationship<SimpleRelationshipLink> relationship)
+        {
+            if (relationship != null)
+            {
+                if (relationship.Data == null)
+                {
+                    relationship.Data = new SimpleRelationshipLink();
+                }
+                relationship.Data.Type = type;
+            }
         }
     }
 }

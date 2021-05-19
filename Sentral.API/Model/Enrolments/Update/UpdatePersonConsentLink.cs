@@ -13,10 +13,15 @@ namespace Sentral.API.Model.Enrolments.Update
 
         private const string _type = "personConsentLink";
 
+        private const string _personType = "person";
+        private const string _consentType = "consent";
+
         private bool _consentGiven;
-        private Relationship<Person> _consentedBy;
-        private Relationship<Person> _person;
-        private Relationship<Consent> _consent;
+
+
+        private Relationship<SimpleRelationshipLink> _consentedBy;
+        private Relationship<SimpleRelationshipLink> _person;
+        private Relationship<SimpleRelationshipLink> _consent;
 
 
         private bool _consentGivenIncludeInSerialize;
@@ -59,7 +64,7 @@ namespace Sentral.API.Model.Enrolments.Update
 
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public Relationship<Person> ConsentedBy
+        public Relationship<SimpleRelationshipLink> ConsentedBy
         {
             get
             {
@@ -69,6 +74,7 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _consentedBy = value;
+                SetRelationshipLinkType(_personType, _consentedBy);
                 _consentedByIncludeInSerialize = true;
             }
         }
@@ -82,7 +88,7 @@ namespace Sentral.API.Model.Enrolments.Update
 
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public Relationship<Person> Person
+        public Relationship<SimpleRelationshipLink> Person
         {
             get
             {
@@ -92,6 +98,7 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _person = value;
+                SetRelationshipLinkType(_personType, _consentedBy);
                 _personIncludeInSerialize = IsPostModel();
             }
         }
@@ -105,7 +112,7 @@ namespace Sentral.API.Model.Enrolments.Update
 
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public Relationship<Consent> Consent
+        public Relationship<SimpleRelationshipLink> Consent
         {
             get
             {
@@ -115,6 +122,7 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _consent = value;
+                SetRelationshipLinkType(_consentType, _consentedBy);
                 _consentIncludeInSerialize = IsPostModel();
             }
         }

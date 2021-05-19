@@ -10,14 +10,15 @@ namespace Sentral.API.Model.Enrolments.Update
     public class UpdatePersonPhone : AbstractUpdatable
     {
 
-        private const string _type = "personEmail";
+        private const string _type = "personPhone";
+        private const string _personType = "person";
 
         private string _number;
         private string _extension;
         private string _phoneType;
         private bool _isListed;
         private bool _canContact;
-        private Relationship<Person> _owner;
+        private Relationship<SimpleRelationshipLink> _owner;
 
 
         private bool _numberIncludeInSerialize;
@@ -150,7 +151,7 @@ namespace Sentral.API.Model.Enrolments.Update
 
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public Relationship<Person> Owner
+        public Relationship<SimpleRelationshipLink> Owner
         {
             get
             {
@@ -160,11 +161,11 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _owner = value;
+                SetRelationshipLinkType(_personType, _owner);
                 _ownerIncludeInSerialize = IsPostModel();
             }
         }
-
-
+        
         public bool ShouldSerializeOwner()
         {
             return _ownerIncludeInSerialize;

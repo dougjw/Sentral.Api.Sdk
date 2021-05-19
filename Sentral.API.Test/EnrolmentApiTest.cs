@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.Model.Enrolments.Update;
 using JsonApiSerializer.JsonApi;
+using Sentral.API.Model.Common;
 
 namespace Sentral.API.Test
 {
@@ -91,6 +92,50 @@ namespace Sentral.API.Test
             var x = SAPI.Enrolments.GetPersonConsentLink(1);
 
             Assert.IsTrue(x != null && x.ID == 1 && x.Consent != null);
+        }
+
+        [TestMethod]
+        public void CreateAndDeleteOneConsentLinkTest()
+        {
+            // Only run test on sandbox
+            if (IsTestSite)
+            {
+                var consentedBy = new Relationship<SimpleRelationshipLink>
+                {
+                    Data = new SimpleRelationshipLink() { ID = 1 }
+                };
+
+                var consent = new Relationship<SimpleRelationshipLink>
+                {
+                    Data = new SimpleRelationshipLink() { ID = 1 }
+                };
+
+                var person = new Relationship<SimpleRelationshipLink>
+                {
+                    Data = new SimpleRelationshipLink() { ID = 1 }
+                };
+
+
+                var updateConsent = new UpdatePersonConsentLink()
+                {
+                    ConsentGiven = true,
+                    ConsentedBy = consentedBy,
+                    Person = person,
+                    Consent = consent
+
+
+
+                };
+
+
+                var response = SAPI.Enrolments.CreatePersonConsentLink(updateConsent);
+
+                Assert.IsTrue(response != null);
+
+                SAPI.Enrolments.DeletePersonEmail(response.ID);
+
+
+            }
         }
 
 
@@ -367,11 +412,11 @@ namespace Sentral.API.Test
                 {
                     Email = "test@somewhere.com",
                     EmailType = "01",
-                    Owner = new Relationship<Person>()
+                    Owner = new Relationship<SimpleRelationshipLink>()
 
                 };
 
-                email.Owner.Data = new Person() { ID = 1 };
+                email.Owner.Data = new SimpleRelationshipLink() { ID = 1 };
 
 
                 var response = SAPI.Enrolments.CreatePersonEmail(email);
@@ -383,6 +428,8 @@ namespace Sentral.API.Test
 
             }
         }
+
+
 
 
         [TestMethod]

@@ -86,7 +86,10 @@ namespace Sentral.API.DataAccess
                 {
                     var responseValue = string.Empty;
 
-                    if (response.StatusCode != HttpStatusCode.OK)
+                    if (
+                        response.StatusCode != HttpStatusCode.OK &&
+                        !( Method == ApiMethod.DELETE && response.StatusCode == HttpStatusCode.NoContent)
+                    )
                     {
                         throw GetRestClientException(response, null);
                     }

@@ -23,7 +23,7 @@ namespace Sentral.API.Model.Enrolments
 
         public bool CanContact { get; set; }
 
-        public Relationship<Person> Owner { get; set; }
+        public Relationship<SimpleRelationshipLink> Owner { get; set; }
 
         public UpdatePersonEmail ToUpdatable()
         {
