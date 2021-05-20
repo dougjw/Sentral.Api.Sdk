@@ -589,6 +589,14 @@ namespace Sentral.API.Test
             Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.StudentCode));
         }
 
+        [TestMethod]
+        public void GetMultipleStudentsTest()
+        {
+
+            var x = SAPI.Enrolments.GetStudent(ids: new int[] { 1, 2 });
+
+            Assert.IsTrue(x != null && x.Count  == 2);
+        }
 
 
         [TestMethod]

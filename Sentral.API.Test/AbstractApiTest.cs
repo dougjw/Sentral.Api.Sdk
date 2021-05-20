@@ -9,7 +9,7 @@ using System.Text;
 namespace Sentral.API.Test
 {
 
-    public class AbstractApiTest
+    public abstract class AbstractApiTest
     {
         private bool _isTestSite;
 

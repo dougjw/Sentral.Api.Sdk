@@ -9,23 +9,18 @@ namespace Sentral.API.Common
 {
     public class ApiQueryStringHelper<T> where T : Enum
     {
-        private delegate char DelegateParamSeparator();
-        private DelegateParamSeparator ParamSeparator;
-        private const char StartOfQueryStringChar = '?';
-        private const char QueryStringSeparatorChar = '&';
+        private const string StartOfQueryStringChar = "?";
+        private const string QueryStringSeparatorChar = "&";
         private const string DateConvertPattern = "yyyy-MM-dd";
+        private bool _firstParam = true;
 
         public string GetQueryString(string endpoint, Dictionary<string,object> parameters)
         {
             StringBuilder queryString = new StringBuilder();
 
-            if (endpoint.Contains("?"))
+            if (endpoint.Contains(StartOfQueryStringChar))
             {
-                ParamSeparator = new DelegateParamSeparator(GetOtherParamSeparator);
-            }
-            else
-            {
-                ParamSeparator = new DelegateParamSeparator(GetFirstParamSeparator);
+                _firstParam = false;
             }
 
             queryString.Append(endpoint);
@@ -35,7 +30,7 @@ namespace Sentral.API.Common
                 // Build the querystring if the parameter has a value.
                 if (param.Value != null)
                 {
-                    char separator = ParamSeparator();
+                    string separator = GetParamSeperator();
                     string paramName = param.Key;
                     string paramValue;
                     //-		param.Value.GetType()	{Name = "Int32" FullName = "System.Int32"}	System.Type {System.RuntimeType}
@@ -43,21 +38,27 @@ namespace Sentral.API.Common
                     {
                         case "System.Int32":
                             paramValue = GetParameterValueString((int)param.Value);
+                            _firstParam = false;
                             break;
                         case "System.Int32[]":
                             paramValue = GetParameterValueString((int[])param.Value);
+                            _firstParam = false;
                             break;
                         case "System.String":
                             paramValue = GetParameterValueString((string)param.Value);
+                            _firstParam = false;
                             break;
                         case "System.String[]":
                             paramValue = GetParameterValueString((string[])param.Value);
+                            _firstParam = false;
                             break;
                         case "System.DateTime":
                             paramValue = GetParameterValueString((DateTime)param.Value);
+                            _firstParam = false;
                             break;
                         case "System.DateTime[]":
                             paramValue = GetParameterValueString((DateTime[])param.Value);
+                            _firstParam = false;
                             break;
                         case "System.Boolean":
                             paramValue = GetParameterValueString((bool)param.Value);
@@ -66,6 +67,7 @@ namespace Sentral.API.Common
                             try
                             {
                                 paramValue = GetParameterValueString((AbstractIncludeOptions<T>)param.Value);
+                                _firstParam = false;
                             }
                             catch(Exception ex)
                             {
@@ -85,15 +87,10 @@ namespace Sentral.API.Common
             return queryString.ToString();
         }
 
+        private string GetParamSeperator()
+        {
+            return _firstParam ? StartOfQueryStringChar : QueryStringSeparatorChar;
 
-        private char GetFirstParamSeparator()
-        {
-            ParamSeparator = new DelegateParamSeparator(GetOtherParamSeparator);
-            return StartOfQueryStringChar;
-        }
-        private char GetOtherParamSeparator()
-        {
-            return QueryStringSeparatorChar;
         }
 
         private string GetParameterValueString( int[] values)

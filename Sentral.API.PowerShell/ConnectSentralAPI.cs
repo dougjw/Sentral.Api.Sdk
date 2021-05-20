@@ -7,7 +7,7 @@ namespace Sentral.API.PowerShell
 {
     [Cmdlet(VerbsCommunications.Connect,"SentralApi")]
     // [OutputType(typeof(FavoriteStuff))]
-    public class ConnectSentralApi : PSCmdlet
+    public class ConnectSentralApi : Cmdlet
     {
         private static SentralApi _connection;
 

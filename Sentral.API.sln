@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sentral.API.Test", "Sentral
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sentral.API.PowerShell", "Sentral.API.PowerShell\Sentral.API.PowerShell.csproj", "{9718FFA8-C3CD-4E5D-B3FE-E7A347B56153}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sentral.API.PowerShell.TestCore", "Sentral.API.PowerShell.Test\Sentral.API.PowerShell.TestCore.csproj", "{E3AC8C18-1C96-4EEF-9DA4-1C874170A023}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentral.API.PowerShell.Test", "Sentral.API.PowerShell.Test\Sentral.API.PowerShell.Test.csproj", "{51F36D6C-7C0C-42EB-A844-62CAAD82BBF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{9718FFA8-C3CD-4E5D-B3FE-E7A347B56153}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9718FFA8-C3CD-4E5D-B3FE-E7A347B56153}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9718FFA8-C3CD-4E5D-B3FE-E7A347B56153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3AC8C18-1C96-4EEF-9DA4-1C874170A023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3AC8C18-1C96-4EEF-9DA4-1C874170A023}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3AC8C18-1C96-4EEF-9DA4-1C874170A023}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3AC8C18-1C96-4EEF-9DA4-1C874170A023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51F36D6C-7C0C-42EB-A844-62CAAD82BBF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51F36D6C-7C0C-42EB-A844-62CAAD82BBF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51F36D6C-7C0C-42EB-A844-62CAAD82BBF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51F36D6C-7C0C-42EB-A844-62CAAD82BBF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
