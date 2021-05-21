@@ -14,6 +14,24 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(Student))]
     public class SetSntEnrStudent : SentralPSCmdlet
     {
+
+        private bool _permissionToPhotograph;
+        private string _usiId;
+        private string _barcode;
+        private string _examNumber;
+        private string _studentCode;
+        private string _systemStudentId;
+        private string _acaraId;
+
+        private bool _permissionToPhotographProvided;
+        private bool _usiIdProvided;
+        private bool _barcodeProvided;
+        private bool _examNumberProvided;
+        private bool _studentCodeProvided;
+        private bool _systemStudentIdProvided;
+        private bool _acaraIdProvided;
+
+
         [Parameter(
             Position = 0,
             Mandatory = true,
@@ -33,19 +51,109 @@ namespace Sentral.API.PowerShell.Enrolments
 
 
         [Parameter( Mandatory = false)]
-        public bool PermissionToPhotograph { get; set; }
+        public bool PermissionToPhotograph {
+            get
+            {
+                return _permissionToPhotograph;
+            }
+            set
+            {
+                _permissionToPhotograph = value;
+                _permissionToPhotographProvided = true;
+            }
+                
+        }
+
         [Parameter(Mandatory = false)]
-        public string UsiId { get; set; }
+        public string UsiId
+        {
+            get
+            {
+                return _usiId;
+            }
+            set
+            {
+                _usiId = value;
+                _usiIdProvided = true;
+            }
+
+        }
+
         [Parameter(Mandatory = false)]
-        public string Barcode { get; set; }
+        public string Barcode
+        {
+            get
+            {
+                return _barcode;
+            }
+            set
+            {
+                _barcode = value;
+                _barcodeProvided = true;
+            }
+
+        }
+
         [Parameter(Mandatory = false)]
-        public string ExamNumber { get; set; }
+        public string ExamNumber
+        {
+            get
+            {
+                return _examNumber;
+            }
+            set
+            {
+                _examNumber = value;
+                _examNumberProvided = true;
+            }
+
+        }
+
         [Parameter(Mandatory = false)]
-        public string StudentCode { get; set; }
+        public string StudentCode
+        {
+            get
+            {
+                return _studentCode;
+            }
+            set
+            {
+                _studentCode = value;
+                _studentCodeProvided = true;
+            }
+
+        }
+
         [Parameter(Mandatory = false)]
-        public string SystemStudentId { get; set; }
+        public string SystemStudentId
+        {
+            get
+            {
+                return _systemStudentId;
+            }
+            set
+            {
+                _systemStudentId = value;
+                _systemStudentIdProvided = true;
+            }
+
+        }
+
         [Parameter(Mandatory = false)]
-        public string AcaraId { get; set; }
+        public string AcaraId
+        {
+            get
+            {
+                return _acaraId;
+            }
+            set
+            {
+                _acaraId = value;
+                _acaraIdProvided = true;
+            }
+
+        }
+
 
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
@@ -69,31 +177,31 @@ namespace Sentral.API.PowerShell.Enrolments
             UpdateStudent student = GetInitUpdateStudent(); 
 
             // Populate from student object if object was used.
-            if (OptionalCommonParameters.Contains("PermissionToPhotograph"))
+            if (_permissionToPhotographProvided)
             {
                 student.PermissionToPhotograph = PermissionToPhotograph;
             };
-            if (OptionalCommonParameters.Contains("UsiId"))
+            if (_usiIdProvided)
             {
                 student.UsiId = UsiId;
             }
-            if (OptionalCommonParameters.Contains("Barcode"))
+            if (_barcodeProvided)
             {
                 student.Barcode = Barcode;
             }
-            if (OptionalCommonParameters.Contains("ExamNumber"))
+            if (_examNumberProvided)
             {
                 student.ExamNumber = ExamNumber;
             }
-            if (OptionalCommonParameters.Contains("StudentCode"))
+            if (_studentCodeProvided)
             {
                 student.StudentCode = StudentCode;
             }
-            if (OptionalCommonParameters.Contains("SystemStudentId"))
+            if (_systemStudentIdProvided)
             {
                 student.SystemStudentId = SystemStudentId;
             }
-            if (OptionalCommonParameters.Contains("AcaraId"))
+            if (_acaraIdProvided)
             {
                 student.AcaraId = AcaraId;
             }
