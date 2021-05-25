@@ -10,7 +10,7 @@ namespace Sentral.API.Model.Common
     public abstract class AbstractUpdatable
     {
 
-        private string _type;
+        private readonly string _type;
 
 
         public AbstractUpdatable (int id, string typeString) 

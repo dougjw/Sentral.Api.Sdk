@@ -224,16 +224,29 @@ namespace Sentral.API.DataAccess
             string message;
 
             if (res == null && webex != null)
+            {
                 res = (HttpWebResponse)webex.Response;
+            }
+
             if (res == null)
+            {
                 message = "Request Failed. Error: " + webex.Message;
+            }
             else
+            {
                 message = string.Format("Request Failed. Received HTTP {0}", (int)res.StatusCode);
+            }
+
             RestClientException ex = null;
             if (webex != null)
+            {
                 ex = new RestClientException(message, webex);
+            }
             else
+            {
                 ex = new RestClientException(message);
+            }
+
             if (res != null)
             {
                 ex.Response = res;

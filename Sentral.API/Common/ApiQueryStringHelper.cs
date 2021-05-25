@@ -67,13 +67,14 @@ namespace Sentral.API.Common
                             paramValue = GetParameterValueString((bool)param.Value);
                             break;
                         default:
-                            // Must be an include Enum
+                            // Must be an include entity Enum
                             try
                             {
                                 paramValue = GetParameterValueString((ICollection<T>)param.Value);
                                 _firstParam = false;
                             }
                             catch {
+                                // Silently continue if unsupported type
                                 continue;
                             }
                             break;

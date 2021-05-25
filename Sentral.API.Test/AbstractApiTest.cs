@@ -11,7 +11,7 @@ namespace Sentral.API.Test
 
     public abstract class AbstractApiTest
     {
-        private bool _isTestSite;
+        private readonly bool _isTestSite;
 
         protected SentralApi SAPI { get; }
 
