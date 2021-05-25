@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrSchoolHistory")]
     [OutputType(typeof(StudentHistory))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrSchoolHistory : SentralPSCmdlet
     {
         [Parameter(

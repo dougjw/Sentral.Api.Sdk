@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrYearLevel")]
     [OutputType(typeof(Tenant))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrYearLevel : SentralPSCmdlet
     {
         [Parameter(

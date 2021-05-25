@@ -12,6 +12,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrStaffAbsences")]
     [OutputType(typeof(StaffAbsence))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrStaffAbsences : SentralPSCmdlet
     {
         [Parameter(

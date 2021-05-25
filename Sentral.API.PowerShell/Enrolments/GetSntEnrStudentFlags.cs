@@ -10,13 +10,14 @@ using Sentral.API.PowerShell.Common;
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrStudentFlag")]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     [OutputType(typeof(Flag))]
     public class GetSntEnrStudentFlag : SentralPSCmdlet
     {
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularId")]
+            ParameterSetName = "Singular")]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentId { get; set; }
 

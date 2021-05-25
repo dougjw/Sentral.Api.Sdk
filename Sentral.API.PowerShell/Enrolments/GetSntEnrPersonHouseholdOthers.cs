@@ -11,12 +11,13 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrPersonHouseholdPrimary")]
     [OutputType(typeof(Household))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrPersonHouseholdPrimary : SentralPSCmdlet
     {
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularId")]
+            ParameterSetName = "Singular")]
         [ValidateRange(1, int.MaxValue)]
         public int? PersonId { get; set; }
 

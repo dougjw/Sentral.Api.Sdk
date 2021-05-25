@@ -12,6 +12,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrConsentLink")]
     [OutputType(typeof(ConsentLink))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrConsentLink : SentralPSCmdlet
     {
 

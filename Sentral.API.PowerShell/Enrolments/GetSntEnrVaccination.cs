@@ -12,12 +12,13 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrVaccination")]
     [OutputType(typeof(Vaccination))]
+    [CmdletBinding(DefaultParameterSetName = "SingularVaccinationId")]
     public class GetSntEnrVaccination : SentralPSCmdlet
     {
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularIdVaccinationID")]
+            ParameterSetName = "SingularVaccinationId")]
         [ValidateRange(1, int.MaxValue)]
         public int? VaccinationID { get; set; }
 

@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrAcademicPeriod")]
     [OutputType(typeof(AcademicPeriod))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrAcademicPeriod : SentralPSCmdlet
     {
 

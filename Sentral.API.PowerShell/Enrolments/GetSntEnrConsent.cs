@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrConsent")]
     [OutputType(typeof(Consent))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrConsent : SentralPSCmdlet
     {
 

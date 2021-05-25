@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrEmergencyContactLink")]
     [OutputType(typeof(EmergencyContactLink))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrEmergencyContactLink : SentralPSCmdlet
     {
 

@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrEnrolmentRollclass")]
     [OutputType(typeof(Rollclass))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrEnrolmentRollclass : SentralPSCmdlet
     {
 

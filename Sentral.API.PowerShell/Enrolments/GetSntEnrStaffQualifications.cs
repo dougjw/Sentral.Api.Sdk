@@ -12,6 +12,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrStaffQualifications")]
     [OutputType(typeof(StaffQualification))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrStaffQualifications : SentralPSCmdlet
     {
         [Parameter(

@@ -12,6 +12,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrSpecialNeedsProgram")]
     [OutputType(typeof(SpecialNeedsProgram))]
+    [CmdletBinding(DefaultParameterSetName = "SingularSpecialNeedsId")]
     public class GetSntEnrSpecialNeedsProgram : SentralPSCmdlet
     {
         [Parameter(

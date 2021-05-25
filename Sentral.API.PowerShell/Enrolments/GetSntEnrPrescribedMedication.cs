@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrPrescribedMedication")]
     [OutputType(typeof(PrescribedMedication))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrPrescribedMedication : SentralPSCmdlet
     {
         [Parameter(

@@ -11,13 +11,14 @@ using System.Collections.Generic;
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrPersonGivenConsentLinks")]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     [OutputType(typeof(ConsentLink))]
     public class GetSntEnrPersonGivenConsentLinks : SentralPSCmdlet
     {
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularId")]
+            ParameterSetName = "Singular")]
         [ValidateRange(1, int.MaxValue)]
         public int? PersonId { get; set; }
 

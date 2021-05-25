@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrClassSubject")]
     [OutputType(typeof(ClassSubject))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrClassSubject : SentralPSCmdlet
     {
 

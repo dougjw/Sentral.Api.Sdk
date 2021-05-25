@@ -12,6 +12,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrStudentFlagLinks")]
     [OutputType(typeof(StudentFlagLink))]
+    [CmdletBinding(DefaultParameterSetName = "SingularStudentFlagId")]
     public class GetSntEnrStudentFlagLinks : SentralPSCmdlet
     {
 

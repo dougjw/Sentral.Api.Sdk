@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrHouseholdRelatedAddresses")]
     [OutputType(typeof(Address))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrHouseholdRelatedAddresses : SentralPSCmdlet
     {
 
