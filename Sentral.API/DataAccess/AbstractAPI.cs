@@ -107,13 +107,30 @@ namespace Sentral.API.DataAccess
             return _baseUrl + endpoint;
         }
 
+
+        internal string GetEndpointParameters(string endpoint,
+                Dictionary<string, object> parameters)
+        {
+            return GetEndpointParameters<object>(endpoint, parameters);
+        }
+
+        internal string GetEndpointParameters<T>(
+                string endpoint,
+                Dictionary<string, object> parameters
+        )
+        {
+            var queryStringHelper = new ApiQueryStringHelper();
+
+            return GetEndpointParameters<T>(endpoint, parameters, queryStringHelper);
+        }
+
         internal string GetEndpointParameters<T>(
                 string endpoint,
                 Dictionary<string, object> parameters,
-                ApiQueryStringHelper<T> queryStringHelper
-        ) where T : Enum
+                ApiQueryStringHelper queryStringHelper
+        )
         {
-            return queryStringHelper.GetQueryString(endpoint, parameters);
+            return queryStringHelper.GetQueryString<T>(endpoint, parameters);
         }
 
         internal void ValidateModelIsNotNullOrZero(AbstractUpdatable updateData)

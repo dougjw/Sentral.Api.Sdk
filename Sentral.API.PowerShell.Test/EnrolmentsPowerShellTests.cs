@@ -14,9 +14,10 @@ namespace Sentral.API.PowerShell.Test
         {
             List<Student> students = new List<Student>();
 
-            var studentsCmd = new Enrolments.GetSntEnrStudent();
-
-            studentsCmd.StudentIds = new int[] { 1, 2 };
+            var studentsCmd = new Enrolments.GetSntEnrStudent
+            {
+                StudentIds = new int[] { 1, 2 }
+            };
 
             var enumerator = studentsCmd.Invoke<List<Student>>().GetEnumerator();
 
@@ -39,9 +40,10 @@ namespace Sentral.API.PowerShell.Test
 
                 Student updatedStudent = null;
 
-                var studentsCmd = new Enrolments.GetSntEnrStudent();
-
-                studentsCmd.StudentId = 1;
+                var studentsCmd = new Enrolments.GetSntEnrStudent
+                {
+                    StudentId = 1
+                };
 
 
                 var enumerator = studentsCmd.Invoke<Student>().GetEnumerator();

@@ -6,6 +6,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
@@ -53,10 +54,15 @@ namespace Sentral.API.PowerShell.Enrolments
         protected override void BeginProcessing()
         {
 
-            StudentHouseholdRelationIncludeOptions include = new StudentHouseholdRelationIncludeOptions(
-                    IncludeStudent.IsPresent,
-                    IncludeHousehold.IsPresent
-                );
+            List<StudentHouseholdRelationIncludeOptions> include = new List<StudentHouseholdRelationIncludeOptions>();
+            if(IncludeStudent.IsPresent)
+            {
+                include.Add(StudentHouseholdRelationIncludeOptions.Student);
+            }
+            if(IncludeHousehold.IsPresent)
+            {
+                include.Add(StudentHouseholdRelationIncludeOptions.Household);
+            }
 
             // Singular mode chosen
             if (StudentHouseholdLinkId.HasValue && StudentHouseholdLinkId.Value > 0)

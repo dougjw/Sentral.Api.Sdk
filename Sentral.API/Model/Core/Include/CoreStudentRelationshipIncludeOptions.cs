@@ -5,20 +5,8 @@ using System.Text;
 
 namespace Sentral.API.Model.Core.Include
 {
-    public class CoreStudentRelationshipIncludeOptions : AbstractIncludeOptions<EnumCoreIncludeOptions>
+    public enum CoreStudentRelationshipIncludeOptions
     {
-        public CoreStudentRelationshipIncludeOptions(bool coreStudent = false) : 
-            base(GetIncludeOptionList(coreStudent)) {}
-
-        private static EnumCoreIncludeOptions[] GetIncludeOptionList(bool coreStudent)
-        {
-            List<EnumCoreIncludeOptions> inclOptions = new List<EnumCoreIncludeOptions>();
-
-            if (coreStudent)
-            {
-                inclOptions.Add(EnumCoreIncludeOptions.CoreStudent);
-            }
-            return inclOptions.ToArray();
-        }
+        CoreStudent
     }
 }

@@ -101,19 +101,19 @@ namespace Sentral.API.Test
             // Only run test on sandbox
             if (IsTestSite)
             {
-                var consentedBy = new Relationship<SimpleRelationshipLink>
+                var consentedBy = new Relationship<SimplePersonLink>
                 {
-                    Data = new SimpleRelationshipLink() { ID = 1 }
+                    Data = new SimplePersonLink() { ID = 1 }
                 };
 
-                var consent = new Relationship<SimpleRelationshipLink>
+                var consent = new Relationship<SimpleConsentLink>
                 {
-                    Data = new SimpleRelationshipLink() { ID = 1 }
+                    Data = new SimpleConsentLink() { ID = 1 }
                 };
 
-                var person = new Relationship<SimpleRelationshipLink>
+                var person = new Relationship<SimplePersonLink>
                 {
-                    Data = new SimpleRelationshipLink() { ID = 1 }
+                    Data = new SimplePersonLink() { ID = 1 }
                 };
 
 
@@ -360,7 +360,12 @@ namespace Sentral.API.Test
         public void GetOnePersonTest()
         {
 
-            var incl = new PersonIncludeOptions(emails: true, phoneNumbers: true, primaryHousehold: true, otherHouseholds:true);
+            var incl = new PersonIncludeOptions[] {
+                    PersonIncludeOptions.Emails,
+                    PersonIncludeOptions.PhoneNumbers,
+                    PersonIncludeOptions.PrimaryHousehold,
+                    PersonIncludeOptions.OtherHouseholds
+                };
             var x = SAPI.Enrolments.GetPerson(2, include: incl);
 
             Assert.IsTrue(x != null && x.ID == 2 && !string.IsNullOrWhiteSpace(x.LastName));
@@ -372,7 +377,7 @@ namespace Sentral.API.Test
             // Only run test on sandbox
             if (IsTestSite)
             {
-                var include = new PersonIncludeOptions(phoneNumbers: true);
+                var include = new PersonIncludeOptions[] { PersonIncludeOptions.PhoneNumbers } ;
                 var personPreUpdate = SAPI.Enrolments.GetPerson(2, include);
 
                 string updatePersonName = personPreUpdate.FirstName == "Sharron" ? "Jane" : "Sharron";
@@ -413,7 +418,7 @@ namespace Sentral.API.Test
                 {
                     Email = "test@somewhere.com",
                     EmailType = "01",
-                    Owner = new Relationship<SimpleRelationshipLink>()
+                    Owner = new Relationship<SimplePersonLink>()
 
                 };
 
@@ -562,7 +567,7 @@ namespace Sentral.API.Test
                     Qualification = "Some Qualification",
                     QualificationType = EnumStaffQualificiationType.bachelors_degree,
                     DateAchieved  = new DateTime(2010,10,1),
-                    Staff = new Relationship<SimpleRelationshipLink>()
+                    Staff = new Relationship<SimpleStaffLink>()
 
                 };
 
@@ -762,7 +767,7 @@ namespace Sentral.API.Test
         public void GetOneStudentWithContactTest()
         {
             int studentId = 11434;
-            var x = SAPI.Enrolments.GetStudent(studentId, new StudentIncludeOptions(contacts:true));
+            var x = SAPI.Enrolments.GetStudent(studentId, new StudentIncludeOptions[] { StudentIncludeOptions.Contacts });
 
 
             Assert.IsTrue(x != null && x.ID == studentId && x.Contacts.Data.Count >=1);

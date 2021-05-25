@@ -6,6 +6,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
@@ -49,11 +50,20 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
         {
-            PersonConsentIncludeOptions include = new PersonConsentIncludeOptions(
-                        IncludePerson.IsPresent,
-                        IncludeConsent.IsPresent,
-                        IncludeConsentedBy.IsPresent
-                   );
+            List<PersonConsentIncludeOptions> include = new List<PersonConsentIncludeOptions>();
+
+            if (IncludePerson.IsPresent)
+            {
+                include.Add(PersonConsentIncludeOptions.Person);
+            }
+            if (IncludeConsent.IsPresent)
+            {
+                include.Add(PersonConsentIncludeOptions.Consent);
+            }
+            if (IncludeConsentedBy.IsPresent)
+            {
+                include.Add(PersonConsentIncludeOptions.ConsentedBy);
+            }
 
             // Singular mode chosen
             if (ConsentLinkId.HasValue && ConsentLinkId.Value > 0)

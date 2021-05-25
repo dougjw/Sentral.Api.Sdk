@@ -10,7 +10,7 @@ namespace Sentral.API.Model.Common
     public abstract class AbstractUpdatable
     {
 
-        private readonly string _type;
+        private string _type;
 
 
         public AbstractUpdatable (int id, string typeString) 
@@ -46,19 +46,6 @@ namespace Sentral.API.Model.Common
         public bool IsPostModel()
         {
             return ID == 0;
-        }
-
-
-        internal void SetRelationshipLinkType(string type, Relationship<SimpleRelationshipLink> relationship)
-        {
-            if (relationship != null)
-            {
-                if (relationship.Data == null)
-                {
-                    relationship.Data = new SimpleRelationshipLink();
-                }
-                relationship.Data.Type = type;
-            }
         }
     }
 }

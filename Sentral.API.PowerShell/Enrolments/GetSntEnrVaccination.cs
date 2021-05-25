@@ -6,6 +6,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
@@ -41,9 +42,11 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
         {
-            VaccinationIncludeOptions include = new VaccinationIncludeOptions(
-                    IncludePerson.IsPresent
-            );
+            List<VaccinationIncludeOptions> include = new List<VaccinationIncludeOptions>();
+            if (IncludePerson.IsPresent) 
+            {
+                include.Add(VaccinationIncludeOptions.Person);
+            }
             // Singular mode chosen
             if (VaccinationID.HasValue && VaccinationID.Value > 0)
             {

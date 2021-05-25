@@ -23,16 +23,28 @@ namespace Sentral.API.Model.Enrolments
 
         public bool CanContact { get; set; }
 
-        public Relationship<SimpleRelationshipLink> Owner { get; set; }
+        public Relationship<Person> Owner { get; set; }
 
         public UpdatePersonEmail ToUpdatable()
         {
-            return new UpdatePersonEmail(ID)
+            var updatePerson = new UpdatePersonEmail(ID)
             {
                 Email = Email,
-                EmailType = Email,
-                Owner = Owner
+                EmailType = Email
             };
+
+            if(Owner!= null && Owner.Data != null)
+            {
+                updatePerson.Owner = new Relationship<SimplePersonLink>
+                {
+                    Data = new SimplePersonLink()
+                    {
+                        ID = Owner.Data.ID
+                    }
+                };
+            }
+
+            return updatePerson;
         }
     }
 }

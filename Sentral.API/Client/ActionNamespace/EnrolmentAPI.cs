@@ -138,7 +138,7 @@ namespace Sentral.API.Client.ActionNamespace
             DeleteData("/v1/enrolments/consent", id);
         }
 
-        public List<ConsentLink> GetPersonConsentLink(PersonConsentIncludeOptions include = null,
+        public List<ConsentLink> GetPersonConsentLink(ICollection<PersonConsentIncludeOptions> include = null,
             int[] ids = null, int[] personIds = null, bool? includeInactive = null)
         {
             var p = new Dictionary<string, object>
@@ -149,18 +149,18 @@ namespace Sentral.API.Client.ActionNamespace
                 ["includeInactive"] = includeInactive
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/person-consent-link", p);
+            var uri = GetEndpointParameters<PersonConsentIncludeOptions>("/v1/enrolments/person-consent-link", p);
 
             return GetAllData<ConsentLink>(uri);
         }
-        public ConsentLink GetPersonConsentLink(int id, PersonConsentIncludeOptions include = null)
+        public ConsentLink GetPersonConsentLink(int id, ICollection<PersonConsentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
             var endpoint = string.Format("/v1/enrolments/person-consent-link/{0}", id);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<PersonConsentIncludeOptions>(endpoint, p);
             return GetData<ConsentLink>(uri);
         }
 
@@ -233,7 +233,7 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-        public List<Enrolment> GetEnrolment(EnrolmentIncludeOptions include = null, int[] ids = null,
+        public List<Enrolment> GetEnrolment(ICollection<EnrolmentIncludeOptions> include = null, int[] ids = null,
             int[] studentIds = null, int[] rollclassIds = null, int[] yearLevelIds = null,
             int[] houseIds = null, string[] statuses = null)
         {
@@ -248,11 +248,11 @@ namespace Sentral.API.Client.ActionNamespace
                 ["statuses"] = statuses
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/enrolment", p);
+            var uri = GetEndpointParameters<EnrolmentIncludeOptions>("/v1/enrolments/enrolment", p);
             return GetAllData<Enrolment>(uri);
         }
 
-        public Enrolment GetEnrolment(int id, EnrolmentIncludeOptions include = null)
+        public Enrolment GetEnrolment(int id, ICollection<EnrolmentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -404,23 +404,23 @@ namespace Sentral.API.Client.ActionNamespace
         // TODO: Add Careplan File endpoint for Medical Conditions
 
 
-        public MedicalConditionAdd GetMedicalConditionAdd(int id, MedicalConditionsIncludeOptions include = null)
+        public MedicalConditionAdd GetMedicalConditionAdd(int id, ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/medical-condition-add/{0}",id), p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>(string.Format("/v1/enrolments/medical-condition-add/{0}",id), p);
             return GetData<MedicalConditionAdd>(uri);
         }
 
-        public List<MedicalConditionAdd> GetMedicalConditionAdd(MedicalConditionsIncludeOptions include = null)
+        public List<MedicalConditionAdd> GetMedicalConditionAdd(ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters("/v1/enrolments/medical-condition-add", p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>("/v1/enrolments/medical-condition-add", p);
 
             return GetAllData<MedicalConditionAdd>(uri);
         }
@@ -428,23 +428,23 @@ namespace Sentral.API.Client.ActionNamespace
         // TODO: Add Careplan File endpoint for Medical Condition ADD
 
 
-        public MedicalConditionAllergy GetMedicalConditionAllergy(int id, MedicalConditionsIncludeOptions include = null)
+        public MedicalConditionAllergy GetMedicalConditionAllergy(int id, ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/medical-condition-allergy/{0}", id), p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>(string.Format("/v1/enrolments/medical-condition-allergy/{0}", id), p);
             return GetData<MedicalConditionAllergy>(uri);
         }
 
-        public List<MedicalConditionAllergy> GetMedicalConditionAllergy(MedicalConditionsIncludeOptions include = null)
+        public List<MedicalConditionAllergy> GetMedicalConditionAllergy(ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters("/v1/enrolments/medical-condition-allergy", p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>("/v1/enrolments/medical-condition-allergy", p);
 
             return GetAllData<MedicalConditionAllergy>(uri);
         }
@@ -452,23 +452,23 @@ namespace Sentral.API.Client.ActionNamespace
         // TODO: Add Careplan File endpoint for Medical Condition Allergy
 
 
-        public MedicalConditionAsthma GetMedicalConditionAsthma(int id, MedicalConditionsIncludeOptions include = null)
+        public MedicalConditionAsthma GetMedicalConditionAsthma(int id, ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/medical-condition-asthma/{0}", id), p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>(string.Format("/v1/enrolments/medical-condition-asthma/{0}", id), p);
             return GetData<MedicalConditionAsthma>(uri);
         }
 
-        public List<MedicalConditionAsthma> GetMedicalConditionAsthma(MedicalConditionsIncludeOptions include = null)
+        public List<MedicalConditionAsthma> GetMedicalConditionAsthma(ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters("/v1/enrolments/medical-condition-asthma", p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>("/v1/enrolments/medical-condition-asthma", p);
 
             return GetAllData<MedicalConditionAsthma>(uri);
         }
@@ -476,23 +476,23 @@ namespace Sentral.API.Client.ActionNamespace
         // TODO: Add Careplan File endpoint for Medical Condition Asthma
 
 
-        public MedicalConditionDiabetes GetMedicalConditionDiabetes(int id, MedicalConditionsIncludeOptions include = null)
+        public MedicalConditionDiabetes GetMedicalConditionDiabetes(int id, ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/medical-condition-diabetes/{0}", id), p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>(string.Format("/v1/enrolments/medical-condition-diabetes/{0}", id), p);
             return GetData<MedicalConditionDiabetes>(uri);
         }
 
-        public List<MedicalConditionDiabetes> GetMedicalConditionDiabetes(MedicalConditionsIncludeOptions include = null)
+        public List<MedicalConditionDiabetes> GetMedicalConditionDiabetes(ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters("/v1/enrolments/medical-condition-diabetes", p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>("/v1/enrolments/medical-condition-diabetes", p);
 
             return GetAllData<MedicalConditionDiabetes>(uri);
         }
@@ -500,23 +500,23 @@ namespace Sentral.API.Client.ActionNamespace
         // TODO: Add Careplan File endpoint for Medical Condition Diabetes
 
 
-        public MedicalConditionEpilepsy GetMedicalConditionEpilepsy(int id, MedicalConditionsIncludeOptions include = null)
+        public MedicalConditionEpilepsy GetMedicalConditionEpilepsy(int id, ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/medical-condition-epilepsy/{0}", id), p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>(string.Format("/v1/enrolments/medical-condition-epilepsy/{0}", id), p);
             return GetData<MedicalConditionEpilepsy>(uri);
         }
 
-        public List<MedicalConditionEpilepsy> GetMedicalConditionEpilepsy(MedicalConditionsIncludeOptions include = null)
+        public List<MedicalConditionEpilepsy> GetMedicalConditionEpilepsy(ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters("/v1/enrolments/medical-condition-epilepsy", p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>("/v1/enrolments/medical-condition-epilepsy", p);
 
             return GetAllData<MedicalConditionEpilepsy>(uri);
         }
@@ -524,23 +524,23 @@ namespace Sentral.API.Client.ActionNamespace
         // TODO: Add Careplan File endpoint for Medical Condition Epilepsy
 
 
-        public MedicalConditionOther GetMedicalConditionOther(int id, MedicalConditionsIncludeOptions include = null)
+        public MedicalConditionOther GetMedicalConditionOther(int id, ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/medical-condition-other/{0}", id), p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>(string.Format("/v1/enrolments/medical-condition-other/{0}", id), p);
             return GetData<MedicalConditionOther>(uri);
         }
 
-        public List<MedicalConditionOther> GetMedicalConditionOther(MedicalConditionsIncludeOptions include = null)
+        public List<MedicalConditionOther> GetMedicalConditionOther(ICollection<MedicalConditionsIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters("/v1/enrolments/medical-condition-other", p);
+            var uri = GetEndpointParameters<MedicalConditionsIncludeOptions>("/v1/enrolments/medical-condition-other", p);
 
             return GetAllData<MedicalConditionOther>(uri);
         }
@@ -556,7 +556,7 @@ namespace Sentral.API.Client.ActionNamespace
 
 
         public List<Person> GetPerson(
-                PersonIncludeOptions include = null, int[] ids = null, string[] refIds = null,
+                ICollection<PersonIncludeOptions> include = null, int[] ids = null, string[] refIds = null,
                 string[] contactCodes = null, string[] externalIds = null, string firstName = null,
                 string lastName = null, bool? inactive = null
             )
@@ -573,13 +573,13 @@ namespace Sentral.API.Client.ActionNamespace
                 ["inactive"] = inactive
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/person", p);
+            var uri = GetEndpointParameters<PersonIncludeOptions>("/v1/enrolments/person", p);
 
             return GetAllData<Person>(uri);
         }
 
 
-        public Person GetPerson(int id, PersonIncludeOptions include = null)
+        public Person GetPerson(int id, ICollection<PersonIncludeOptions> include = null)
         {
             string endpoint = string.Format("/v1/enrolments/person/{0}", id);
 
@@ -587,13 +587,13 @@ namespace Sentral.API.Client.ActionNamespace
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<PersonIncludeOptions>(endpoint, p);
 
             return GetData<Person>(uri);
         }
 
 
-        public Person GetPersonByCode(string contactCode, PersonIncludeOptions include = null)
+        public Person GetPersonByCode(string contactCode, ICollection<PersonIncludeOptions> include = null)
         {
             string endpoint = string.Format("/v1/enrolments/person/{0}", contactCode);
 
@@ -601,7 +601,7 @@ namespace Sentral.API.Client.ActionNamespace
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<PersonIncludeOptions>(endpoint, p);
 
             return GetData<Person>(uri);
         }
@@ -643,7 +643,7 @@ namespace Sentral.API.Client.ActionNamespace
             return GetAllData<Doctor>(string.Format("/v1/enrolments/person/{0}/doctors", personId));
         }
 
-        public List<ConsentLink> GetPersonGivenConsentLinks(int personId, PersonConsentIncludeOptions include = null)
+        public List<ConsentLink> GetPersonGivenConsentLinks(int personId, ICollection<PersonConsentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -651,7 +651,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/person/{0}/given-consent-links", personId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<PersonConsentIncludeOptions>(endpoint, p);
 
             return GetAllData<ConsentLink>(uri);
 
@@ -678,7 +678,7 @@ namespace Sentral.API.Client.ActionNamespace
             return GetAllData<PrescribedMedication>(string.Format("/v1/enrolments/person/{0}/prescribed-medication", personId));
         }
 
-        public Staff GetPersonStaff(int personId, StaffIncludeOptions include = null)
+        public Staff GetPersonStaff(int personId, ICollection<StaffIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -686,12 +686,12 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/person/{0}/staff", personId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StaffIncludeOptions>(endpoint, p);
 
             return GetData<Staff>(uri);
         }
 
-        public Student GetPersonStudent(int personId, StudentIncludeOptions include = null)
+        public Student GetPersonStudent(int personId, ICollection<StudentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -699,12 +699,12 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/person/{0}/student", personId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StaffIncludeOptions>(endpoint, p);
 
             return GetData<Student>(uri);
         }
 
-        public List<StudentPersonRelationship> GetPersonStudentContacts(int personId, StudentContactIncludeOptions include = null)
+        public List<StudentPersonRelationship> GetPersonStudentContacts(int personId, ICollection<StudentContactIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -712,12 +712,12 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/person/{0}/student-contacts", personId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentContactIncludeOptions>(endpoint, p);
 
             return GetAllData<StudentPersonRelationship>(uri);
         }
 
-        public List<Vaccination> GetPersonVaccination(int personId, VaccinationIncludeOptions include = null)
+        public List<Vaccination> GetPersonVaccination(int personId, ICollection<VaccinationIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -725,7 +725,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/person/{0}/vaccination", personId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<VaccinationIncludeOptions>(endpoint, p);
 
             return GetAllData<Vaccination>(uri);
         }
@@ -818,7 +818,7 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-        public List<PersonMedicalMisc> GetPersonMedicalMisc(MedicalMiscIncludeOptions include = null, int[] personIds = null)
+        public List<PersonMedicalMisc> GetPersonMedicalMisc(ICollection<MedicalMiscIncludeOptions> include = null, int[] personIds = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -826,18 +826,18 @@ namespace Sentral.API.Client.ActionNamespace
                 ["personIds"] = personIds
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/person-medical-misc", p);
+            var uri = GetEndpointParameters<MedicalMiscIncludeOptions>("/v1/enrolments/person-medical-misc", p);
 
             return GetAllData<PersonMedicalMisc>(uri);
         }
-        public PersonMedicalMisc GetPersonMedicalMisc(int id, MedicalMiscIncludeOptions include = null)
+        public PersonMedicalMisc GetPersonMedicalMisc(int id, ICollection<MedicalMiscIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
 
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/person-medical-misc/{0}", id), p);
+            var uri = GetEndpointParameters<MedicalMiscIncludeOptions>(string.Format("/v1/enrolments/person-medical-misc/{0}", id), p);
 
             return GetData<PersonMedicalMisc>(uri);
         }
@@ -896,26 +896,26 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-        public List<School> GetSchool(SchoolIncludeOptions include = null)
+        public List<School> GetSchool(ICollection<SchoolIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/school", p);
+            var uri = GetEndpointParameters<SchoolIncludeOptions>("/v1/enrolments/school", p);
 
             return GetAllData<School>(uri);
         }
 
-        public School GetSchool(int id, SchoolIncludeOptions include = null)
+        public School GetSchool(int id, ICollection<SchoolIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
 
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/school/{0}", id), p);
+            var uri = GetEndpointParameters<SchoolIncludeOptions>(string.Format("/v1/enrolments/school/{0}", id), p);
 
             return GetData<School>(uri);
         }
@@ -925,7 +925,7 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<School>(string.Format("/v1/enrolments/school/{0}/tenant", schoolId));
         }
 
-        public List<SpecialNeedsProgram> GetSpecialNeedsProgram(SpecialNeedsProgramIncludeOptions include = null,
+        public List<SpecialNeedsProgram> GetSpecialNeedsProgram(ICollection<SpecialNeedsProgramIncludeOptions> include = null,
                 int[] ids = null, int[] studentIds = null)
         {
             var p = new Dictionary<string, object>
@@ -935,25 +935,25 @@ namespace Sentral.API.Client.ActionNamespace
                 ["studentIds"] = studentIds
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/special-needs-program", p);
+            var uri = GetEndpointParameters<SpecialNeedsProgramIncludeOptions>("/v1/enrolments/special-needs-program", p);
 
             return GetAllData<SpecialNeedsProgram>(uri);
         }
 
-        public SpecialNeedsProgram GetSpecialNeedsProgram(int id, SpecialNeedsProgramIncludeOptions include = null)
+        public SpecialNeedsProgram GetSpecialNeedsProgram(int id, ICollection<SpecialNeedsProgramIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
 
-            var uri = GetEndpointParameters(string.Format("/v1/enrolments/special-needs-program/{0}", id), p);
+            var uri = GetEndpointParameters<SpecialNeedsProgramIncludeOptions>(string.Format("/v1/enrolments/special-needs-program/{0}", id), p);
 
             return GetData<SpecialNeedsProgram>(uri);
         }
 
 
-        public List<Staff> GetStaff(StaffIncludeOptions include = null, int[] ids = null, string[] barcodes = null,
+        public List<Staff> GetStaff(ICollection<StaffIncludeOptions> include = null, int[] ids = null, string[] barcodes = null,
             string[] staffCodes = null, Guid[] refIds = null, string[] contactCodes = null, string[] externalIds = null)
         {
             var p = new Dictionary<string, object>
@@ -967,12 +967,12 @@ namespace Sentral.API.Client.ActionNamespace
                 ["externalIds"] = externalIds
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/staff", p);
+            var uri = GetEndpointParameters<StaffIncludeOptions>("/v1/enrolments/staff", p);
 
             return GetAllData<Staff>(uri);
         }
 
-        public Staff GetStaff(int id, StaffIncludeOptions include = null)
+        public Staff GetStaff(int id, ICollection<StaffIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -980,7 +980,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/staff/{0}", id);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StaffIncludeOptions>(endpoint, p);
 
             return GetData<Staff>(uri);
         }
@@ -1054,7 +1054,7 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-        public List<Student> GetStudent(StudentIncludeOptions include = null, int[] ids = null,
+        public List<Student> GetStudent(ICollection<StudentIncludeOptions> include = null, int[] ids = null,
                 string[] studentCodes = null, string[] examCodes = null, string[] refIds = null,
                 string[] contactCodes = null, int[] externalIds = null, int[] academicPeriodIds = null)
         {
@@ -1070,12 +1070,12 @@ namespace Sentral.API.Client.ActionNamespace
                 ["academicPeriodIds"] = academicPeriodIds
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/student", p);
+            var uri = GetEndpointParameters<StudentIncludeOptions>("/v1/enrolments/student", p);
 
             return GetAllData<Student>(uri);
 
         }
-        public Student GetStudent(int id, StudentIncludeOptions include = null)
+        public Student GetStudent(int id, ICollection<StudentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1083,7 +1083,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student/{0}", id);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentIncludeOptions>(endpoint, p);
 
             return GetData<Student>(uri);
         }
@@ -1113,10 +1113,10 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             // Use Activites API query string helper
-            var apiQueryStringHelper = new ApiQueryStringHelper<Model.Activities.Include.EnumActivitiesIncludeOptions>();
+            var apiQueryStringHelper = new ApiQueryStringHelper();
 
             var endpoint = string.Format("/v1/enrolments/student/{0}/activities", studentId);
-            var uri = GetEndpointParameters(endpoint, p, apiQueryStringHelper);
+            var uri = GetEndpointParameters<StudentIncludeOptions>(endpoint, p, apiQueryStringHelper);
 
             return GetAllData<Model.Activities.Activity>(uri);
         }
@@ -1129,7 +1129,7 @@ namespace Sentral.API.Client.ActionNamespace
             return GetAllData<Model.Activities.AttendeeLink>(uri);
         }
 
-        public List<Enrolment> GetStudentEnrolment(int studentId, EnrolmentIncludeOptions include = null)
+        public List<Enrolment> GetStudentEnrolment(int studentId, ICollection<EnrolmentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1137,13 +1137,13 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student/{0}/enrolment", studentId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<EnrolmentIncludeOptions>(endpoint, p);
 
             return GetAllData<Enrolment>(uri);
 
         }
 
-        public List<StudentFlagLink> GetStudentFlagLinkByStudentId(int studentId, StudentFlagLinkIncludeOptions include = null)
+        public List<StudentFlagLink> GetStudentFlagLinkByStudentId(int studentId, ICollection<StudentFlagLinkIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1151,7 +1151,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student/{0}/student-flag-links", studentId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentFlagLinkIncludeOptions>(endpoint, p);
 
             return GetAllData<StudentFlagLink>(uri);
         }
@@ -1164,7 +1164,7 @@ namespace Sentral.API.Client.ActionNamespace
         // TODO household relationhips
 
         public List<StudentHouseholdRelationship> GetStudentHouseholdRelationshisByStudentId(int studentId,
-            StudentHouseholdRelationIncludeOptions include = null, string[] residentialHouseholdTypes = null)
+            ICollection<StudentHouseholdRelationIncludeOptions> include = null, string[] residentialHouseholdTypes = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1173,11 +1173,11 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student/{0}/households", studentId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentHouseholdRelationIncludeOptions>(endpoint, p);
             return GetAllData<StudentHouseholdRelationship>(uri);
         }
 
-        public Person GetStudentPerson(int studentId, PersonIncludeOptions include = null)
+        public Person GetStudentPerson(int studentId, ICollection<PersonIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1185,14 +1185,14 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student/{0}/person", studentId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<PersonIncludeOptions>(endpoint, p);
 
             return GetData<Person>(uri);
         }
 
         // TODO Student Photo (Binary stream?)
 
-        public Enrolment GetStudentPrimaryEnrolment(int studentId, EnrolmentIncludeOptions include = null)
+        public Enrolment GetStudentPrimaryEnrolment(int studentId, ICollection<EnrolmentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1200,7 +1200,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student/{0}/primary-enrolment", studentId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<EnrolmentIncludeOptions>(endpoint, p);
 
             return GetData<Enrolment>(uri);
         }
@@ -1217,15 +1217,15 @@ namespace Sentral.API.Client.ActionNamespace
             var endpoint = string.Format("/v1/enrolments/student/{0}/academic-reports", studentId);
 
             // Use reports include helper 
-            var queryStringHelper = new ApiQueryStringHelper<Model.Reports.Include.EnumReportsIncludeOptions>();
+            var queryStringHelper = new ApiQueryStringHelper();
 
-            var uri = GetEndpointParameters(endpoint, p, queryStringHelper);
+            var uri = GetEndpointParameters<Model.Reports.Include.StudentAcademicReportIncludeOptions>(endpoint, p, queryStringHelper);
 
             return GetAllData<Model.Reports.StudentAcademicReport>(uri);
 
         }
 
-        public List<SpecialNeedsProgram> GetStudentSpecialNeedsProgram(int studentId, SpecialNeedsProgramIncludeOptions include = null)
+        public List<SpecialNeedsProgram> GetStudentSpecialNeedsProgram(int studentId, ICollection<SpecialNeedsProgramIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1233,7 +1233,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student/{0}/special-needs-programs", studentId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<SpecialNeedsProgramIncludeOptions>(endpoint, p);
 
             return GetAllData<SpecialNeedsProgram>(uri);
         }
@@ -1245,19 +1245,19 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-        public List<StudentPersonRelationship> GetStudentContact(StudentContactIncludeOptions include = null)
+        public List<StudentPersonRelationship> GetStudentContact(ICollection<StudentContactIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/student-contact", p);
+            var uri = GetEndpointParameters<StudentContactIncludeOptions>("/v1/enrolments/student-contact", p);
 
             return GetAllData<StudentPersonRelationship>(uri);
         }
 
-        public StudentPersonRelationship GetStudentContact(int id, StudentContactIncludeOptions include = null)
+        public StudentPersonRelationship GetStudentContact(int id, ICollection<StudentContactIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1265,12 +1265,12 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student-contact/{0}", id);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentContactIncludeOptions>(endpoint, p);
 
             return GetData<StudentPersonRelationship>(uri);
         }
 
-        public Student GetStudentContactStudent(int id, StudentIncludeOptions include = null)
+        public Student GetStudentContactStudent(int id, ICollection<StudentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1278,7 +1278,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student-contact/{0}/student", id);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentIncludeOptions>(endpoint, p);
 
             return GetData<Student>(uri);
         }
@@ -1323,20 +1323,20 @@ namespace Sentral.API.Client.ActionNamespace
 
 
 
-        public List<StudentFlagLink> GetStudentFlagLink(StudentFlagLinkIncludeOptions include = null)
+        public List<StudentFlagLink> GetStudentFlagLink(ICollection<StudentFlagLinkIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/student-flag-links", p);
+            var uri = GetEndpointParameters<StudentFlagLinkIncludeOptions>("/v1/enrolments/student-flag-links", p);
 
             return GetAllData<StudentFlagLink>(uri);
         }
 
 
-        public StudentFlagLink GetStudentFlagLink(int id, StudentFlagLinkIncludeOptions include = null)
+        public StudentFlagLink GetStudentFlagLink(int id, ICollection<StudentFlagLinkIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1344,7 +1344,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student-flag-links/{0}", id);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentFlagLinkIncludeOptions>(endpoint, p);
 
             return GetData<StudentFlagLink>(uri);
         }
@@ -1352,7 +1352,7 @@ namespace Sentral.API.Client.ActionNamespace
         // TODO Add Student Flag Link PATCH/POST/DEL enpoints
 
 
-        public List<StudentHouseholdRelationship> GetStudentHouseholdRelationship(StudentHouseholdRelationIncludeOptions include = null,
+        public List<StudentHouseholdRelationship> GetStudentHouseholdRelationship(ICollection<StudentHouseholdRelationIncludeOptions> include = null,
             int[] studentIds = null)
         {
             var p = new Dictionary<string, object>
@@ -1361,11 +1361,11 @@ namespace Sentral.API.Client.ActionNamespace
                 ["studentIds"] = studentIds
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/student-households", p);
+            var uri = GetEndpointParameters<StudentHouseholdRelationIncludeOptions>("/v1/enrolments/student-households", p);
             return GetAllData<StudentHouseholdRelationship>(uri);
 
         }
-        public StudentHouseholdRelationship GetStudentHouseholdRelationship(int id, StudentHouseholdRelationIncludeOptions include = null)
+        public StudentHouseholdRelationship GetStudentHouseholdRelationship(int id, ICollection<StudentHouseholdRelationIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1373,7 +1373,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student-household/{0}", id);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentHouseholdRelationIncludeOptions>(endpoint, p);
             return GetData<StudentHouseholdRelationship>(uri);
 
         }
@@ -1382,7 +1382,7 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<Household>(string.Format("/v1/enrolments/student-household/{0}/household?include=addresses", id));
 
         }
-        public List<Student> GetStudentHouseholdStudents(int studentHouseholdId, StudentIncludeOptions include = null)
+        public List<Student> GetStudentHouseholdStudents(int studentHouseholdId, ICollection<StudentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1390,7 +1390,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/student-household/{0}/student", studentHouseholdId);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<StudentIncludeOptions>(endpoint, p);
             return GetAllData<Student>(uri);
         }
 
@@ -1414,20 +1414,20 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-        public List<Vaccination> GetVaccination(VaccinationIncludeOptions include = null)
+        public List<Vaccination> GetVaccination(ICollection<VaccinationIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
 
-            var uri = GetEndpointParameters("/v1/enrolments/vaccination", p);
+            var uri = GetEndpointParameters<VaccinationIncludeOptions>("/v1/enrolments/vaccination", p);
 
             return GetAllData<Vaccination>(uri);
         }
 
 
-        public Vaccination GetVaccination(int id, VaccinationIncludeOptions include = null)
+        public Vaccination GetVaccination(int id, ICollection<VaccinationIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
@@ -1435,7 +1435,7 @@ namespace Sentral.API.Client.ActionNamespace
             };
 
             var endpoint = string.Format("/v1/enrolments/vaccination/{0}", id);
-            var uri = GetEndpointParameters(endpoint, p);
+            var uri = GetEndpointParameters<VaccinationIncludeOptions>(endpoint, p);
 
             return GetData<Vaccination>(uri);
         }
@@ -1461,14 +1461,6 @@ namespace Sentral.API.Client.ActionNamespace
 
 
 
-        private string GetEndpointParameters(
-                string endpoint,
-                Dictionary<string, object> parameters
-        )
-        {
-            var queryStringHelper = new ApiQueryStringHelper<EnumEnrolmentsIncludeOptions>();
 
-            return GetEndpointParameters(endpoint, parameters, queryStringHelper);
-        }
     }
 }

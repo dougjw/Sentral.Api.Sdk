@@ -6,6 +6,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
@@ -62,19 +63,53 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
         {
-            StudentIncludeOptions include = new StudentIncludeOptions(
-                    IncludePrimaryEnrolment.IsPresent,
-                    IncludePerson.IsPresent,
-                    IncludeActivities.IsPresent,
-                    IncludeActivityInstances.IsPresent,
-                    IncludeTenants.IsPresent,
-                    IncludeFlags.IsPresent,
-                    IncludeFlagLinks.IsPresent,
-                    IncludeContacts.IsPresent,
-                    IncludeHolidays.IsPresent,
-                    IncludeSpecialNeedsPrograms.IsPresent,
-                    IncludeSchoolHistory.IsPresent
-            );
+            List<StudentIncludeOptions> include = new List<StudentIncludeOptions>();
+
+            if(IncludePrimaryEnrolment.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.PrimaryEnrolment);
+            }
+            if(IncludePerson.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.Person);
+            }
+            if (IncludeActivities.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.Activities);
+            }
+            if (IncludeActivityInstances.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.ActivityInstances);
+            }
+            if (IncludeTenants.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.Tenants);
+            }
+            if (IncludeFlags.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.Flags);
+            }
+            if (IncludeFlagLinks.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.FlagLinks);
+            }
+            if (IncludeContacts.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.Contacts);
+            }
+            if (IncludeHolidays.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.Holidays);
+
+            }
+            if (IncludeSpecialNeedsPrograms.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.SpecialNeedsPrograms);
+            }
+            if (IncludeSchoolHistory.IsPresent)
+            {
+                include.Add(StudentIncludeOptions.SchoolHistory);
+            }
             // Singular mode chosen
             if (PersonId.HasValue && PersonId.Value > 0)
             {

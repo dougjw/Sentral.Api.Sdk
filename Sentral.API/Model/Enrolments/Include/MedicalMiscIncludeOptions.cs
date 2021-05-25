@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Sentral.API.Model.Enrolments.Include
 {
-    public enum StudentHouseholdRelationIncludeOptions
+    public enum MedicalMiscIncludeOptions
     {
-        Student,
-        Household
+        Person
     }
 }

@@ -6,6 +6,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
@@ -71,13 +72,32 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
         {
-            EnrolmentIncludeOptions include = new EnrolmentIncludeOptions(
-                    IncludeStudent.IsPresent,
-                    IncludeHouse.IsPresent,
-                    IncludeRollclass.IsPresent,
-                    IncludeClasses.IsPresent,
-                    IncludeCampus.IsPresent
-                );
+            List<EnrolmentIncludeOptions> include = new List<EnrolmentIncludeOptions>();
+
+            if(IncludeStudent.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.Student);
+            }
+
+            if (IncludeHouse.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.House);
+            }
+
+            if (IncludeRollclass.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.Rollclass);
+            }
+
+            if (IncludeClasses.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.Classes);
+            }
+
+            if (IncludeCampus.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.Campus);
+            }
 
             // Singular mode chosen
             if(EnrolmentId.HasValue && EnrolmentId.Value > 0)

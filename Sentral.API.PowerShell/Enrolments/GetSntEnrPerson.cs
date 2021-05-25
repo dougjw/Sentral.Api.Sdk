@@ -6,6 +6,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
@@ -113,27 +114,77 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
         {
-            PersonIncludeOptions include = new PersonIncludeOptions(
-                    IncludePrimaryHousehold.IsPresent,
-                    IncludeStudentPrimaryEnrolment.IsPresent,
-                    IncludeStaff.IsPresent,
-                    IncludeStudent.IsPresent,
-                    IncludeContactDetails.IsPresent,
-                    IncludeOtherHouseholds.IsPresent,
-                    IncludeStudentContacts.IsPresent,
-                    IncludeStudentTenants.IsPresent,
-                    IncludePrescribedMedication.IsPresent,
-                    IncludeEmails.IsPresent,
-                    IncludePhoneNumbers.IsPresent,
-                    IncludeGivenConsents.IsPresent,
-                    IncludeGivenConsentLinks.IsPresent,
-                    IncludeEmergencyContactLinks.IsPresent,
-                    IncludeAbilities.IsPresent,
-                    IncludeAdditionalFields.IsPresent
-            );
+            List<PersonIncludeOptions> include = new List<PersonIncludeOptions>();
+
+
+            if(IncludePrimaryHousehold.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.PrimaryHousehold);
+            }
+            if(IncludeStudentPrimaryEnrolment.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.StudentPrimaryEnrolment);
+            }
+            if (IncludeStaff.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.Staff);
+            }
+            if (IncludeStudent.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.Student);
+            }
+            if (IncludeContactDetails.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.ContactDetails);
+            }
+            if (IncludeOtherHouseholds.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.OtherHouseholds);
+            }
+            if (IncludeStudentContacts.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.StudentContacts);
+            }
+            if (IncludeStudentTenants.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.StudentTenants);
+            }
+            if (IncludePrescribedMedication.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.PrescribedMedication);
+            }
+            if (IncludeEmails.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.Emails);
+            }
+            if (IncludePhoneNumbers.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.PhoneNumbers);
+            }
+            if (IncludeGivenConsents.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.GivenConsents);
+            }
+            if (IncludeGivenConsentLinks.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.GivenConsentLinks);
+            }
+            if (IncludeEmergencyContactLinks.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.EmergencyContactLinks);
+            }
+            if (IncludeAbilities.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.AdditionalFields);
+            }
+            if (IncludeAdditionalFields.IsPresent)
+            {
+                include.Add(PersonIncludeOptions.AdditionalFields);
+            }
+
 
             // Singular mode chosen
-            if(PersonId.HasValue && PersonId.Value > 0)
+            if (PersonId.HasValue && PersonId.Value > 0)
             {
                 WriteObject(
                         SentralApiClient.Enrolments.GetPerson(PersonId.Value, include)

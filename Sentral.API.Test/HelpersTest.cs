@@ -21,7 +21,7 @@ namespace Sentral.API.Test
         [TestMethod]
         public void QueryStringTest()
         {
-            ApiQueryStringHelper<EnumEnrolmentsIncludeOptions> queryStringHelper = new ApiQueryStringHelper<EnumEnrolmentsIncludeOptions> ();
+            ApiQueryStringHelper queryStringHelper = new ApiQueryStringHelper();
 
             Dictionary<string, object> p = new Dictionary<string, object>
             {
@@ -29,12 +29,12 @@ namespace Sentral.API.Test
                 ["intArrayParam"] = new int[] { 1, 2, 3 },
                 ["stringParam"] = "hello",
                 ["stringArrayParam"] = new string[] { "Hello", "World" },
-                ["includeParam"] = new PersonIncludeOptions(emails: true, phoneNumbers: true)
+                ["includeParam"] = new PersonIncludeOptions[] { PersonIncludeOptions.Emails, PersonIncludeOptions.PhoneNumbers }
             };
 
 
             string expected = "/v1/some-end-point?intParam=1&intArrayParam=1,2,3&stringParam=hello&stringArrayParam=Hello,World&includeParam=emails,phoneNumbers";
-            var queryString = queryStringHelper.GetQueryString("/v1/some-end-point", p);
+            var queryString = queryStringHelper.GetQueryString<PersonIncludeOptions>("/v1/some-end-point", p);
 
             Assert.AreEqual(expected, queryString);
         }
@@ -82,14 +82,14 @@ namespace Sentral.API.Test
             var personConsent = new UpdatePersonConsentLink(1)
             {
                  ConsentGiven = true,
-                 ConsentedBy = new Relationship<SimpleRelationshipLink>(),
-                 Person = new Relationship<SimpleRelationshipLink>(),
-                 Consent = new Relationship<SimpleRelationshipLink>()
+                 ConsentedBy = new Relationship<SimplePersonLink>(),
+                 Person = new Relationship<SimplePersonLink>(),
+                 Consent = new Relationship<SimpleConsentLink>()
             };
 
-            personConsent.ConsentedBy.Data = new SimpleRelationshipLink() { ID = 1 };
-            personConsent.Person.Data = new SimpleRelationshipLink() { ID = 1 };
-            personConsent.Consent.Data = new SimpleRelationshipLink() { ID = 1 };
+            personConsent.ConsentedBy.Data = new SimplePersonLink() { ID = 1 };
+            personConsent.Person.Data = new SimplePersonLink() { ID = 1 };
+            personConsent.Consent.Data = new SimpleConsentLink() { ID = 1 };
 
             string valueEnrolmentJson = JsonConvert.SerializeObject(personConsent, _settings);
 
@@ -101,18 +101,18 @@ namespace Sentral.API.Test
             var personConsent = new UpdatePersonConsentLink()
             {
                 ConsentGiven = true,
-                ConsentedBy = new Relationship<SimpleRelationshipLink>(),
-                Person = new Relationship<SimpleRelationshipLink>(),
-                Consent = new Relationship<SimpleRelationshipLink>()
+                ConsentedBy = new Relationship<SimplePersonLink>(),
+                Person = new Relationship<SimplePersonLink>(),
+                Consent = new Relationship<SimpleConsentLink>()
             };
 
-            personConsent.ConsentedBy.Data = new SimpleRelationshipLink() { ID = 1 };
-            personConsent.Person.Data = new SimpleRelationshipLink() { ID = 1 };
-            personConsent.Consent.Data = new SimpleRelationshipLink() { ID = 1 };
+            personConsent.ConsentedBy.Data = new SimplePersonLink() { ID = 1 } ;
+            personConsent.Person.Data = new SimplePersonLink() { ID = 1 };
+            personConsent.Consent.Data = new SimpleConsentLink() { ID = 1 };
 
             string valueEnrolmentJson = JsonConvert.SerializeObject(personConsent, _settings);
 
-            Assert.AreEqual(valueEnrolmentJson, "{\"data\":{\"type\":\"personConsentLink\",\"attributes\":{\"consentGiven\":true},\"relationships\":{\"consentedBy\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"person\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"consent\":{\"data\":{\"id\":\"1\",\"type\":\"consent\"}}}}}", "Actual Property value test");
+            Assert.AreEqual(valueEnrolmentJson, "{\"data\":{\"type\":\"personConsentLink\",\"attributes\":{\"consentGiven\":true},\"relationships\":{\"consentedBy\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"person\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"consent\":{\"data\":{\"id\":\"1\",\"type\":\"consent\"}}}}}", valueEnrolmentJson);
         }
     }
 }

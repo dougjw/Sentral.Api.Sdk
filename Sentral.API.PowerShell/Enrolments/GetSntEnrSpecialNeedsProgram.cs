@@ -6,6 +6,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
@@ -42,9 +43,11 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
         {
-            SpecialNeedsProgramIncludeOptions include = new SpecialNeedsProgramIncludeOptions(
-                    IncludeStudents.IsPresent
-            );
+            List<SpecialNeedsProgramIncludeOptions> include = new List<SpecialNeedsProgramIncludeOptions>();
+            if (IncludeStudents.IsPresent)
+            {
+                include.Add(SpecialNeedsProgramIncludeOptions.Students);
+            }
 
             // Singular mode chosen
             if(SpecialNeedsProgramId.HasValue && SpecialNeedsProgramId.Value > 0)

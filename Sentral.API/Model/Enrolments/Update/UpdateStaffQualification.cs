@@ -11,7 +11,6 @@ namespace Sentral.API.Model.Enrolments.Update
     {
 
         private const string _type = "staffQualification";
-        private const string _staffType = "staff";
 
         // Patch model
         public UpdateStaffQualification(int id) :base(id, _type)
@@ -27,7 +26,7 @@ namespace Sentral.API.Model.Enrolments.Update
         private string _aitslTeacherAccreditationLevel;
         private string _nextAitslTeacherAccreditationLevel;
         private DateTime? _dateAchieved;
-        private Relationship<SimpleRelationshipLink> _staff;
+        private Relationship<SimpleStaffLink> _staff;
 
 
         private bool _qualificationIncludeInSerialize;
@@ -185,7 +184,7 @@ namespace Sentral.API.Model.Enrolments.Update
 
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public Relationship<SimpleRelationshipLink> Staff
+        public Relationship<SimpleStaffLink> Staff
         {
             get
             {
@@ -195,7 +194,6 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _staff = value;
-                SetRelationshipLinkType(_staffType, _staff);
                 _staffIncludeInSerialize = IsPostModel();
             }
         }
