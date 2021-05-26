@@ -171,6 +171,8 @@ namespace Sentral.API.PowerShell.Enrolments
 
         }
 
+
+        [Parameter(Mandatory = false)]
         public string EmploymentStatus
         {
             get
@@ -184,6 +186,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public string EmploymentClassification
         {
             get
@@ -197,6 +201,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public string JobTitle
         {
             get
@@ -210,6 +216,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? ContractCommencementDate
         {
             get
@@ -223,6 +231,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? ContractExpiryDate
         {
             get
@@ -236,6 +246,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public string WWCCNumber
         {
             get
@@ -249,6 +261,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public string WWCCStatus
         {
             get
@@ -262,6 +276,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? WWCCExpiryDate
         {
             get
@@ -275,6 +291,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? CodeOfConductDateSigned
         {
             get
@@ -288,6 +306,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? SocialNetworkingPolicyDateSigned
         {
             get
@@ -301,6 +321,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? ChildProtectionPolicyDateSigned
         {
             get
@@ -314,6 +336,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? ICTPolicyDateSigned
         {
             get
@@ -327,6 +351,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? FirstAidExpiryDate
         {
             get
@@ -340,6 +366,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? ResuscitationExpiryDate
         {
             get
@@ -353,6 +381,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public DateTime? PublicLiabilityExpiryDate
         {
             get
@@ -366,6 +396,8 @@ namespace Sentral.API.PowerShell.Enrolments
             }
 
         }
+
+        [Parameter(Mandatory = false)]
         public string AGSNumber
         {
             get

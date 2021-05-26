@@ -383,11 +383,73 @@ namespace Sentral.API.PowerShell.Test
 
 
                 // Is Deleted?
-                Assert.ThrowsException<RestClientException>(() => getPersonEmailCmdlet.Invoke<ConsentLink>().FirstOrDefault());
+                Assert.ThrowsException<RestClientException>(() => getPersonEmailCmdlet.Invoke<PersonEmail>().FirstOrDefault());
 
             }
         }
 
+        [TestMethod]
+        public void NewSetDelStaffQualificationPowerShellTest()
+        {
+            if (IsTestSite)
+            {
+                var testCert = "Some Test Cert";
+                var testUpdatedCert = "A better Test Cert";
+
+                var newConsentLinkCmdlet = new NewSntEnrQualification()
+                {
+                    Qualification = testCert,
+                    QualificationType = EnumStaffQualificiationType.certificate,
+                    From = "UTS",
+                    DateAchieved = new DateTime(2010, 10, 15),
+                    Staff = new Staff() { ID = 1},
+
+                };
+
+
+                StaffQualification newStaffQualificationResponse = newConsentLinkCmdlet.Invoke<StaffQualification>().FirstOrDefault();
+
+                // Has been created
+                Assert.IsTrue(
+                        newStaffQualificationResponse != null &&
+                        newStaffQualificationResponse.Qualification == testCert
+                    );
+
+
+                var setStaffQualificationCmdlet = new SetSntEnrQualification()
+                {
+                    StaffQualification = newStaffQualificationResponse,
+                    Qualification = testUpdatedCert
+                };
+
+                var setStaffQualificationResponse = setStaffQualificationCmdlet.Invoke<StaffQualification>().FirstOrDefault();
+
+                // Is updated
+                Assert.IsTrue(
+                        setStaffQualificationResponse != null &&
+                        setStaffQualificationResponse.Qualification == testUpdatedCert
+                    );
+
+
+                var removeConsentCmdlet = new RemoveSntEnrQualification()
+                {
+                    StaffQualification = setStaffQualificationResponse
+                };
+
+                removeConsentCmdlet.Invoke<object>().FirstOrDefault();
+
+
+                var getStaffQualificationCmdlet = new GetSntEnrQualification()
+                {
+                    QualificationId = setStaffQualificationResponse.ID
+                };
+
+
+                // Is Deleted?
+                Assert.ThrowsException<RestClientException>(() => getStaffQualificationCmdlet.Invoke<StaffQualification>().FirstOrDefault());
+
+            }
+        }
 
         [TestMethod]
         public void NewSetDelPersonPhonePowerShellTest()

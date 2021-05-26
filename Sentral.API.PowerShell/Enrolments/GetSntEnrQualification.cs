@@ -19,16 +19,16 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = false,
             ParameterSetName = "Singular")]
         [ValidateRange(1, int.MaxValue)]
-        public int? QualificationID { get; set; }
+        public int? QualificationId { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
             // Singular mode chosen
-            if(QualificationID.HasValue && QualificationID.Value > 0)
+            if(QualificationId.HasValue && QualificationId.Value > 0)
             {
                 WriteObject(
-                        SentralApiClient.Enrolments.GetQualification(QualificationID.Value)
+                        SentralApiClient.Enrolments.GetQualification(QualificationId.Value)
                     );
             }
             // Multiple mode chosen

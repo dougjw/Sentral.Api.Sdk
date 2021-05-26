@@ -35,7 +35,7 @@ namespace Sentral.API.PowerShell.Enrolments
         {
             if(Owner == null)
             {
-                throw new ArgumentException("The PersonEmail.Owner cannot be null");
+                throw new ArgumentException("The Owner property cannot be null");
             }
 
             UpdatePersonEmail personEmail = new UpdatePersonEmail()
