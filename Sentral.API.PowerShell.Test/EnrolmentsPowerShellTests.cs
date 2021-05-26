@@ -118,6 +118,56 @@ namespace Sentral.API.PowerShell.Test
             }
         }
 
+
+
+        [TestMethod]
+        public void SetOnePersonPowerShellTest()
+        {
+            if (IsTestSite)
+            {
+                Person person = null;
+
+                Person updatedPerson = null;
+
+                var studentsCmd = new SetSntEnrPerson
+                {
+                    PersonId = 1
+                };
+
+
+                var enumerator = studentsCmd.Invoke<Person>().GetEnumerator();
+
+                while (enumerator.MoveNext())
+                {
+                    person = enumerator.Current;
+                }
+
+                var updateFirstName = person != null && person.FirstName == "Test Emily" ?  "Test Sarah" : "Test Emily";
+                var updateLastName = person != null && person.FirstName == "Test Sampson" ? "Test Beggs" : "Test Sampson";
+
+                var updatePersonCmd = new SetSntEnrPerson()
+                {
+                    PersonId = 1,
+                    FirstName = updateFirstName,
+                    LastName = updateLastName
+                };
+
+                enumerator = updatePersonCmd.Invoke<Person>().GetEnumerator();
+
+                while (enumerator.MoveNext())
+                {
+                    updatedPerson = enumerator.Current;
+                }
+
+
+                Assert.IsTrue(
+                        updatedPerson != null && updatedPerson.ID == 1 && 
+                        updatedPerson.FirstName == updateFirstName &&
+                        updatedPerson.LastName == updateLastName
+                    );
+            }
+        }
+
         [TestMethod]
         public void NewSetDelConsentPowerShellTest()
         {

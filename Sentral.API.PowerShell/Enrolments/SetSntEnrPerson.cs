@@ -16,9 +16,27 @@ namespace Sentral.API.PowerShell.Enrolments
     public class SetSntEnrPerson : SentralPSCmdlet
     {
 
-        private bool _isBoarding;
+        private string _contactCode;
+        private string _title;
+        private string _firstName;
+        private string _middleNames;
+        private string _lastName;
+        private string _legalLastName;
+        private string _preferredName;
+        private string _genderCode;
+        private string _crn;
+        private string _languageSpokenAtHomeCode;
 
-        private bool _isBoardingProvided;
+        private bool _contactCodeProvided;
+        private bool _titleProvided;
+        private bool _firstNameProvided;
+        private bool _middleNamesProvided;
+        private bool _lastNameProvided;
+        private bool _legalLastNameProvided;
+        private bool _preferredNameProvided;
+        private bool _genderCodeProvided;
+        private bool _crnProvided;
+        private bool _languageSpokenAtHomeCodeProvided;
 
 
         [Parameter(
@@ -26,7 +44,7 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "PersonObject")]
-        public Enrolment Enrolment { get; set; }
+        public Person Person { get; set; }
 
 
 
@@ -36,24 +54,146 @@ namespace Sentral.API.PowerShell.Enrolments
             ValueFromPipeline = true,
             ParameterSetName = "PersonId")]
         [ValidateRange(1, int.MaxValue)]
-        public int EnrolmentId { get; set; }
+        public int PersonId { get; set; }
 
 
         [Parameter( Mandatory = false)]
-        public bool IsBoarding {
+        public string ContactCode {
             get
             {
-                return _isBoarding;
+                return _contactCode;
             }
             set
             {
-                _isBoarding = value;
-                _isBoardingProvided = true;
-            }
-                
+                _contactCode = value;
+                _contactCodeProvided = true;
+            } 
         }
 
+        [Parameter(Mandatory = false)]
+        public string Title
+        {
+            get
+            {
+                return _title;
+            }
+            set
+            {
+                _title = value;
+                _titleProvided = true;
+            }
+        }
 
+        [Parameter(Mandatory = false)]
+        public string FirstName
+        {
+            get
+            {
+                return _firstName;
+            }
+            set
+            {
+                _firstName = value;
+                _firstNameProvided = true;
+            }
+        }
+
+        [Parameter(Mandatory = false)]
+        public string MiddleNames
+        {
+            get
+            {
+                return _middleNames;
+            }
+            set
+            {
+                _middleNames = value;
+                _middleNamesProvided = true;
+            }
+        }
+
+        [Parameter(Mandatory = false)]
+        public string LastName
+        {
+            get
+            {
+                return _lastName;
+            }
+            set
+            {
+                _lastName = value;
+                _lastNameProvided = true;
+            }
+        }
+
+        [Parameter(Mandatory = false)]
+        public string LegalLastName
+        {
+            get
+            {
+                return _legalLastName;
+            }
+            set
+            {
+                _legalLastName = value;
+                _legalLastNameProvided = true;
+            }
+        }
+
+        [Parameter(Mandatory = false)]
+        public string PreferredName
+        {
+            get
+            {
+                return _preferredName;
+            }
+            set
+            {
+                _preferredName = value;
+                _preferredNameProvided = true;
+            }
+        }
+
+        [Parameter(Mandatory = false)]
+        public string GenderCode
+        {
+            get
+            {
+                return _genderCode;
+            }
+            set
+            {
+                _genderCode = value;
+                _genderCodeProvided = true;
+            }
+        }
+
+        [Parameter(Mandatory = false)]
+        public string CRN
+        {
+            get
+            {
+                return _crn;
+            }
+            set
+            {
+                _crn = value;
+                _crnProvided = true;
+            }
+        }
+        [Parameter(Mandatory = false)]
+        public string LanguageSpokenAtHomeCode
+        {
+            get
+            {
+                return _languageSpokenAtHomeCode;
+            }
+            set
+            {
+                _languageSpokenAtHomeCode = value;
+                _languageSpokenAtHomeCodeProvided = true;
+            }
+        }
 
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
@@ -61,28 +201,64 @@ namespace Sentral.API.PowerShell.Enrolments
         {
         }
 
-        private UpdateEnrolment GetInitUpdateModel()
+        private UpdatePerson GetInitUpdateModel()
         {
 
-            if (Enrolment != null)
+            if (Person != null)
             {
-                return new UpdateEnrolment(Enrolment.ID);
+                return new UpdatePerson(Person.ID);
             }
-            return new UpdateEnrolment(EnrolmentId);
+            return new UpdatePerson(PersonId);
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void ProcessRecord()
         {
-            UpdateEnrolment enrolment = GetInitUpdateModel(); 
+            UpdatePerson person = GetInitUpdateModel(); 
 
             // Populate from student object if object was used.
-            if (_isBoardingProvided)
+            if (_contactCodeProvided)
             {
-                enrolment.IsBoarding = IsBoarding;
+                person.ContactCode = ContactCode;
+            };
+            if (_titleProvided)
+            {
+                person.Title = Title;
+            };
+            if (_firstNameProvided)
+            {
+                person.FirstName = FirstName;
+            };
+            if (_middleNamesProvided)
+            {
+                person.MiddleNames = MiddleNames;
+            };
+            if (_lastNameProvided)
+            {
+                person.LastName = LastName;
+            };
+            if (_legalLastNameProvided)
+            {
+                person.LegalLastName = LegalLastName;
+            };
+            if (_preferredNameProvided)
+            {
+                person.PreferredName = PreferredName;
+            };
+            if (_genderCodeProvided)
+            {
+                person.GenderCode = GenderCode;
+            };
+            if (_crnProvided)
+            {
+                person.CRN = CRN;
+            };
+            if (_languageSpokenAtHomeCodeProvided)
+            {
+                person.LanguageSpokenAtHomeCode = LanguageSpokenAtHomeCode;
             };
 
-            var response = SentralApiClient.Enrolments.UpdateEnrolment(enrolment);
+            var response = SentralApiClient.Enrolments.UpdatePerson(person);
 
             WriteObject(response);
         }
