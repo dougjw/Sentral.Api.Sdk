@@ -37,6 +37,49 @@ namespace Sentral.API.PowerShell.Test
         }
 
         [TestMethod]
+        public void SetOneStaffPowerShellTest()
+        {
+            if (IsTestSite)
+            {
+                Staff staff = null;
+
+                Staff updatedStaff = null;
+
+                var studentsCmd = new GetSntEnrStaff
+                {
+                    StaffId = 1
+                };
+
+
+                var enumerator = studentsCmd.Invoke<Staff>().GetEnumerator();
+
+                while (enumerator.MoveNext())
+                {
+                    staff = enumerator.Current;
+                }
+
+                var updateValue = staff != null && staff.TimetableCode != null && staff.TimetableCode != "T999" ? "A000" : "T999";
+
+
+                var updateStudentsCmd = new SetSntEnrStaff()
+                {
+                    StaffId = 1,
+                    TimetableCode = updateValue
+                };
+
+                enumerator = updateStudentsCmd.Invoke<Staff>().GetEnumerator();
+
+                while (enumerator.MoveNext())
+                {
+                    updatedStaff = enumerator.Current;
+                }
+
+
+                Assert.IsTrue(updatedStaff != null && updatedStaff.ID == 1 && updatedStaff.TimetableCode == updateValue);
+            }
+        }
+
+        [TestMethod]
         public void SetOneStudentPowerShellTest()
         {
             if (IsTestSite) {
@@ -281,6 +324,127 @@ namespace Sentral.API.PowerShell.Test
 
                 // Is Deleted?
                 Assert.ThrowsException<RestClientException>(() => getConsentLinkCmdlet.Invoke<ConsentLink>().FirstOrDefault());
+
+            }
+        }
+
+        [TestMethod]
+        public void NewSetDelPersonEmailPowerShellTest()
+        {
+            if (IsTestSite)
+            {
+                var testEmail = "test@testdomain.net";
+                var testUpdatedEmail = "test@testseconddomain.net";
+
+                var newConsentLinkCmdlet = new NewSntEnrPersonEmail()
+                {
+                    Email = testEmail,
+                    EmailType = "01",
+                    Owner = new Person() { ID = 1}
+                };
+
+
+                PersonEmail newPersonEmailResponse = newConsentLinkCmdlet.Invoke<PersonEmail>().FirstOrDefault();
+
+                // Has been created
+                Assert.IsTrue(
+                        newPersonEmailResponse != null &&
+                        newPersonEmailResponse.Email == testEmail
+                    );
+
+
+                var setPersonEmailCmdlet = new SetSntEnrPersonEmail()
+                {
+                    PersonEmail = newPersonEmailResponse,
+                    Email = testUpdatedEmail
+                };
+
+                var setPersonEmailResponse = setPersonEmailCmdlet.Invoke<PersonEmail>().FirstOrDefault();
+
+                // Is updated
+                Assert.IsTrue(
+                        setPersonEmailResponse != null &&
+                        setPersonEmailResponse.Email == testUpdatedEmail
+                    );
+
+
+                var removeConsentCmdlet = new RemoveSntEnrPersonEmail()
+                {
+                    PersonEmail = setPersonEmailResponse
+                };
+
+                removeConsentCmdlet.Invoke<object>().FirstOrDefault();
+
+
+                var getPersonEmailCmdlet = new GetSntEnrPersonEmail()
+                {
+                    PersonEmailId = setPersonEmailResponse.ID
+                };
+
+
+                // Is Deleted?
+                Assert.ThrowsException<RestClientException>(() => getPersonEmailCmdlet.Invoke<ConsentLink>().FirstOrDefault());
+
+            }
+        }
+
+
+        [TestMethod]
+        public void NewSetDelPersonPhonePowerShellTest()
+        {
+            if (IsTestSite)
+            {
+                var testPhone = "0400000000";
+                var testUpdatedPhone = "0499999999";
+                var newConsentLinkCmdlet = new NewSntEnrPersonPhone()
+                {
+                    Number = testPhone,
+                    Extension = null,
+                    PhoneType = "01",
+                    Owner = new Person() { ID = 1 }
+                };
+
+
+                PersonPhone newPersonPhoneResponse = newConsentLinkCmdlet.Invoke<PersonPhone>().FirstOrDefault();
+
+                // Has been created
+                Assert.IsTrue(
+                        newPersonPhoneResponse != null &&
+                        newPersonPhoneResponse.Number == testPhone
+                    );
+
+
+                var setPersonPhoneCmdlet = new SetSntEnrPersonPhone()
+                {
+                    PersonPhone = newPersonPhoneResponse,
+                    Phone = testUpdatedPhone
+                };
+
+                var setPersonPhoneResponse = setPersonPhoneCmdlet.Invoke<PersonPhone>().FirstOrDefault();
+
+                // Is updated
+                Assert.IsTrue(
+                        setPersonPhoneResponse != null &&
+                        setPersonPhoneResponse.Number == testUpdatedPhone
+                    );
+
+
+                var removeConsentCmdlet = new RemoveSntEnrPersonPhone()
+                {
+                    PersonPhone = setPersonPhoneResponse
+                };
+
+                removeConsentCmdlet.Invoke<object>().FirstOrDefault();
+
+
+                var getPersonPhoneCmdlet = new GetSntEnrPersonPhone()
+                {
+                    PersonPhoneId = setPersonPhoneResponse.ID
+                };
+
+
+                // Is Deleted?
+                Assert.ThrowsException<RestClientException>(() => getPersonPhoneCmdlet.Invoke<ConsentLink>().FirstOrDefault());
 
             }
         }
