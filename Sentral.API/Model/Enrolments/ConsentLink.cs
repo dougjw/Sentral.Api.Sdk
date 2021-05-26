@@ -16,7 +16,7 @@ namespace Sentral.API.Model.Enrolments
         public DateTime? ConsentDate { get; set; }
 
         [JsonProperty(propertyName: "consentGiven")]
-        public string ConsentGiven { get; set; }
+        public bool ConsentGiven { get; set; }
 
 
         [JsonProperty(propertyName: "createdAt")]

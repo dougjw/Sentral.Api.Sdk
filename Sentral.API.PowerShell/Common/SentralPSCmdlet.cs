@@ -14,5 +14,6 @@ namespace Sentral.API.PowerShell.Common
         {
             SentralApiClient = ConnectSentralApi.GetSentralAPIConnection();
         }
+
     }
 }

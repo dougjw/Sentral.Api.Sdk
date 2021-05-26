@@ -1,7 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Sentral.API.DataAccess.Exceptions;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.Model.Enrolments.Update;
 using Sentral.API.PowerShell.Enrolments;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -143,7 +145,7 @@ namespace Sentral.API.PowerShell.Test
                 }
 
                 var updateFirstName = person != null && person.FirstName == "Test Emily" ?  "Test Sarah" : "Test Emily";
-                var updateLastName = person != null && person.FirstName == "Test Sampson" ? "Test Beggs" : "Test Sampson";
+                var updateLastName = person != null && person.FirstName == "Test Thompson" ? "Test Smith" : "Test Thompson";
 
                 var updatePersonCmd = new SetSntEnrPerson()
                 {
@@ -216,11 +218,70 @@ namespace Sentral.API.PowerShell.Test
                     ConsentId = setConsentResponse.ID
                 };
 
-                var getConsentResponse = getConsentCmdlet.Invoke<Consent>().FirstOrDefault();
+                // Is Deleted
+                Assert.ThrowsException<Exception>(()=> getConsentCmdlet.Invoke<Consent>().FirstOrDefault());
+
+            }
+        }
 
 
-                // Is deleted
-                Assert.IsTrue(getConsentResponse == null);
+
+        [TestMethod]
+        public void NewSetDelConsentLinkPowerShellTest()
+        {
+            if (IsTestSite)
+            {
+
+                var newConsentLinkCmdlet = new NewSntEnrConsentLink()
+                {
+                    Person = new Person() { ID = 1 },
+                    Consent = new Consent() { ID = 1},
+                    ConsentedBy = new Person() { ID = 2 },
+                    ConsentGiven = true
+                };
+
+
+                ConsentLink newConsentLinkResponse = newConsentLinkCmdlet.Invoke<ConsentLink>().FirstOrDefault();
+
+                // Has been created
+                Assert.IsTrue(
+                        newConsentLinkResponse != null &&
+                        newConsentLinkResponse.ConsentGiven
+                    );
+
+
+                var setConsentLinkCmdlet = new SetSntEnrConsentLink()
+                {
+                    ConsentLink = newConsentLinkResponse,
+                    ConsentGiven = false
+                };
+
+                var setConsentLinkResponse = setConsentLinkCmdlet.Invoke<ConsentLink>().FirstOrDefault();
+
+                // Is updated
+                Assert.IsTrue(
+                        setConsentLinkResponse != null && 
+                        !setConsentLinkResponse.ConsentGiven
+                    );
+
+
+                var removeConsentCmdlet = new RemoveSntEnrConsentLink()
+                {
+                    ConsentLink = setConsentLinkResponse
+                };
+
+                removeConsentCmdlet.Invoke<object>().FirstOrDefault();
+
+
+                var getConsentLinkCmdlet = new GetSntEnrConsentLink()
+                {
+                    ConsentLinkId = setConsentLinkResponse.ID
+                };
+
+
+                // Is Deleted?
+                Assert.ThrowsException<RestClientException>(() => getConsentLinkCmdlet.Invoke<ConsentLink>().FirstOrDefault());
+
             }
         }
     }

@@ -11,7 +11,7 @@ using Sentral.API.Model.Enrolments.Update;
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Set,"SntEnrEnrolment")]
-    [OutputType(typeof(Student))]
+    [OutputType(typeof(Enrolment))]
     [CmdletBinding(DefaultParameterSetName ="EnrolmentId")]
     public class SetSntEnrEnrolment : SentralPSCmdlet
     {

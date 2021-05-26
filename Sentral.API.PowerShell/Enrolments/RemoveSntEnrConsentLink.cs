@@ -11,23 +11,23 @@ using Sentral.API.Model.Enrolments.Update;
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Remove , "SntEnrConsent")]
-    public class RemoveSntEnrConsent : SentralPSCmdlet
+    public class RemoveSntEnrConsentLink : SentralPSCmdlet
     {
         
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName ="ConsentId")]
+            ParameterSetName ="ConsentLinkId")]
         [ValidateRange(1, int.MaxValue)]
-        public int ConsentId { get; set; }
+        public int ConsentLinkId { get; set; }
 
 
         [Parameter(
             Mandatory = true,
             ValueFromPipeline = true,
-            ParameterSetName = "Consent")]
+            ParameterSetName = "ConsentLinkObject")]
         [ValidateRange(1, int.MaxValue)]
-        public Consent Consent { get; set; }
+        public ConsentLink ConsentLink { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
@@ -40,18 +40,18 @@ namespace Sentral.API.PowerShell.Enrolments
         {
             int consentId = GetConsentId();
             
-            SentralApiClient.Enrolments.DeleteConsent(consentId);
+            SentralApiClient.Enrolments.DeletePersonConsentLink(consentId);
         }
 
         private int GetConsentId()
         {
-            if (ConsentId > 0)
+            if (ConsentLinkId > 0)
             {
-                return ConsentId;
+                return ConsentLinkId;
             }
-            if(Consent != null)
+            if(ConsentLink != null)
             {
-                return Consent.ID;
+                return ConsentLink.ID;
             }
 
             return 0;
