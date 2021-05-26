@@ -11,11 +11,11 @@ namespace Sentral.API.Model.Enrolments.Update
 
         private const string _type = "consent";
 
-        private string _consentGiven;
+        private string _consentType;
         private string _details;
 
 
-        private bool _consentGivenIncludeInSerialize;
+        private bool _consentTypeIncludeInSerialize;
         private bool _detailsIncludeInSerialize;
 
         // Patch model
@@ -29,23 +29,23 @@ namespace Sentral.API.Model.Enrolments.Update
 
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public string ConsentGiven {
+        public string ConsentType {
             get
             {
-                return _consentGiven;
+                return _consentType;
             } 
             
             set
             {
-                _consentGiven = value;
-                _consentGivenIncludeInSerialize = true;
+                _consentType = value;
+                _consentTypeIncludeInSerialize = true;
             } 
         }
 
 
         public bool ShouldSerializeConsentGiven()
         {
-            return _consentGivenIncludeInSerialize;
+            return _consentTypeIncludeInSerialize;
         }
 
 

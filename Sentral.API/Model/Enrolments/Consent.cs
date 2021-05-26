@@ -15,8 +15,6 @@ namespace Sentral.API.Model.Enrolments
         [JsonProperty(propertyName: "type")]
         public string ConsentType { get; set; }
 
-        public string ConsentGiven { get; set; }
-
         public string Details { get; set; }
 
         [JsonProperty(propertyName: "isInactive")]
@@ -26,7 +24,7 @@ namespace Sentral.API.Model.Enrolments
         {
             return new UpdateConsent(ID)
             {
-                ConsentGiven = ConsentGiven,
+                ConsentType = ConsentType,
                 Details = Details
             };
         }

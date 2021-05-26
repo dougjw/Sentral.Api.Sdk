@@ -16,7 +16,7 @@ namespace Sentral.API.PowerShell.Enrolments
     {
                   
         [Parameter(Mandatory = true)]
-        public string ConsentGiven { get; set; }
+        public string ConsentType { get; set; }
 
         [Parameter(Mandatory = true)]
         public string Details { get; set; }
@@ -33,7 +33,7 @@ namespace Sentral.API.PowerShell.Enrolments
             {
 
                 Details = Details,
-                ConsentGiven = ConsentGiven
+                ConsentType = ConsentType
             };
 
             // Populate from student object if object was used.

@@ -15,10 +15,10 @@ namespace Sentral.API.PowerShell.Enrolments
     public class SetSntEnrConsent : SentralPSCmdlet
     {
 
-        private string _consentGiven;
+        private string _consentType;
         private string _details;
 
-        private bool _consentGivenProvided;
+        private bool _consentTypeProvided;
         private bool _detailsProvided;
 
 
@@ -38,16 +38,16 @@ namespace Sentral.API.PowerShell.Enrolments
         public Consent Consent { get; set; }
 
         [Parameter(Mandatory = false)]
-        public string ConsentGiven
+        public string ConsentType
         {
             get
             {
-                return _consentGiven;
+                return _consentType;
             }
             set
             {
-                _consentGiven = value;
-                _consentGivenProvided = true;
+                _consentType = value;
+                _consentTypeProvided = true;
             }
 
         }
@@ -92,9 +92,9 @@ namespace Sentral.API.PowerShell.Enrolments
             {
                 consent.Details = _details;
             };
-            if (_consentGivenProvided)
+            if (_consentTypeProvided)
             {
-                consent.ConsentGiven = _consentGiven;
+                consent.ConsentType = _consentType;
             }
 
             var response = SentralApiClient.Enrolments.UpdateConsent(consent);
