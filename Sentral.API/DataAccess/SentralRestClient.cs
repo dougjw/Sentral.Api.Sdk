@@ -47,100 +47,24 @@ namespace Sentral.API.DataAccess
             headers = header;
         }
 
-
         internal string Invoke()
         {
-            return Invoke(1);
+            return Invoke(1, StringResponseMethod);
         }
-
-        private string Invoke(int retryNumber)
-        {
-            try
-            {
-                var request = (HttpWebRequest)WebRequest.Create(Uri);
-
-                request.Headers.Add("X-API-KEY", headers.Key);
-                request.Headers.Add("X-API-TENANT", headers.Tenant);
-
-                request.Method = Method.ToString();
-                request.ContentLength = 0;
-                request.ContentType = ContentType;
-
-                if (
-                        !string.IsNullOrEmpty(PostData) && 
-                        (
-                            Method == ApiMethod.POST || Method == ApiMethod.PATCH
-                        )
-                )
-                {
-                    var bytes = Encoding.UTF8.GetBytes(PostData);
-                    request.ContentLength = bytes.Length;
-
-                    using (var writeStream = request.GetRequestStream())
-                    {
-                        writeStream.Write(bytes, 0, bytes.Length);
-                    }
-                }
-
-                using (var response = (HttpWebResponse)request.GetResponse())
-                {
-                    var responseValue = string.Empty;
-
-                    if (
-                        response.StatusCode != HttpStatusCode.OK &&
-                        !( Method == ApiMethod.DELETE && response.StatusCode == HttpStatusCode.NoContent)
-                    )
-                    {
-                        throw GetRestClientException(response, null);
-                    }
-
-                    // grab the response
-                    using (var responseStream = response.GetResponseStream())
-                    {
-                        if (responseStream != null)
-                            using (var reader = new StreamReader(responseStream))
-                            {
-                                responseValue = reader.ReadToEnd();
-                            }
-                    }
-
-                    return responseValue;
-                }
-            }
-            catch (WebException webex)
-            {
-
-                var webResponse = (HttpWebResponse)webex.Response;
-
-                // Max timeout tries or Error Response received.
-                if (
-                        webResponse == null || 
-                        webResponse.StatusCode != HttpStatusCode.RequestTimeout ||
-                        retryNumber > MAX_TRIES)
-                {
-                    throw GetRestClientException(null, webex);
-                }
-
-                // retry if timeout
-
-                PauseExecution(retryNumber);
-                return Invoke(retryNumber + 1);
-            }
-        }
-
 
         public byte[] InvokeBinary()
         {
-            return InvokeBinary(1);
+            return Invoke(1, BinaryResponseMethod);
         }
 
+        private delegate T DelReturnType<T>(Stream steam);
 
         // Deal with code clones later
-        private byte[] InvokeBinary(int retryNumber)
+        private T Invoke<T>(int retryNumber, DelReturnType<T> streamMethod)
         {
             try
             {
-                byte[] result = null;
+                T result = default;
                 var request = (HttpWebRequest)WebRequest.Create(Uri);
 
                 request.Headers.Add("X-API-KEY", headers.Key);
@@ -180,20 +104,7 @@ namespace Sentral.API.DataAccess
                     {
                         if (responseStream != null)
                         {
-                            byte[] buffer = new byte[4096];
-                            using (MemoryStream memoryStream = new MemoryStream())
-                            {
-                                int count = 0;
-                                do
-                                {
-                                    count = responseStream.Read(buffer, 0, buffer.Length);
-                                    memoryStream.Write(buffer, 0, count);
-
-                                } while (count != 0);
-
-                                result = memoryStream.ToArray();
-
-                            }
+                            return streamMethod(responseStream);
                         }
 
                     }
@@ -209,7 +120,33 @@ namespace Sentral.API.DataAccess
                 }
 
                 PauseExecution(retryNumber);
-                return InvokeBinary(retryNumber + 1);
+                return Invoke(retryNumber + 1, streamMethod);
+            }
+        }
+
+        private byte[] BinaryResponseMethod(Stream stream)
+        {
+            byte[] buffer = new byte[4096];
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                int count = 0;
+                do
+                {
+                    count = stream.Read(buffer, 0, buffer.Length);
+                    memoryStream.Write(buffer, 0, count);
+
+                } while (count != 0);
+
+                return memoryStream.ToArray();
+            }
+
+        }
+
+        private string StringResponseMethod(Stream stream)
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
             }
         }
 
