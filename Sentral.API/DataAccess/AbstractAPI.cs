@@ -6,6 +6,7 @@ using Sentral.API.Common;
 using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.Model.Common;
 using Sentral.API.DataAccess.Exceptions;
+using System;
 
 namespace Sentral.API.DataAccess
 {
@@ -15,13 +16,14 @@ namespace Sentral.API.DataAccess
         private readonly string _baseUrl;
         private const int MaxPageSize = 200;
         private const string NextLinkKey = "next";
-        private readonly ApiQueryStringHelper<EnumEnrolmentsIncludeOptions> _queryStringHelper;
+
+        // TODO: Need more flexibility here? Enrolments Inc breaking other areas. This might need to be generic.
+
         private static readonly JsonApiSerializerSettings _settings = new JsonApiSerializerSettings(new SentralResourceObjectConverter());
 
         public AbstractApi(string baseUrl, string apiKey, string tenantCode) {
             _baseUrl = baseUrl;
             _header = new ApiHeader(apiKey, tenantCode);
-            _queryStringHelper = new ApiQueryStringHelper<EnumEnrolmentsIncludeOptions>();
         }
 
         internal List<T> GetAllData<T>(string endpoint)
@@ -82,6 +84,20 @@ namespace Sentral.API.DataAccess
             return JsonConvert.DeserializeObject<T>(response, _settings);
         }
 
+        internal byte[] GetBinaryData(string endpoint)
+        {
+            var client = new SentralRestClient(GetUri(endpoint), _header, ApiMethod.GET, null);
+            return client.InvokeBinary();
+        }
+
+
+        internal string GetApiResponse(string endpoint, ApiMethod method)
+        {
+            var client = new SentralRestClient(GetUri(endpoint), _header, method, null);
+            var response = client.Invoke();
+            return response;
+        }
+
         private string GetUri(string endpoint)
         {
             if(endpoint.StartsWith(_baseUrl))
@@ -91,9 +107,30 @@ namespace Sentral.API.DataAccess
             return _baseUrl + endpoint;
         }
 
-        internal string GetEndpointParameters(string endpoint, Dictionary<string, object> parameters)
+
+        internal string GetEndpointParameters(string endpoint,
+                Dictionary<string, object> parameters)
         {
-            return _queryStringHelper.GetQueryString(endpoint, parameters);
+            return GetEndpointParameters<object>(endpoint, parameters);
+        }
+
+        internal string GetEndpointParameters<T>(
+                string endpoint,
+                Dictionary<string, object> parameters
+        )
+        {
+            var queryStringHelper = new ApiQueryStringHelper();
+
+            return GetEndpointParameters<T>(endpoint, parameters, queryStringHelper);
+        }
+
+        internal string GetEndpointParameters<T>(
+                string endpoint,
+                Dictionary<string, object> parameters,
+                ApiQueryStringHelper queryStringHelper
+        )
+        {
+            return queryStringHelper.GetQueryString<T>(endpoint, parameters);
         }
 
         internal void ValidateModelIsNotNullOrZero(AbstractUpdatable updateData)
@@ -103,6 +140,31 @@ namespace Sentral.API.DataAccess
             {
                 throw new RestClientException("Enrolment object null or has ID of zero (0).");
             }
+        }
+
+
+        internal T UpdateData<T>(string endpoint, AbstractUpdatable updateData)
+        {
+            ValidateModelIsNotNullOrZero(updateData);
+            return GetApiResponse<T>(
+                    string.Format(endpoint + "/{0}", updateData.ID),
+                    ApiMethod.PATCH,
+                    updateData
+                );
+        }
+
+
+        public T CreateData<T>(string endpoint, AbstractUpdatable updateData)
+        {
+            return GetApiResponse<T>(
+                    endpoint,
+                    ApiMethod.POST,
+                    updateData
+                );
+        }
+        public void DeleteData(string endpoint, int id)
+        {
+            GetApiResponse(string.Format(endpoint + "/{0}", id), ApiMethod.DELETE);
         }
     }
 }

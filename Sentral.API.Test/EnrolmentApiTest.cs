@@ -2,6 +2,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sentral.API.Client;
 using Sentral.API.Model.Enrolments.Include;
 using System.Text;
+using Sentral.API.Common;
+using Sentral.API.Model.Reports.Include;
+using System.Collections.Generic;
+using Sentral.API.Model.Enrolments;
+using Sentral.API.Model.Enrolments.Update;
+using JsonApiSerializer.JsonApi;
+using Sentral.API.Model.Common;
+using System;
 
 namespace Sentral.API.Test
 {
@@ -75,7 +83,7 @@ namespace Sentral.API.Test
 
             var x = SAPI.Enrolments.GetConsent(1);
 
-            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.Type));
+            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.ConsentType));
         }
 
         [TestMethod]
@@ -85,6 +93,50 @@ namespace Sentral.API.Test
             var x = SAPI.Enrolments.GetPersonConsentLink(1);
 
             Assert.IsTrue(x != null && x.ID == 1 && x.Consent != null);
+        }
+
+        [TestMethod]
+        public void CreateAndDeleteOneConsentLinkTest()
+        {
+            // Only run test on sandbox
+            if (IsTestSite)
+            {
+                var consentedBy = new Relationship<SimplePersonLink>
+                {
+                    Data = new SimplePersonLink() { ID = 1 }
+                };
+
+                var consent = new Relationship<SimpleConsentLink>
+                {
+                    Data = new SimpleConsentLink() { ID = 1 }
+                };
+
+                var person = new Relationship<SimplePersonLink>
+                {
+                    Data = new SimplePersonLink() { ID = 1 }
+                };
+
+
+                var updateConsent = new UpdatePersonConsentLink()
+                {
+                    ConsentGiven = true,
+                    ConsentedBy = consentedBy,
+                    Person = person,
+                    Consent = consent
+
+
+
+                };
+
+
+                var response = SAPI.Enrolments.CreatePersonConsentLink(updateConsent);
+
+                Assert.IsTrue(response != null);
+
+                SAPI.Enrolments.DeletePersonEmail(response.ID);
+
+
+            }
         }
 
 
@@ -308,7 +360,12 @@ namespace Sentral.API.Test
         public void GetOnePersonTest()
         {
 
-            var incl = new PersonIncludeOptions(emails: true, phoneNumbers: true, primaryHousehold: true, otherHouseholds:true);
+            var incl = new PersonIncludeOptions[] {
+                    PersonIncludeOptions.Emails,
+                    PersonIncludeOptions.PhoneNumbers,
+                    PersonIncludeOptions.PrimaryHousehold,
+                    PersonIncludeOptions.OtherHouseholds
+                };
             var x = SAPI.Enrolments.GetPerson(2, include: incl);
 
             Assert.IsTrue(x != null && x.ID == 2 && !string.IsNullOrWhiteSpace(x.LastName));
@@ -320,7 +377,8 @@ namespace Sentral.API.Test
             // Only run test on sandbox
             if (IsTestSite)
             {
-                var personPreUpdate = SAPI.Enrolments.GetPerson(2);
+                var include = new PersonIncludeOptions[] { PersonIncludeOptions.PhoneNumbers } ;
+                var personPreUpdate = SAPI.Enrolments.GetPerson(2, include);
 
                 string updatePersonName = personPreUpdate.FirstName == "Sharron" ? "Jane" : "Sharron";
 
@@ -342,13 +400,41 @@ namespace Sentral.API.Test
         }
 
         [TestMethod]
-        public void GetPersonEmailTest()
+        public void GetOnePersonEmailTest()
         {
 
             var x = SAPI.Enrolments.GetPersonEmail(1);
 
             Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.Email));
         }
+
+        [TestMethod]
+        public void CreateAndDeleteOnePersonEmailTest()
+        {
+            // Only run test on sandbox
+            if (IsTestSite)
+            {
+                var email = new UpdatePersonEmail()
+                {
+                    Email = "test@somewhere.com",
+                    EmailType = "01",
+                    Owner = new Relationship<SimplePersonLink>()
+
+                };
+
+                email.Owner.Data.ID = 1;
+
+
+                var response = SAPI.Enrolments.CreatePersonEmail(email);
+
+                Assert.IsTrue(response != null && email.Email == response.Email);
+
+                SAPI.Enrolments.DeletePersonEmail(response.ID);
+
+
+            }
+        }
+
 
 
 
@@ -465,9 +551,38 @@ namespace Sentral.API.Test
 
             var x = SAPI.Enrolments.GetQualification(1);
 
-            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.Type));
+            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.QualificationType));
         }
 
+
+
+        [TestMethod]
+        public void CreateAndDeleteOneStaffQualificatioest()
+        {
+            // Only run test on sandbox
+            if (IsTestSite)
+            {
+                var qualification = new UpdateStaffQualification()
+                {
+                    Qualification = "Some Qualification",
+                    QualificationType = EnumStaffQualificiationType.bachelors_degree,
+                    DateAchieved  = new DateTime(2010,10,1),
+                    Staff = new Relationship<SimpleStaffLink>()
+
+                };
+
+
+                qualification.Staff.Data.ID = 1;
+
+                var response = SAPI.Enrolments.CreateQualification(qualification);
+
+                Assert.IsTrue(response != null && qualification.Qualification == response.Qualification);
+
+                SAPI.Enrolments.DeletePersonEmail(response.ID);
+
+
+            }
+        }
 
 
         [TestMethod]
@@ -479,7 +594,81 @@ namespace Sentral.API.Test
             Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.StudentCode));
         }
 
+        [TestMethod]
+        public void GetMultipleStudentsTest()
+        {
 
+            var x = SAPI.Enrolments.GetStudent(ids: new int[] { 1, 2 });
+
+            Assert.IsTrue(x != null && x.Count  == 2);
+        }
+
+
+        [TestMethod]
+        public void GetOneStudentsAbsencesTest()
+        {
+            var knownStudentIdWithAbsence = 9613;
+            var x = SAPI.Enrolments.GetStudentAbsences(knownStudentIdWithAbsence);
+
+            Assert.IsTrue(x != null && x.Count >= 1);
+        }
+
+
+        [TestMethod]
+        public void GetOneStudentsRelatedAcademicReportWithSideloadTest()
+        {
+           var knownStudentIdWithReport = 10061;
+
+
+
+            var incl = new StudentAcademicReportIncludeOptions(period: true);
+
+            var x = SAPI.Enrolments.GetStudentRelatedAcademicReports(knownStudentIdWithReport, incl);
+
+            Assert.IsTrue(x != null && x.Count >= 1 && !string.IsNullOrWhiteSpace(x[0].Period.Data.Name));
+        }
+
+        [TestMethod]
+        public void GetOneStudentsRelatedActivitiesWithSideloadTest()
+        {
+            var knownStudentIdWithActivity = 9587;
+
+
+            var incl = new Model.Activities.Include.ActivityIncludeOptions(venue: true);
+
+            var x = SAPI.Enrolments.GetStudentActivities(knownStudentIdWithActivity, incl);
+
+            Assert.IsTrue(x != null && x.Count >= 1);
+        }
+
+        [TestMethod]
+        public void GetOneStudentsRelatedActivityAttendanceLinkTest()
+        {
+            var knownStudentIdWithActivity = 9587;
+
+
+            var x = SAPI.Enrolments.GetStudentActivityAttendeeLinks(knownStudentIdWithActivity);
+
+            Assert.IsTrue(x != null && x.Count >= 1);
+        }
+
+        [TestMethod]
+        public void GetOneStudentDocumentFileTest()
+        {
+
+            var x = SAPI.Enrolments.GetStudentDocumentFile(1);
+
+            Assert.IsTrue(x != null && x.ID == 1 && x.FileData.Length>0);
+        }
+
+        [TestMethod]
+        public void WriteOneStudentDocumentFileTest()
+        {
+
+            var x = SAPI.Enrolments.GetStudentDocumentFile(1);
+
+            x.SaveDocument("C:\\Temp");
+        }
 
         [TestMethod]
         public void GetOneStudentFlagTest()
@@ -578,10 +767,13 @@ namespace Sentral.API.Test
         public void GetOneStudentWithContactTest()
         {
             int studentId = 11434;
-            var x = SAPI.Enrolments.GetStudent(studentId, new StudentIncludeOptions(contacts:true));
+            var x = SAPI.Enrolments.GetStudent(studentId, new StudentIncludeOptions[] { StudentIncludeOptions.Contacts });
 
 
             Assert.IsTrue(x != null && x.ID == studentId && x.Contacts.Data.Count >=1);
         }
+
+
+
     }
 }

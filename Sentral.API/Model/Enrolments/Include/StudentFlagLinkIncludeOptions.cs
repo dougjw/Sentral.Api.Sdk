@@ -5,32 +5,9 @@ using System.Text;
 
 namespace Sentral.API.Model.Enrolments.Include
 {
-    public class StudentFlagLinkIncludeOptions : AbstractIncludeOptions<EnumEnrolmentsIncludeOptions>
+    public enum StudentFlagLinkIncludeOptions
     {
-        //student, house, rollclass, classes, campus
-        public StudentFlagLinkIncludeOptions(
-                bool student = false, bool flag = false
-
-            ) : base(GetIncludeOptionList(
-                    student, flag
-                )) {}
-
-        private static EnumEnrolmentsIncludeOptions[] GetIncludeOptionList(
-                bool student = false, bool flag = false
-            )
-        {
-            List<EnumEnrolmentsIncludeOptions> inclOptions = new List<EnumEnrolmentsIncludeOptions>();
-
-            if (student)
-            {
-                inclOptions.Add(EnumEnrolmentsIncludeOptions.Student);
-            }
-
-            if (flag)
-            {
-                inclOptions.Add(EnumEnrolmentsIncludeOptions.Flag);
-            }
-            return inclOptions.ToArray();
-        }
+        Student,
+        Flag
     }
 }

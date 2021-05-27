@@ -9,23 +9,14 @@ namespace Sentral.API.Model.Enrolments.Update
     public class UpdateEnrolment : AbstractUpdatable
     {
 
-        private bool? _isBoarding;
-        private bool _isBoardingSpecified;
-
-
-        public UpdateEnrolment(int id) :base(id)
-        {}
-
-
         private const string _type = "enrolment";
 
-        public string Type
-        {
-            get
-            {
-                return _type;
-            }
-        }
+        private bool? _isBoarding;
+        private bool _isBoardingIncludeInSerialize;
+
+
+        public UpdateEnrolment(int id) :base(id, _type)
+        {}
 
 
         [JsonProperty(propertyName: "isBoarding", NullValueHandling = NullValueHandling.Include)]
@@ -38,13 +29,13 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _isBoarding = value;
-                _isBoardingSpecified = true;
+                _isBoardingIncludeInSerialize = true;
             } }
 
 
         public bool ShouldSerializeIsBoarding()
         {
-            return _isBoardingSpecified;
+            return _isBoardingIncludeInSerialize;
         }
     }
 }

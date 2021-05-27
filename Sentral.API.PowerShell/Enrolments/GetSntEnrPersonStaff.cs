@@ -6,17 +6,19 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrPersonStaff")]
     [OutputType(typeof(Staff))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrPersonStaff : SentralPSCmdlet
     {
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularId")]
+            ParameterSetName = "Singular")]
         [ValidateRange(1, int.MaxValue)]
         public int? PersonId { get; set; }
 
@@ -34,13 +36,21 @@ namespace Sentral.API.PowerShell.Enrolments
         public SwitchParameter IncludeEmployments { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
-            StaffIncludeOptions include = new StaffIncludeOptions(
-                    IncludePerson.IsPresent,
-                    IncludeQualification.IsPresent,
-                    IncludeEmployments.IsPresent
-                );
+            List<StaffIncludeOptions> include = new List<StaffIncludeOptions>();
+            if (IncludePerson.IsPresent) 
+            {
+                include.Add(StaffIncludeOptions.Person);
+            }
+            if (IncludeQualification.IsPresent)
+            {
+                include.Add(StaffIncludeOptions.Qualifications);
+            }
+            if (IncludeEmployments.IsPresent)
+            {
+                include.Add(StaffIncludeOptions.Employments);
+            }
 
             // Singular mode chosen
             if(PersonId.HasValue && PersonId.Value > 0)
@@ -52,7 +62,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

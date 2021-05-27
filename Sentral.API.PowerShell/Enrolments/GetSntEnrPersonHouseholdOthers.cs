@@ -11,18 +11,19 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrPersonHouseholdPrimary")]
     [OutputType(typeof(Household))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrPersonHouseholdPrimary : SentralPSCmdlet
     {
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularId")]
+            ParameterSetName = "Singular")]
         [ValidateRange(1, int.MaxValue)]
         public int? PersonId { get; set; }
 
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
 
 
@@ -36,7 +37,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

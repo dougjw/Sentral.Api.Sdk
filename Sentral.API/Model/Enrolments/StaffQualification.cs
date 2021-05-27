@@ -1,41 +1,69 @@
 ﻿using JsonApiSerializer.JsonApi;
 using Newtonsoft.Json;
+using Sentral.API.Model.Common;
+using Sentral.API.Model.Enrolments.Update;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Sentral.API.Model.Enrolments
 {
-    public class StaffQualification
+    public class StaffQualification : IToUpdatable<UpdateStaffQualification>
     {
          [JsonProperty(propertyName:"id")]
          public int ID { get; set; }
 
-        [JsonProperty(propertyName: "qualification")]
         public string Qualification { get; set; }
 
-        [JsonProperty(propertyName: "type")]
-        public string Type { get; set; }
+        public string QualificationType { get; set; }
 
-        [JsonProperty(propertyName: "from")]
         public string From { get; set; }
 
-        [JsonProperty(propertyName: "aitslTeacherAccreditationLevel")]
         public string AitslTeacherAccreditationLevel { get; set; }
 
-        [JsonProperty(propertyName: "nextAitslTeacherAccreditationLevel")]
         public string NextAitslTeacherAccreditationLevel { get; set; }
 
-        [JsonProperty(propertyName: "dateAchieved")]
         public DateTime? DateAchieved { get; set; }
 
-        [JsonProperty(propertyName: "isActive")]
         public bool IsActive { get; set; }
 
         [JsonProperty(propertyName: "staff")]
         public Relationship<Staff> Staff { get; set; }
 
+        public UpdateStaffQualification ToUpdatable()
+        {
+            EnumStaffQualificiationType qualificiationType;
 
-        //TODO: Complete Stub
+            switch(QualificationType)
+            {
+                case "bachelors_degree":
+                    qualificiationType = EnumStaffQualificiationType.bachelors_degree;
+                    break;
+                case "doctoral_degree":
+                    qualificiationType = EnumStaffQualificiationType.doctoral_degree;
+                    break;
+                case "masters_degree":
+                    qualificiationType = EnumStaffQualificiationType.masters_degree;
+                    break;
+                case "tafe_certificate":
+                    qualificiationType = EnumStaffQualificiationType.tafe_certificate;
+                    break;
+                default:
+                    qualificiationType = EnumStaffQualificiationType.certificate;
+                    break;
+            }
+
+
+            return new UpdateStaffQualification(ID)
+            {
+                Qualification = Qualification,
+                QualificationType = qualificiationType,
+                From = From,
+                AitslTeacherAccreditationLevel = AitslTeacherAccreditationLevel,
+                NextAitslTeacherAccreditationLevel = NextAitslTeacherAccreditationLevel,
+                DateAchieved = DateAchieved
+            };
+        }
+
     }
 }

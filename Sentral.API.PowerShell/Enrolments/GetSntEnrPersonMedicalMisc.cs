@@ -6,11 +6,13 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrPersonMedicalMisc")]
     [OutputType(typeof(PersonMedicalMisc))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrPersonMedicalMisc : SentralPSCmdlet
     {
         [Parameter(
@@ -31,11 +33,13 @@ namespace Sentral.API.PowerShell.Enrolments
 
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
-            MedicalMiscIncludeOptions include = new MedicalMiscIncludeOptions(
-                    IncludePerson.IsPresent
-                );
+            List<MedicalMiscIncludeOptions> include = new List<MedicalMiscIncludeOptions>();
+            if(IncludePerson.IsPresent)
+            {
+                include.Add(MedicalMiscIncludeOptions.Person);
+            }
 
             // Singular mode chosen
             if(PersonMedMiscId.HasValue && PersonMedMiscId.Value > 0)
@@ -54,7 +58,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

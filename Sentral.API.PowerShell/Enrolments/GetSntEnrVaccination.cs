@@ -6,17 +6,19 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrVaccination")]
     [OutputType(typeof(Vaccination))]
+    [CmdletBinding(DefaultParameterSetName = "SingularVaccinationId")]
     public class GetSntEnrVaccination : SentralPSCmdlet
     {
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularIdVaccinationID")]
+            ParameterSetName = "SingularVaccinationId")]
         [ValidateRange(1, int.MaxValue)]
         public int? VaccinationID { get; set; }
 
@@ -39,11 +41,13 @@ namespace Sentral.API.PowerShell.Enrolments
 
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
-            VaccinationIncludeOptions include = new VaccinationIncludeOptions(
-                    IncludePerson.IsPresent
-            );
+            List<VaccinationIncludeOptions> include = new List<VaccinationIncludeOptions>();
+            if (IncludePerson.IsPresent) 
+            {
+                include.Add(VaccinationIncludeOptions.Person);
+            }
             // Singular mode chosen
             if (VaccinationID.HasValue && VaccinationID.Value > 0)
             {
@@ -68,7 +72,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

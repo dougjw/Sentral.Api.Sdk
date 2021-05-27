@@ -49,13 +49,22 @@ namespace Sentral.API.DataAccess
 
         internal string Invoke()
         {
-            return Invoke(1);
+            return Invoke(1, StringResponseMethod);
         }
 
-        private string Invoke(int retryNumber)
+        public byte[] InvokeBinary()
+        {
+            return Invoke(1, BinaryResponseMethod);
+        }
+
+        private delegate T DelReturnType<T>(Stream steam);
+
+        // Deal with code clones later
+        private T Invoke<T>(int retryNumber, DelReturnType<T> streamMethod)
         {
             try
             {
+                T result = default;
                 var request = (HttpWebRequest)WebRequest.Create(Uri);
 
                 request.Headers.Add("X-API-KEY", headers.Key);
@@ -66,7 +75,7 @@ namespace Sentral.API.DataAccess
                 request.ContentType = ContentType;
 
                 if (
-                        !string.IsNullOrEmpty(PostData) && 
+                        !string.IsNullOrEmpty(PostData) &&
                         (
                             Method == ApiMethod.POST || Method == ApiMethod.PATCH
                         )
@@ -94,13 +103,13 @@ namespace Sentral.API.DataAccess
                     using (var responseStream = response.GetResponseStream())
                     {
                         if (responseStream != null)
-                            using (var reader = new StreamReader(responseStream))
-                            {
-                                responseValue = reader.ReadToEnd();
-                            }
+                        {
+                            return streamMethod(responseStream);
+                        }
+
                     }
 
-                    return responseValue;
+                    return result;
                 }
             }
             catch (WebException webex)
@@ -111,7 +120,33 @@ namespace Sentral.API.DataAccess
                 }
 
                 PauseExecution(retryNumber);
-                return Invoke(retryNumber + 1);
+                return Invoke(retryNumber + 1, streamMethod);
+            }
+        }
+
+        private byte[] BinaryResponseMethod(Stream stream)
+        {
+            byte[] buffer = new byte[4096];
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                int count = 0;
+                do
+                {
+                    count = stream.Read(buffer, 0, buffer.Length);
+                    memoryStream.Write(buffer, 0, count);
+
+                } while (count != 0);
+
+                return memoryStream.ToArray();
+            }
+
+        }
+
+        private string StringResponseMethod(Stream stream)
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
             }
         }
 
@@ -126,16 +161,29 @@ namespace Sentral.API.DataAccess
             string message;
 
             if (res == null && webex != null)
+            {
                 res = (HttpWebResponse)webex.Response;
+            }
+
             if (res == null)
+            {
                 message = "Request Failed. Error: " + webex.Message;
+            }
             else
+            {
                 message = string.Format("Request Failed. Received HTTP {0}", (int)res.StatusCode);
+            }
+
             RestClientException ex = null;
             if (webex != null)
+            {
                 ex = new RestClientException(message, webex);
+            }
             else
+            {
                 ex = new RestClientException(message);
+            }
+
             if (res != null)
             {
                 ex.Response = res;

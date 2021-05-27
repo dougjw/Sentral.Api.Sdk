@@ -6,17 +6,19 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrStudentEnrolment")]
     [OutputType(typeof(Enrolment))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrStudentEnrolment : SentralPSCmdlet
     {
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularId")]
+            ParameterSetName = "Singular")]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentId { get; set; }
 
@@ -38,16 +40,31 @@ namespace Sentral.API.PowerShell.Enrolments
         public SwitchParameter IncludeCampus { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
 
-            EnrolmentIncludeOptions include = new EnrolmentIncludeOptions(
-                    IncludeStudent.IsPresent,
-                    IncludeHouse.IsPresent,
-                    IncludeRollclass.IsPresent,
-                    IncludeClasses.IsPresent,
-                    IncludeCampus.IsPresent
-                );
+            List<EnrolmentIncludeOptions> include = new List<EnrolmentIncludeOptions>();
+
+            if(IncludeStudent.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.Student);
+            }
+            if(IncludeHouse.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.House);
+            }
+            if (IncludeRollclass.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.Rollclass);
+            }
+            if (IncludeClasses.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.Classes);
+            }
+            if (IncludeCampus.IsPresent)
+            {
+                include.Add(EnrolmentIncludeOptions.Campus);
+            }
 
 
             // Singular mode chosen
@@ -60,7 +77,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

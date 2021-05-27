@@ -6,11 +6,13 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrStaff")]
     [OutputType(typeof(Staff))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrStaff : SentralPSCmdlet
     {
         [Parameter(
@@ -55,16 +57,24 @@ namespace Sentral.API.PowerShell.Enrolments
        
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
-            StaffIncludeOptions include = new StaffIncludeOptions(
-                    IncludePerson.IsPresent,
-                    IncludeQualifications.IsPresent,
-                    IncludeEmployments.IsPresent
-            );
+            List<StaffIncludeOptions> include = new List<StaffIncludeOptions>();
+            if (IncludePerson.IsPresent) 
+            {
+                include.Add(StaffIncludeOptions.Person);
+            }
+            if(IncludeQualifications.IsPresent)
+            {
+                include.Add(StaffIncludeOptions.Qualifications);
+            }
+            if (IncludeEmployments.IsPresent)
+            {
+                include.Add(StaffIncludeOptions.Employments);
+            }
 
             // Singular mode chosen
-            if(StaffId.HasValue && StaffId.Value > 0)
+            if (StaffId.HasValue && StaffId.Value > 0)
             {
                 WriteObject(
                         SentralApiClient.Enrolments.GetStaff(StaffId.Value, include)
@@ -81,7 +91,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

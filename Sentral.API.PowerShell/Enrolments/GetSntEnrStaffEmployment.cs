@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrStaffEmployment")]
     [OutputType(typeof(Staff))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrStaffEmployment : SentralPSCmdlet
     {
         [Parameter(
@@ -34,7 +35,7 @@ namespace Sentral.API.PowerShell.Enrolments
         public int[] SchoolIds { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
             // Singular mode chosen
             if(StaffEmploymentId.HasValue && StaffEmploymentId.Value > 0)
@@ -53,7 +54,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

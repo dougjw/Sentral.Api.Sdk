@@ -6,11 +6,13 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrStudentFlagLinks")]
     [OutputType(typeof(StudentFlagLink))]
+    [CmdletBinding(DefaultParameterSetName = "SingularStudentFlagId")]
     public class GetSntEnrStudentFlagLinks : SentralPSCmdlet
     {
 
@@ -38,14 +40,19 @@ namespace Sentral.API.PowerShell.Enrolments
 
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
 
-            StudentFlagLinkIncludeOptions include = new StudentFlagLinkIncludeOptions(
-                    IncludeStudent.IsPresent,
-                    IncludeFlag.IsPresent
-                );
+            List<StudentFlagLinkIncludeOptions> include = new List<StudentFlagLinkIncludeOptions>();
 
+            if(IncludeStudent.IsPresent)
+            {
+                include.Add(StudentFlagLinkIncludeOptions.Student);
+            }
+            if(IncludeFlag.IsPresent)
+            {
+                include.Add(StudentFlagLinkIncludeOptions.Flag);
+            }
 
             // Singular mode chosen
             if (StudentId.HasValue && StudentId.Value > 0)
@@ -69,7 +76,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

@@ -8,6 +8,8 @@ using Sentral.API.Model.Core;
 using Sentral.API.Model.Common;
 using Sentral.API.Model.Core.Include;
 using Sentral.API.Model.StaffAbsences;
+using Sentral.API.Common;
+using Sentral.API.Model.Enrolments.Include;
 
 namespace Sentral.API.Client.ActionNamespace
 {
@@ -35,7 +37,7 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<CoreAdministrativeUser>(string.Format("/v1/core/core-administrative-user/{0}", id));
         }
 
-        public List<CoreClass> GetCoreClass(CoreClassIncludeOptions include = null, int[] ids = null, 
+        public List<CoreClass> GetCoreClass(ICollection<CoreClassIncludeOptions> include = null, int[] ids = null, 
             int[] teacherIds = null, int[] assignedStudentIds = null, int[] assignedStaffIds = null,
             bool? includeInactive = null)
         {
@@ -48,17 +50,17 @@ namespace Sentral.API.Client.ActionNamespace
                 ["assignedStaffIds"] = assignedStaffIds,
                 ["includeInactive"] = includeInactive
             };
-            var uri = GetEndpointParameters("/v1/core/core-classes", p);
+            var uri = GetEndpointParameters<CoreClassIncludeOptions>("/v1/core/core-classes", p);
             return GetAllData<CoreClass>(uri);
         }
 
-        public CoreClass GetCoreClass(int id, CoreClassIncludeOptions include = null)
+        public CoreClass GetCoreClass(int id, ICollection<CoreClassIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/core/core-class/{0}", id), p);
+            var uri = GetEndpointParameters<CoreClassIncludeOptions>(string.Format("/v1/core/core-class/{0}", id), p);
             return GetData<CoreClass>(uri);
         }
         public List<CoreStaff> GetCoreClassAssignedStaff(int classId)
@@ -156,38 +158,38 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<CoreRollclass>(string.Format("/v1/core/core-rollclass/{0}", id));
         }
 
-        public List<CoreStaff> GetCoreStaff(CoreStaffIncludeOptions include = null, int[] staffIds = null)
+        public List<CoreStaff> GetCoreStaff(ICollection<CoreStaffIncludeOptions> include = null, int[] staffIds = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include,
                 ["ids"] = staffIds
             };
-            var uri = GetEndpointParameters("/v1/core/core-staff", p);
+            var uri = GetEndpointParameters<CoreStaffIncludeOptions>("/v1/core/core-staff", p);
             return GetAllData<CoreStaff>(uri);
         }
 
-        public CoreStaff GetCoreStaff(int id, CoreStaffIncludeOptions include = null)
+        public CoreStaff GetCoreStaff(int id, ICollection<CoreStaffIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/core/core-staff/{0}", id), p);
+            var uri = GetEndpointParameters<CoreStaffIncludeOptions>(string.Format("/v1/core/core-staff/{0}", id), p);
             return GetData<CoreStaff>(uri);
 
         }
-        public List<CoreClass> GetCoreStaffAssignedClasses(int staffId, CoreClassIncludeOptions include = null)
+        public List<CoreClass> GetCoreStaffAssignedClasses(int staffId, ICollection<CoreClassIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/core/core-staff/{0}/assigned-classes", staffId), p);
+            var uri = GetEndpointParameters<CoreClassIncludeOptions>(string.Format("/v1/core/core-staff/{0}/assigned-classes", staffId), p);
             return GetAllData<CoreClass>(uri);
         }
 
-        public List<CoreStudent> GetCoreStudent(CoreStudentIncludeOptions include = null, int[] staffIds = null,
+        public List<CoreStudent> GetCoreStudent(ICollection<CoreStudentIncludeOptions> include = null, int[] staffIds = null,
             bool? includeInactive = null)
         {
             var p = new Dictionary<string, object>
@@ -196,26 +198,26 @@ namespace Sentral.API.Client.ActionNamespace
                 ["ids"] = staffIds,
                 ["includeInactive"] = includeInactive
             };
-            var uri = GetEndpointParameters("/v1/core/core-student", p);
+            var uri = GetEndpointParameters<CoreStudentIncludeOptions>("/v1/core/core-student", p);
             return GetAllData<CoreStudent>(uri);
         }
 
-        public CoreStudent GetCoreStudent(int id, CoreStudentIncludeOptions include = null)
+        public CoreStudent GetCoreStudent(int id, ICollection<CoreStudentIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/core/core-student/{0}", id), p);
+            var uri = GetEndpointParameters<CoreStudentIncludeOptions>(string.Format("/v1/core/core-student/{0}", id), p);
             return GetData<CoreStudent>(uri);
         }
-        public List<CoreClass> GetCoreStudentAttendedClasses(int studentId, CoreClassIncludeOptions include = null)
+        public List<CoreClass> GetCoreStudentAttendedClasses(int studentId, ICollection<CoreClassIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/core/core-student/{0}/attended-classes", studentId), p);
+            var uri = GetEndpointParameters<CoreClassIncludeOptions>(string.Format("/v1/core/core-student/{0}/attended-classes", studentId), p);
             return GetAllData<CoreClass>(uri);
         }
 
@@ -225,7 +227,7 @@ namespace Sentral.API.Client.ActionNamespace
             return GetAllData<CoreStudentPersonRelation>(uri);
         }
 
-        public List<CoreStudentRelationship> GetCoreStudentRelationship(CoreStudentRelationshipIncludeOptions include = null,
+        public List<CoreStudentRelationship> GetCoreStudentRelationship(ICollection<CoreStudentRelationshipIncludeOptions> include = null,
             int[] studentRelationshipIds = null, int[] studentIds = null,  bool? includeInactive = null)
         {
             var p = new Dictionary<string, object>
@@ -235,17 +237,17 @@ namespace Sentral.API.Client.ActionNamespace
                 ["studentIds"] = studentIds,
                 ["includeInactive"] = includeInactive
             };
-            var uri = GetEndpointParameters("/v1/core/core-student-relationships", p);
+            var uri = GetEndpointParameters<CoreStudentRelationshipIncludeOptions>("/v1/core/core-student-relationships", p);
             return GetAllData<CoreStudentRelationship>(uri);
         }
 
-        public CoreStudentRelationship GetCoreStudentRelationship(int id, CoreStudentRelationshipIncludeOptions include = null)
+        public CoreStudentRelationship GetCoreStudentRelationship(int id, ICollection<CoreStudentRelationshipIncludeOptions> include = null)
         {
             var p = new Dictionary<string, object>
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/core/core-student-relationship/{0}", id), p);
+            var uri = GetEndpointParameters<CoreStudentRelationshipIncludeOptions>(string.Format("/v1/core/core-student-relationship/{0}", id), p);
             return GetData<CoreStudentRelationship>(uri);
         }
 

@@ -7,7 +7,7 @@ namespace Sentral.API.PowerShell
 {
     [Cmdlet(VerbsCommunications.Connect,"SentralApi")]
     // [OutputType(typeof(FavoriteStuff))]
-    public class ConnectSentralApi : PSCmdlet
+    public class ConnectSentralApi : Cmdlet
     {
         private static SentralApi _connection;
 
@@ -30,13 +30,13 @@ namespace Sentral.API.PowerShell
         public string ApiKey { private get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
             _connection = new SentralApi(BaseUrl, ApiKey, TenantCode);
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

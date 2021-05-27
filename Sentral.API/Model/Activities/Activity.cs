@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using JsonApiSerializer.JsonApi;
+using Newtonsoft.Json;
+using Sentral.API.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,79 +9,90 @@ namespace Sentral.API.Model.Activities
 {
     public class Activity
     {
-        [JsonProperty(propertyName: "id")]
+        private SentralTime _startTime;
+        private SentralTime _endTime;
+
         public int ID { get; set; }
 
-        [JsonProperty(propertyName: "name")]
         public string Name { get; set; }
 
-        [JsonProperty(propertyName: "reportName")]
         public string ReportName { get; set; }
 
-        [JsonProperty(propertyName: "description")]
         public string Description { get; set; }
 
-        [JsonProperty(propertyName: "startDate")]
         public DateTime? StartDate { get; set; }
 
-        [JsonProperty(propertyName: "endDate")]
         public DateTime? EndDate { get; set; }
 
         [JsonProperty(propertyName: "startTime")]
-        public DateTime? StartTime { get; set; }
+        public string StartTime {
+            get
+            {
+                if (_startTime == null)
+                {
+                    return null;
+                }
+                return _startTime.ToString();
+            }
+            set
+            {
+                _startTime = new SentralTime(value);
+            }
+        }
 
-        [JsonProperty(propertyName: "endTime")]
-        public DateTime? EndTime { get; set; }
+        public string EndTime 
+        {
+            get
+            {
+                if (_endTime == null)
+                {
+                    return null;
+                }
+                return _endTime.ToString();
+            }
+            set
+            {
+                _endTime = new SentralTime(value);
+            }
+        }
 
-        [JsonProperty(propertyName: "permissionFormDueDate")]
         public DateTime? PermissionFormDueDate { get; set; }
 
-        [JsonProperty(propertyName: "isRestrictedByTerm")]
         public bool IsRestrictedByTerm { get; set; }
 
-        [JsonProperty(propertyName: "isRestrictedByYear")]
         public bool IsRestrictedByYear { get; set; }
 
-        [JsonProperty(propertyName: "showReports")]
         public bool ShowReports { get; set; }
 
-        [JsonProperty(propertyName: "showAttendance")]
         public bool ShowAttendance { get; set; }
 
-        [JsonProperty(propertyName: "showPortal")]
         public bool ShowPortal { get; set; }
 
-        [JsonProperty(propertyName: "selfRegistration")]
         public bool SelfRegistration { get; set; }
 
-        [JsonProperty(propertyName: "approvalRequired")]
         public bool ApprovalRequired { get; set; }
 
-        [JsonProperty(propertyName: "maximumPlaces")]
         public int MaximumPlaces { get; set; }
 
-        [JsonProperty(propertyName: "waitingListPlaces")]
-        public int WaitingListPlaces { get; set; }
+        public int? WaitingListPlaces { get; set; }
 
-        [JsonProperty(propertyName: "archived")]
         public DateTime? Archived { get; set; }
 
-        [JsonProperty(propertyName: "riskAssessment")]
         public bool RiskAssessment { get; set; }
 
-        [JsonProperty(propertyName: "registrationType")]
         public string RegistrationType { get; set; }
 
-        [JsonProperty(propertyName: "portalDescription")]
         public string PortalDescription { get; set; }
 
-        [JsonProperty(propertyName: "availableTerms")]
-        public List<string> AvailableTerms { get; set; }
+        public List<int> AvailableTerms { get; set; }
 
-        [JsonProperty(propertyName: "availableYears")]
-        public List<string> AvailableYears { get; set; }
+        public List<int> AvailableYears { get; set; }
 
-        [JsonProperty(propertyName: "isActive")]
         public bool IsActive { get; set; }
+
+        public Relationship<List<CycleInstance>>  Cycles { get; set; }
+
+        public Relationship<ActivityInstance> Instances { get; set; }
+
     }
 }

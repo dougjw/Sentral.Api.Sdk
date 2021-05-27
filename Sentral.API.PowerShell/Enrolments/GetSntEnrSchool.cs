@@ -6,11 +6,13 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get,"SntEnrSchool")]
     [OutputType(typeof(School))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrSchool : SentralPSCmdlet
     {
         [Parameter(
@@ -22,14 +24,16 @@ namespace Sentral.API.PowerShell.Enrolments
 
         [Parameter(Mandatory = false)]
         public SwitchParameter IncludeTenant { get; set; }
-        
+
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
-            SchoolIncludeOptions include = new SchoolIncludeOptions(
-                    IncludeTenant.IsPresent
-            );
+            List<SchoolIncludeOptions> include = new List<SchoolIncludeOptions>();
+            if (IncludeTenant.IsPresent)
+            {
+                include.Add(SchoolIncludeOptions.Tenant);
+            }
 
             // Singular mode chosen
             if(SchoolId.HasValue && SchoolId.Value > 0)
@@ -48,7 +52,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

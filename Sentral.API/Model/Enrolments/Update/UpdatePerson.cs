@@ -8,6 +8,8 @@ namespace Sentral.API.Model.Enrolments.Update
     public class UpdatePerson : AbstractUpdatable
     {
 
+        private const string _type = "person";
+
         private string _contactCode;
         private string _title;
         private string _firstName;
@@ -20,47 +22,40 @@ namespace Sentral.API.Model.Enrolments.Update
         private string _languageSpokenAtHomeCode;
 
 
-        private bool _contactCodeSpecified;
-        private bool _titleSpecified;
-        private bool _firstNameSpecified;
-        private bool _middleNamesSpecified;
-        private bool _lastNameSpecified;
-        private bool _legalLastNameSpecified;
-        private bool _preferredNameSpecified;
-        private bool _genderCodeSpecified;
-        private bool _crnSpecified;
-        private bool _languageSpokenAtHomeCodeSpecified;
+        private bool _contactCodeIncludeInSerialize;
+        private bool _titleIncludeInSerialize;
+        private bool _firstNameIncludeInSerialize;
+        private bool _middleNamesIncludeInSerialize;
+        private bool _lastNameIncludeInSerialize;
+        private bool _legalLastNameIncludeInSerialize;
+        private bool _preferredNameIncludeInSerialize;
+        private bool _genderCodeIncludeInSerialize;
+        private bool _crnIncludeInSerialize;
+        private bool _languageSpokenAtHomeCodeIncludeInSerialize;
 
 
-        private const string _type = "person";
 
-        public UpdatePerson(int id) : base (id)
+        public UpdatePerson(int id) : base (id, _type)
         {
         }
    
-        public string Type
-        {
-            get
-            {
-                return _type;
-            }
 
-        }
-
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string ContactCode { 
             get {
                 return _contactCode;
             }
             set {
                 _contactCode = value;
-                _contactCodeSpecified = true;
+                _contactCodeIncludeInSerialize = true;
             }
         }
         public bool ShouldSerializeContactCode()
         {
-            return _contactCodeSpecified;
+            return _contactCodeIncludeInSerialize;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string Title
         {
             get
@@ -70,14 +65,15 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _title = value;
-                _titleSpecified = true;
+                _titleIncludeInSerialize = true;
             }
         }
         public bool ShouldSerializeTitle()
         {
-            return _titleSpecified;
+            return _titleIncludeInSerialize;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string FirstName
         {
             get
@@ -87,14 +83,15 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _firstName = value;
-                _firstNameSpecified = true;
+                _firstNameIncludeInSerialize = true;
             }
         }
         public bool ShouldSerializeFirstName()
         {
-            return _firstNameSpecified;
+            return _firstNameIncludeInSerialize;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string MiddleNames
         {
             get
@@ -104,14 +101,17 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _middleNames = value;
-                _middleNamesSpecified = true;
+                _middleNamesIncludeInSerialize = true;
             }
         }
 
         public bool ShouldSerializeMiddleNames()
         {
-            return _middleNamesSpecified;
+            return _middleNamesIncludeInSerialize;
         }
+
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string LastName
         {
             get
@@ -121,14 +121,16 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _lastName = value;
-                _lastNameSpecified = true;
+                _lastNameIncludeInSerialize = true;
             }
         }
         public bool ShouldSerializeLastName()
         {
-            return _lastNameSpecified;
+            return _lastNameIncludeInSerialize;
         }
 
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string LegalLastName
         {
             get
@@ -138,14 +140,15 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _legalLastName = value;
-                _legalLastNameSpecified = true;
+                _legalLastNameIncludeInSerialize = true;
             }
         }
         public bool ShouldSerializeLegalLastName()
         {
-            return _legalLastNameSpecified;
+            return _legalLastNameIncludeInSerialize;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string PreferredName
         {
             get
@@ -155,14 +158,15 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _preferredName = value;
-                _preferredNameSpecified = true;
+                _preferredNameIncludeInSerialize = true;
             }
         }
         public bool ShouldSerializePreferredName()
         {
-            return _preferredNameSpecified;
+            return _preferredNameIncludeInSerialize;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string GenderCode
         {
             get
@@ -172,15 +176,16 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _genderCode = value;
-                _genderCodeSpecified = true;
+                _genderCodeIncludeInSerialize = true;
             }
         }
 
         public bool ShouldSerializeGenderCode()
         {
-            return _genderCodeSpecified;
+            return _genderCodeIncludeInSerialize;
         }
-        [JsonProperty(propertyName: "crn")]
+
+        [JsonProperty(propertyName: "crn", NullValueHandling = NullValueHandling.Include)]
         public string CRN
         {
             get
@@ -190,14 +195,15 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _crn = value;
-                _crnSpecified = true;
+                _crnIncludeInSerialize = true;
             }
         }
         public bool ShouldSerializeCRN()
         {
-            return _crnSpecified;
+            return _crnIncludeInSerialize;
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string LanguageSpokenAtHomeCode
         {
             get
@@ -207,12 +213,12 @@ namespace Sentral.API.Model.Enrolments.Update
             set
             {
                 _languageSpokenAtHomeCode = value;
-                _languageSpokenAtHomeCodeSpecified = true;
+                _languageSpokenAtHomeCodeIncludeInSerialize = true;
             }
         }
         public bool ShouldSerializeLanguageSpokenAtHomeCode()
         {
-            return _languageSpokenAtHomeCodeSpecified;
+            return _languageSpokenAtHomeCodeIncludeInSerialize;
         }
 
     }

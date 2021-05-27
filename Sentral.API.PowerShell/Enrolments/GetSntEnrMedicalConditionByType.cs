@@ -6,6 +6,7 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
+using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
@@ -64,12 +65,18 @@ namespace Sentral.API.PowerShell.Enrolments
         public SwitchParameter IncludePerson { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
 
-            MedicalConditionsIncludeOptions include = new MedicalConditionsIncludeOptions(
-                    IncludePerson.IsPresent
-                );
+            MedicalConditionsIncludeOptions[] include = null;
+            if (IncludePerson.IsPresent) 
+            {
+                include = new MedicalConditionsIncludeOptions[] 
+                    {
+                        MedicalConditionsIncludeOptions.Person
+                    };
+            }
+
             if(ADD.IsPresent)
             {
                 GetMedicalDataAdd(include);
@@ -103,7 +110,7 @@ namespace Sentral.API.PowerShell.Enrolments
 
         }
 
-        private void GetMedicalDataAdd(MedicalConditionsIncludeOptions include = null)
+        private void GetMedicalDataAdd(ICollection<MedicalConditionsIncludeOptions> include = null)
         {            // Singular modechosen
             if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
             {
@@ -118,7 +125,7 @@ namespace Sentral.API.PowerShell.Enrolments
                     );
             }
         }
-        private void GetMedicalDataAllergy(MedicalConditionsIncludeOptions include = null)
+        private void GetMedicalDataAllergy(ICollection<MedicalConditionsIncludeOptions> include = null)
         {            // Singular modechosen
             if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
             {
@@ -133,7 +140,7 @@ namespace Sentral.API.PowerShell.Enrolments
                     );
             }
         }
-        private void GetMedicalDataAsthma(MedicalConditionsIncludeOptions include = null)
+        private void GetMedicalDataAsthma(ICollection<MedicalConditionsIncludeOptions> include = null)
         {            // Singular modechosen
             if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
             {
@@ -148,7 +155,7 @@ namespace Sentral.API.PowerShell.Enrolments
                     );
             }
         }
-        private void GetMedicalDataDiabetes(MedicalConditionsIncludeOptions include = null)
+        private void GetMedicalDataDiabetes(ICollection<MedicalConditionsIncludeOptions> include = null)
         {            // Singular modechosen
             if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
             {
@@ -163,7 +170,7 @@ namespace Sentral.API.PowerShell.Enrolments
                     );
             }
         }
-        private void GetMedicalDataEpilepsy(MedicalConditionsIncludeOptions include = null)
+        private void GetMedicalDataEpilepsy(ICollection<MedicalConditionsIncludeOptions> include = null)
         {            // Singular modechosen
             if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
             {
@@ -178,7 +185,7 @@ namespace Sentral.API.PowerShell.Enrolments
                     );
             }
         }
-        private void GetMedicalDataOther(MedicalConditionsIncludeOptions include = null)
+        private void GetMedicalDataOther(ICollection<MedicalConditionsIncludeOptions> include = null)
         {            // Singular modechosen
             if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
             {
@@ -196,7 +203,7 @@ namespace Sentral.API.PowerShell.Enrolments
 
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 

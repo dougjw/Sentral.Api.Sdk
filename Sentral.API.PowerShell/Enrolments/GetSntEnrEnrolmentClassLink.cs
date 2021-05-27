@@ -11,6 +11,7 @@ namespace Sentral.API.PowerShell.Enrolments
 {
     [Cmdlet(VerbsCommon.Get, "SntEnrEnrolmentClassLink")]
     [OutputType(typeof(EnrolmentClassLink))]
+    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrEnrolmentClassLink : SentralPSCmdlet
     {
 
@@ -32,7 +33,7 @@ namespace Sentral.API.PowerShell.Enrolments
         public int[] ClassIds { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
-        protected override void BeginProcessing()
+        protected override void ProcessRecord()
         {
 
             // Singular mode chosen
@@ -53,7 +54,7 @@ namespace Sentral.API.PowerShell.Enrolments
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
-        protected override void ProcessRecord()
+        protected override void BeginProcessing()
         {
         }
 
