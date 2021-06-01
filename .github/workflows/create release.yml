@@ -1,9 +1,7 @@
-name: .NET
+name: Create Sentral.API.SDK Release
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
@@ -63,7 +61,7 @@ jobs:
         prerelease: true
         
     - name: Package dlls from build
-      run: Get-ChildItem -Recurse |where {$_.Directory.Name -eq "Release" -and $_.Name -like "*.nupkg" } | Compress-Archive -DestinationPath ./Sentral.API.zip
+      run: Get-ChildItem -Recurse |where {$_.FullName -like "*\Sentral.API.PowerShell\bin\Release\*" -and $_.Name -match "(JsonApi|Sentral.Api|Newtonsoft).*.(dll|psd1|pdb|json)" } | Compress-Archive -DestinationPath ./Sentral.API.zip
       shell: powershell
     - name: Upload Release Asset 
       id: upload-release-asset
