@@ -1,0 +1,44 @@
+name: Test Build Sentral.API.SDK
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Setup NuGet.exe for use with actions
+      uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: latest
+    - name: Restore nuget dependencies
+      run: nuget restore Sentral.API.sln
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+#    - name: Test
+#      run: dotnet test --no-build --verbosity normal
+    - name: Publish NuGet Sentral.API
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+        # Filepath of the project to be packaged, relative to root of repository
+        PROJECT_FILE_PATH: Sentral.API/Sentral.API.csproj
+        NUGET_KEY: ${{secrets.NUGET}}
+        VERSION_FILE_PATH: PackageVersion
+        VERSION_REGEX: ^(.*)$
+    - name: Publish NuGet Sentral.API.PowerShell
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+        # Filepath of the project to be packaged, relative to root of repository
+        PROJECT_FILE_PATH: Sentral.API.PowerShell/Sentral.API.PowerShell.csproj
+        NUGET_KEY: ${{secrets.NUGET}}
+        VERSION_FILE_PATH: PackageVersion
+        VERSION_REGEX: ^(.*)$    
