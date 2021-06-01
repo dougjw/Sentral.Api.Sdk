@@ -59,7 +59,9 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: true
-        
+    - name: Sentral PowerShell Module Import (no name clash)
+      run: Import-Module .\Sentral.API.PowerShell\bin\Release\netstandard2.0\Sentral.API.PowerShell.dll
+      shell: powershell
     - name: Package dlls from build
       run: Get-ChildItem -Recurse |where {$_.FullName -like "*\Sentral.API.PowerShell\bin\Release\*" -and $_.Name -match "(JsonApi|Sentral.Api|Newtonsoft).*.(dll|psd1|pdb|json)" } | Compress-Archive -DestinationPath ./Sentral.API.zip
       shell: powershell
