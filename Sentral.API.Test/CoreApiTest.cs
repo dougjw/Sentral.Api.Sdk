@@ -26,17 +26,20 @@ namespace Sentral.API.Test
         [TestMethod]
         public void GetOneCoreClass()
         {
+            int knownClassId = 838;
 
-            var x = SAPI.Core.GetCoreClass(1);
+            var x = SAPI.Core.GetCoreClass(knownClassId);
 
-            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.ExternalId));
+            Assert.IsTrue(x != null && x.ID == knownClassId && !string.IsNullOrWhiteSpace(x.ExternalId));
         }
 
         [TestMethod]
         public void GetCoreClassAssignedStaff()
         {
 
-            var x = SAPI.Core.GetCoreClassAssignedStaff(1);
+            int knownClassId = 838;
+
+            var x = SAPI.Core.GetCoreClassAssignedStaff(knownClassId);
 
             Assert.IsTrue(x != null && x.Count>=0);
         }
@@ -44,8 +47,9 @@ namespace Sentral.API.Test
         [TestMethod]
         public void GetClassAssignedStudents()
         {
+            int knownClassId = 838;
 
-            var x = SAPI.Core.GetCoreClassAssignedStudents(1);
+            var x = SAPI.Core.GetCoreClassAssignedStudents(knownClassId);
 
             Assert.IsTrue(x != null && x.Count >= 0);
         }
