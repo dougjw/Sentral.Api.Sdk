@@ -9,9 +9,8 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrConsent")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrConsent", DefaultParameterSetName = "Singular")]
     [OutputType(typeof(Consent))]
-    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrConsent : SentralPSCmdlet
     {
 

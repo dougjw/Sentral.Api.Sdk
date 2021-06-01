@@ -10,9 +10,8 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrConsentLink")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrConsentLink", DefaultParameterSetName = "Singular")]
     [OutputType(typeof(ConsentLink))]
-    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrConsentLink : SentralPSCmdlet
     {
 

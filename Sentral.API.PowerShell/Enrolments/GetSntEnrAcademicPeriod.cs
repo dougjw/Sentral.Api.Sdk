@@ -9,9 +9,8 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrAcademicPeriod")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrAcademicPeriod", DefaultParameterSetName = "Singular")]
     [OutputType(typeof(AcademicPeriod))]
-    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrAcademicPeriod : SentralPSCmdlet
     {
 

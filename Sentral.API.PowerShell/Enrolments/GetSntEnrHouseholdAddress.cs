@@ -9,9 +9,8 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrHouseholdAddress")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrHouseholdAddress", DefaultParameterSetName = "Singular")]
     [OutputType(typeof(Address))]
-    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrHouseholdAddress : SentralPSCmdlet
     {
 

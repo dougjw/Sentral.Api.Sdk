@@ -9,9 +9,8 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrPersonDoctors")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrPersonDoctors", DefaultParameterSetName = "Singular")]
     [OutputType(typeof(Doctor))]
-    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrPersonDoctors : SentralPSCmdlet
     {
         [Parameter(

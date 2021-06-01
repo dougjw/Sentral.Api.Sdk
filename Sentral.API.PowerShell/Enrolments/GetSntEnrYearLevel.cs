@@ -9,9 +9,8 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrYearLevel")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrYearLevel", DefaultParameterSetName = "Singular")]
     [OutputType(typeof(Tenant))]
-    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrYearLevel : SentralPSCmdlet
     {
         [Parameter(
