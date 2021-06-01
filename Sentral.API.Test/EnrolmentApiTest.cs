@@ -365,11 +365,12 @@ namespace Sentral.API.Test
                     PersonIncludeOptions.Emails,
                     PersonIncludeOptions.PhoneNumbers,
                     PersonIncludeOptions.PrimaryHousehold,
-                    PersonIncludeOptions.OtherHouseholds
+                    PersonIncludeOptions.OtherHouseholds,
+                    PersonIncludeOptions.AdditionalFields
                 };
-            var x = SAPI.Enrolments.GetPerson(2, include: incl);
+            var x = SAPI.Enrolments.GetPerson(1, include: incl);
 
-            Assert.IsTrue(x != null && x.ID == 2 && !string.IsNullOrWhiteSpace(x.LastName));
+            Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.LastName));
         }
 
         [TestMethod]
