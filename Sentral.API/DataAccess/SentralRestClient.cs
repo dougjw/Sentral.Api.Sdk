@@ -94,10 +94,7 @@ namespace Sentral.API.DataAccess
                 {
                     var responseValue = string.Empty;
 
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        throw GetRestClientException(response, null);
-                    }
+                    ValiateResponse(response);
 
                     // grab the response
                     using (var responseStream = response.GetResponseStream())
@@ -121,6 +118,18 @@ namespace Sentral.API.DataAccess
 
                 PauseExecution(retryNumber);
                 return Invoke(retryNumber + 1, streamMethod);
+            }
+        }
+
+        private void ValiateResponse(HttpWebResponse response)
+        {
+            if (
+                    (Method == ApiMethod.DELETE && response.StatusCode != HttpStatusCode.NoContent)
+                    ||
+                    (Method != ApiMethod.DELETE && response.StatusCode != HttpStatusCode.OK)
+            )
+            {
+                throw GetRestClientException(response, null);
             }
         }
 
@@ -156,39 +165,42 @@ namespace Sentral.API.DataAccess
             Thread.Sleep(exponentialBackoff);
         }
 
-        private RestClientException GetRestClientException(HttpWebResponse res, WebException webex)
+        private RestClientException GetRestClientException(HttpWebResponse response, WebException webEx)
         {
             string message;
 
-            if (res == null && webex != null)
+            if (response == null && webEx != null)
             {
-                res = (HttpWebResponse)webex.Response;
+                response = (HttpWebResponse)webEx.Response;
             }
 
-            if (res == null)
+            if (response == null)
             {
-                message = "Request Failed. Error: " + webex.Message;
+                message = "Request Failed. Error: " + webEx.Message;
             }
             else
             {
-                message = string.Format("Request Failed. Received HTTP {0}", (int)res.StatusCode);
+                message = string.Format("Request Failed. Received HTTP {0}", (int)response.StatusCode);
             }
 
             RestClientException ex = null;
-            if (webex != null)
+            if (webEx != null)
             {
-                ex = new RestClientException(message, webex);
+                ex = new RestClientException(message, webEx);
             }
             else
             {
                 ex = new RestClientException(message);
             }
 
-            if (res != null)
+            if (response != null)
             {
-                ex.Response = res;
-                //ex.ErrorDetails = StringHelper.getJsonAsDictionary((new StreamReader(res.GetResponseStream())).ReadToEnd());
-                //ex.ErrorDetails = (new StreamReader(res.GetResponseStream()).ReadToEnd()).ToString();
+                ex.Response = response;
+                ex.ErrorDetails = new Dictionary<string, object>();
+                using (var reader = new StreamReader(response.GetResponseStream()))
+                {
+                    ex.ErrorDetails["Response Message"] = reader.ReadToEnd();
+                }
             }
             return ex;
         }

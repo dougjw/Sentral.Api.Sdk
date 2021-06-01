@@ -10,6 +10,7 @@ using Sentral.API.Model.Enrolments.Update;
 using JsonApiSerializer.JsonApi;
 using Sentral.API.Model.Common;
 using System;
+using Sentral.API.DataAccess.Exceptions;
 
 namespace Sentral.API.Test
 {
@@ -133,9 +134,9 @@ namespace Sentral.API.Test
 
                 Assert.IsTrue(response != null);
 
-                SAPI.Enrolments.DeletePersonEmail(response.ID);
+                SAPI.Enrolments.DeletePersonConsentLink(response.ID);
 
-
+                Assert.ThrowsException<RestClientException>(()=>SAPI.Enrolments.GetPersonConsentLink(response.ID));
             }
         }
 
@@ -419,10 +420,15 @@ namespace Sentral.API.Test
                     Email = "test@somewhere.com",
                     EmailType = "01",
                     Owner = new Relationship<SimplePersonLink>()
+                    {
+                        Data = new SimplePersonLink()
+                        {
+                            ID = 1
+                        }
+                    }
 
                 };
 
-                email.Owner.Data.ID = 1;
 
 
                 var response = SAPI.Enrolments.CreatePersonEmail(email);
@@ -430,6 +436,8 @@ namespace Sentral.API.Test
                 Assert.IsTrue(response != null && email.Email == response.Email);
 
                 SAPI.Enrolments.DeletePersonEmail(response.ID);
+
+                Assert.ThrowsException<RestClientException>(() => SAPI.Enrolments.GetPersonEmail(response.ID));
 
 
             }
@@ -557,7 +565,7 @@ namespace Sentral.API.Test
 
 
         [TestMethod]
-        public void CreateAndDeleteOneStaffQualificatioest()
+        public void CreateAndDeleteOneStaffQualificationTest()
         {
             // Only run test on sandbox
             if (IsTestSite)
@@ -578,8 +586,9 @@ namespace Sentral.API.Test
 
                 Assert.IsTrue(response != null && qualification.Qualification == response.Qualification);
 
-                SAPI.Enrolments.DeletePersonEmail(response.ID);
+                SAPI.Enrolments.DeleteQualification(response.ID);
 
+                Assert.ThrowsException<RestClientException>(() => SAPI.Enrolments.GetQualification(response.ID));
 
             }
         }
