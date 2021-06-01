@@ -1,4 +1,4 @@
-name: .NET
+name: Create Sentral.API.SDK Release
 
 on:
   push:
