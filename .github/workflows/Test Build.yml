@@ -41,4 +41,8 @@ jobs:
         PROJECT_FILE_PATH: Sentral.API.PowerShell/Sentral.API.PowerShell.csproj
         NUGET_KEY: ${{secrets.NUGET}}
         VERSION_FILE_PATH: PackageVersion
-        VERSION_REGEX: ^(.*)$    
+        VERSION_REGEX: ^(.*)$   
+        
+    - name: Sentral PowerShell Module Import (no name clash)
+      run: Import-Module .\Sentral.API.PowerShell\bin\Release\netstandard2.0\Sentral.API.PowerShell.dll
+      shell: powershell

@@ -11,7 +11,7 @@ using JsonApiSerializer.JsonApi;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.New,"SntEnrConsent")]
+    [Cmdlet(VerbsCommon.New,"SntEnrConsentLink")]
     [OutputType(typeof(Consent))]
     public class NewSntEnrConsentLink : SentralPSCmdlet
     {

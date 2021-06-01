@@ -10,7 +10,7 @@ using Sentral.API.Model.Enrolments.Update;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Remove , "SntEnrConsent")]
+    [Cmdlet(VerbsCommon.Remove , "SntEnrConsentLink")]
     public class RemoveSntEnrConsentLink : SentralPSCmdlet
     {
         
