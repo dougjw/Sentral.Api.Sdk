@@ -1207,7 +1207,7 @@ namespace Sentral.API.Client.ActionNamespace
 
 
         public List<Model.Reports.StudentAcademicReport> GetStudentRelatedAcademicReports(int studentId,
-                Model.Reports.Include.StudentAcademicReportIncludeOptions include = null)
+                Model.Reports.Include.StudentAcademicReportIncludeOptions[] include = null)
         {
             var p = new Dictionary<string, object>
             {

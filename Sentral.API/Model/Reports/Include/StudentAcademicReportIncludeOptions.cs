@@ -5,21 +5,8 @@ using System.Text;
 
 namespace Sentral.API.Model.Reports.Include
 {
-    public class StudentAcademicReportIncludeOptions : AbstractIncludeOptions<EnumReportsIncludeOptions>
+    public enum StudentAcademicReportIncludeOptions 
     {
-        
-        public StudentAcademicReportIncludeOptions( bool period = false) : base(GetIncludeOptionList( period )) {}
-
-        private static EnumReportsIncludeOptions[] GetIncludeOptionList( bool period )
-        {
-            List<EnumReportsIncludeOptions> inclOptions = new List<EnumReportsIncludeOptions>();
-
-            if (period)
-            {
-                inclOptions.Add(EnumReportsIncludeOptions.Period);
-            }
-
-            return inclOptions.ToArray();
-        }
+        Period
     }
 }

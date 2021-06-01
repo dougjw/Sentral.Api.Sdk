@@ -576,11 +576,16 @@ namespace Sentral.API.Test
                     QualificationType = EnumStaffQualificiationType.bachelors_degree,
                     DateAchieved  = new DateTime(2010,10,1),
                     Staff = new Relationship<SimpleStaffLink>()
+                    {
+                        Data = new SimpleStaffLink()
+                        {
+                            ID = 1
+                        }
+
+                    }
 
                 };
 
-
-                qualification.Staff.Data.ID = 1;
 
                 var response = SAPI.Enrolments.CreateQualification(qualification);
 
@@ -626,11 +631,9 @@ namespace Sentral.API.Test
         [TestMethod]
         public void GetOneStudentsRelatedAcademicReportWithSideloadTest()
         {
-           var knownStudentIdWithReport = 10061;
+            var knownStudentIdWithReport = 10061;
 
-
-
-            var incl = new StudentAcademicReportIncludeOptions(period: true);
+            var incl = new StudentAcademicReportIncludeOptions[] { StudentAcademicReportIncludeOptions.Period };
 
             var x = SAPI.Enrolments.GetStudentRelatedAcademicReports(knownStudentIdWithReport, incl);
 
@@ -775,7 +778,7 @@ namespace Sentral.API.Test
         [TestMethod]
         public void GetOneStudentWithContactTest()
         {
-            int studentId = 11434;
+            int studentId = 1;
             var x = SAPI.Enrolments.GetStudent(studentId, new StudentIncludeOptions[] { StudentIncludeOptions.Contacts });
 
 
