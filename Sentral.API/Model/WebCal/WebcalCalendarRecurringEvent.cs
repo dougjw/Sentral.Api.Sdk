@@ -61,7 +61,7 @@ namespace Sentral.API.Model.WebCal
             }
         }
 
-        public WebCalRecurenceType Recurrence { get; set; }
+        public WebCalRecurrenceType Recurrence { get; set; }
 
         public int? RecurrenceMonth { get; set; }
 

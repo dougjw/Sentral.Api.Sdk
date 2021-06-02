@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sentral.API.Model.WebCal
 {
-    public enum WebCalRecurenceType
+    public enum WebCalRecurrenceType
     {
         day,
         week,
