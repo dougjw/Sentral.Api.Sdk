@@ -9,10 +9,12 @@ namespace Sentral.API.Client
     {
         public EnrolmentApi Enrolments { get; }
         public CoreApi Core { get; }
+        public WebCalApi WebCal { get; }
         public SentralApi (string baseUrl, string apiKey, string tenantCode)
         {
             Enrolments = new EnrolmentApi(baseUrl, apiKey, tenantCode);
             Core = new CoreApi(baseUrl, apiKey, tenantCode);
+            WebCal = new WebCalApi(baseUrl, apiKey, tenantCode);
         }
 
     }

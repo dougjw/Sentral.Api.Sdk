@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Sentral.API.Common;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
@@ -6,6 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Sentral.API.Model.Common
 {
+    [JsonConverter(typeof(ToStringJsonConverter))]
     public class SentralTime : IComparable, IComparable<SentralTime>, IEquatable<SentralTime>
     {
         private DateTime _time;

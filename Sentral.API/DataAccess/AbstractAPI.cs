@@ -26,12 +26,12 @@ namespace Sentral.API.DataAccess
             _header = new ApiHeader(apiKey, tenantCode);
         }
 
-        internal List<T> GetAllData<T>(string endpoint)
+        protected List<T> GetAllData<T>(string endpoint)
         {
             return GetAllData<T>(endpoint, MaxPageSize);
         }
 
-        internal List<T> GetAllData<T>(string endpoint, int pageSize)
+        protected List<T> GetAllData<T>(string endpoint, int pageSize)
         {
             var data = new List<T>();
 
@@ -60,38 +60,38 @@ namespace Sentral.API.DataAccess
             return data;
         }
 
-        internal T GetData<T>(string endpoint)
+        protected T GetData<T>(string endpoint)
         {
             return GetApiResponse<T>(endpoint, ApiMethod.GET, "");
         }
 
-        internal T GetApiResponse<T>(string endpoint, ApiMethod method)
+        protected T GetApiResponse<T>(string endpoint, ApiMethod method)
         {
             return GetApiResponse<T>(endpoint, method, "");
         }
 
 
-        internal T GetApiResponse<T>(string endpoint, ApiMethod method, AbstractUpdatable payload)
+        protected T GetApiResponse<T>(string endpoint, ApiMethod method, AbstractUpdatable payload)
         {
             var jsonPayload = JsonConvert.SerializeObject(payload, _settings);
             return GetApiResponse<T>(endpoint, method, jsonPayload);
         }
 
-        private T GetApiResponse<T>(string endpoint, ApiMethod method, string payload)
+        protected T GetApiResponse<T>(string endpoint, ApiMethod method, string payload)
         {
             var client = new SentralRestClient(GetUri(endpoint), _header, method, payload);
             var response = client.Invoke();
             return JsonConvert.DeserializeObject<T>(response, _settings);
         }
 
-        internal byte[] GetBinaryData(string endpoint)
+        protected byte[] GetBinaryData(string endpoint)
         {
             var client = new SentralRestClient(GetUri(endpoint), _header, ApiMethod.GET, null);
             return client.InvokeBinary();
         }
 
 
-        internal string GetApiResponse(string endpoint, ApiMethod method)
+        protected string GetApiResponse(string endpoint, ApiMethod method)
         {
             var client = new SentralRestClient(GetUri(endpoint), _header, method, null);
             var response = client.Invoke();
@@ -108,13 +108,13 @@ namespace Sentral.API.DataAccess
         }
 
 
-        internal string GetEndpointParameters(string endpoint,
+        protected string GetEndpointParameters(string endpoint,
                 Dictionary<string, object> parameters)
         {
             return GetEndpointParameters<object>(endpoint, parameters);
         }
 
-        internal string GetEndpointParameters<T>(
+        protected string GetEndpointParameters<T>(
                 string endpoint,
                 Dictionary<string, object> parameters
         )
@@ -124,7 +124,7 @@ namespace Sentral.API.DataAccess
             return GetEndpointParameters<T>(endpoint, parameters, queryStringHelper);
         }
 
-        internal string GetEndpointParameters<T>(
+        protected string GetEndpointParameters<T>(
                 string endpoint,
                 Dictionary<string, object> parameters,
                 ApiQueryStringHelper queryStringHelper
@@ -133,7 +133,7 @@ namespace Sentral.API.DataAccess
             return queryStringHelper.GetQueryString<T>(endpoint, parameters);
         }
 
-        internal void ValidateModelIsNotNullOrZero(AbstractUpdatable updateData)
+        protected void ValidateModelIsNotNullOrZero(AbstractUpdatable updateData)
         {
 
             if (updateData == null || updateData.ID == 0)
@@ -143,7 +143,7 @@ namespace Sentral.API.DataAccess
         }
 
 
-        internal T UpdateData<T>(string endpoint, AbstractUpdatable updateData)
+        protected T UpdateData<T>(string endpoint, AbstractUpdatable updateData)
         {
             ValidateModelIsNotNullOrZero(updateData);
             return GetApiResponse<T>(
@@ -154,7 +154,7 @@ namespace Sentral.API.DataAccess
         }
 
 
-        public T CreateData<T>(string endpoint, AbstractUpdatable updateData)
+        protected T CreateData<T>(string endpoint, AbstractUpdatable updateData)
         {
             return GetApiResponse<T>(
                     endpoint,
@@ -162,7 +162,7 @@ namespace Sentral.API.DataAccess
                     updateData
                 );
         }
-        public void DeleteData(string endpoint, int id)
+        protected void DeleteData(string endpoint, int id)
         {
             GetApiResponse(string.Format(endpoint + "/{0}", id), ApiMethod.DELETE);
         }
