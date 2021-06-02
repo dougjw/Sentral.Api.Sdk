@@ -85,8 +85,8 @@ namespace Sentral.API.Model.WebCal
                 StartTime = new SentralTime(StartTime),
                 EndTime = new SentralTime(EndTime),
                 Recurrence = Recurrence,
-                ReccurenceMonthDay = RecurrenceMonthDay,
-                ReccurenceWeekDay = RecurrenceWeekDay,
+                RecurrenceMonthDay = RecurrenceMonthDay,
+                RecurrenceWeekDay = RecurrenceWeekDay,
                 RecurrenceMonth = RecurrenceMonth,
                 Category = Category
             };

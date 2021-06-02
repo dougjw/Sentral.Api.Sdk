@@ -22,8 +22,8 @@ namespace Sentral.API.Model.WebCal.Update
         private string _category;
         private WebCalRecurrenceType? _recurrence;
         private int? _recurrenceMonth;
-        private int? _reccurenceMonthDay;
-        private int? _reccurenceWeekDay;
+        private int? _recurrenceMonthDay;
+        private int? _recurenceWeekDay;
 
 
         private Relationship<SimpleWebCalCalendarLink> _calendar;
@@ -40,8 +40,8 @@ namespace Sentral.API.Model.WebCal.Update
         private bool _calendarIncludeInSerialize;
         private bool _recurrenceIncludeInSerialize;
         private bool _recurrenceMonthIncludeInSerialize;
-        private bool _reccurenceMonthDayIncludeInSerialize;
-        private bool _reccurenceWeekDayIncludeInSerialize;
+        private bool _recurrenceMonthDayIncludeInSerialize;
+        private bool _recurenceWeekDayIncludeInSerialize;
 
         // Patch model
         public UpdateWebcalCalendarRecurringEvent(int id) :base(id, _type)
@@ -265,47 +265,63 @@ namespace Sentral.API.Model.WebCal.Update
 
         public bool ShouldSerializeRecurrenceMonth()
         {
-            return _recurrenceMonthIncludeInSerialize;
+            string recString = _recurrence == null ? "" : _recurrence.ToString();
+            return _recurrenceMonthIncludeInSerialize &&
+                (
+                    recString.StartsWith("fortnight")
+                    ||
+                    recString == "week"
+                );
         }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public int? ReccurenceMonthDay
+        public int? RecurrenceMonthDay
         {
             get
             {
-                return _reccurenceMonthDay;
+                return _recurrenceMonthDay;
             }
 
             set
             {
-                _reccurenceMonthDay = value;
-                _reccurenceMonthDayIncludeInSerialize = true;
+                _recurrenceMonthDay = value;
+                _recurrenceMonthDayIncludeInSerialize = true;
             }
         }
 
-        public bool ShouldSerializeReccurenceMonthDay()
+        public bool ShouldSerializeRecurrenceMonthDay()
         {
-            return _reccurenceMonthDayIncludeInSerialize;
+            string recString = _recurrence == null ? "" : _recurrence.ToString();
+            return _recurrenceMonthDayIncludeInSerialize &&
+                (
+                    recString.StartsWith("fortnight")
+                    ||
+                    recString == "week"
+                );
         }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public int? ReccurenceWeekDay
+        public int? RecurrenceWeekDay
         {
             get
             {
-                return _reccurenceWeekDay;
+                return _recurenceWeekDay;
             }
 
             set
             {
-                _reccurenceWeekDay = value;
-                _reccurenceWeekDayIncludeInSerialize = true;
+                _recurenceWeekDay = value;
+                _recurenceWeekDayIncludeInSerialize = true;
             }
         }
 
         public bool ShouldSerializeRecurrenceWeekDay()
         {
-            return _reccurenceWeekDayIncludeInSerialize;
+            string recString = _recurrence == null ? "" : _recurrence.ToString();
+            return _recurenceWeekDayIncludeInSerialize &&
+                (
+                    recString.StartsWith("day")
+                );
         }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
