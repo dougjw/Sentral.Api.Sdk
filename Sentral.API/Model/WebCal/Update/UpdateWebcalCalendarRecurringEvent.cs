@@ -328,5 +328,10 @@ namespace Sentral.API.Model.WebCal.Update
         {
             return _calendarIncludeInSerialize;
         }
+
+        public UpdateWebcalCalendarEvent ToUpdatable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

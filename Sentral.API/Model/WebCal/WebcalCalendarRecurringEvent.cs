@@ -1,13 +1,14 @@
 ﻿using JsonApiSerializer.JsonApi;
 using Newtonsoft.Json;
 using Sentral.API.Model.Common;
+using Sentral.API.Model.WebCal.Update;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Sentral.API.Model.WebCal
 {
-    public class WebcalCalendarRecurringEvent
+    public class WebcalCalendarRecurringEvent : IToUpdatable<UpdateWebcalCalendarRecurringEvent>
     {
 
         private SentralTime _startTime;
@@ -24,9 +25,9 @@ namespace Sentral.API.Model.WebCal
 
         public string Category { get; set; }
 
-        DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
-        DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
 
         public string StartTime
@@ -69,8 +70,27 @@ namespace Sentral.API.Model.WebCal
 
         public int? RecurrenceWeekDay { get; set; }
 
-        List<DateTime> RecurrenceDates { get; set; }
+        public List<DateTime> RecurrenceDates { get; set; }
 
-        Relationship<WebcalCalendar> Owner { get; set; }
+        public Relationship<WebcalCalendar> Owner { get; set; }
+
+        public UpdateWebcalCalendarRecurringEvent ToUpdatable()
+        {
+            return new UpdateWebcalCalendarRecurringEvent(ID)
+            {
+                Title = Title,
+                Notes = Notes,
+                Link = Link,
+                StartDate = StartDate,
+                EndDate = EndDate,
+                StartTime = new SentralTime(StartTime),
+                EndTime = new SentralTime(EndTime),
+                Recurrence = Recurrence,
+                ReccurenceMonthDay = RecurrenceMonthDay,
+                ReccurenceWeekDay = RecurrenceWeekDay,
+                RecurrenceMonth = RecurrenceMonth,
+                Category = Category
+            };
+        }
     }
 }
