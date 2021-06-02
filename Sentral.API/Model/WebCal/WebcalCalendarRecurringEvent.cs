@@ -1,24 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using JsonApiSerializer.JsonApi;
+﻿using JsonApiSerializer.JsonApi;
 using Newtonsoft.Json;
 using Sentral.API.Model.Common;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Sentral.API.Model.StaffAbsences
+namespace Sentral.API.Model.WebCal
 {
-    public class StaffAbsence
+    public class WebcalCalendarRecurringEvent
     {
+
         private SentralTime _startTime;
         private SentralTime _endTime;
 
         [JsonProperty(propertyName: "id")]
         public int ID { get; set; }
 
-        public string Type { get; set; }
+        public string Title { get; set; }
 
-        public DateTime? StartDate { get; set; }
+        public string Notes { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        public string Link { get; set; }
+
+        public string Category { get; set; }
+
+        DateTime StartDate { get; set; }
+
+        DateTime EndDate { get; set; }
+
 
         public string StartTime
         {
@@ -36,7 +45,6 @@ namespace Sentral.API.Model.StaffAbsences
             }
         }
 
-        
         public string EndTime
         {
             get
@@ -53,25 +61,16 @@ namespace Sentral.API.Model.StaffAbsences
             }
         }
 
+        public WebCalRecurenceType Recurrence { get; set; }
 
+        public int? RecurrenceMonth { get; set; }
 
-        [JsonProperty(propertyName: "leaveType")]
-        public string LeaveTypeName { get; set; }
+        public int? RecurrenceMonthDay { get; set; }
 
-        public DateTime Reason { get; set; }
+        public int? RecurrenceWeekDay { get; set; }
 
-        public bool HasReceivedMedicalCertificate { get; set; }
+        List<DateTime> RecurrenceDates { get; set; }
 
-        [JsonProperty(propertyName: "externalSource")]        public string ExternalSource { get; set; }
-
-        public string ExternalId { get; set; }
-
-        public bool IsApproved { get; set; }
-
-        // Related Entities
-        public Relationship<Model.Enrolments.Staff> Staff { get; set; }
-
-        public Relationship<StaffAbsenceLeaveType> LeaveType { get; set; }
-
+        Relationship<WebcalCalendar> Owner { get; set; }
     }
 }
