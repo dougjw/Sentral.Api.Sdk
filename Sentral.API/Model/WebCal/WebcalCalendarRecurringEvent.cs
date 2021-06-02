@@ -29,7 +29,6 @@ namespace Sentral.API.Model.WebCal
 
         public DateTime EndDate { get; set; }
 
-
         public string StartTime
         {
             get
