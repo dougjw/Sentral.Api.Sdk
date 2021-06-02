@@ -58,20 +58,39 @@ namespace Sentral.API.Model.Enrolments
         public bool IsActive { get; set; }
 
         /*
-         * Related Data
+         * Extended Related Data
          */ 
-
-        [JsonProperty(propertyName: "emails")]
+        
         public List<PersonEmail> Emails { get; set; }
 
-        [JsonProperty(propertyName: "phoneNumbers")]
         public List<PersonPhone> PhoneNumbers { get; set; }
 
-        [JsonProperty(propertyName: "primaryHousehold")]
         public Household PrimaryHousehold { get; set; }
 
-        [JsonProperty(propertyName: "otherHouseholds")]
         public List<Household> OtherHouseholds { get; set; }
+
+        public Enrolment StudentPrimaryEnrolment { get; set; }
+
+        public Staff Staff { get; set; }
+
+        public Student Student { get; set; }
+
+        public PersonContactDetail ContactDetails { get; set; }
+
+        public StudentPersonRelationship StudentContacts { get; set; }
+
+        public PrescribedMedication prescribedMedication { get; set; }
+
+        public Tenant StudentTenants { get; set; }
+
+        public List<Consent> GivenConsents { get; set; }
+
+        public List<ConsentLink> GivenConsentLinks { get; set; }
+
+        public List<Ability> Abilities { get; set; }
+        public List<EmergencyContactLink> EmergencyContactLinks { get; set; }
+
+        public List<PersonFieldValue> AdditionalFields { get; set; }
 
         public UpdatePerson ToUpdatable()
         {

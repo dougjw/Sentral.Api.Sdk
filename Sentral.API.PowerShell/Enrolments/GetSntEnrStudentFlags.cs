@@ -9,8 +9,7 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrStudentFlag")]
-    [CmdletBinding(DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrStudentFlag", DefaultParameterSetName = "Singular")]
     [OutputType(typeof(Flag))]
     public class GetSntEnrStudentFlag : SentralPSCmdlet
     {

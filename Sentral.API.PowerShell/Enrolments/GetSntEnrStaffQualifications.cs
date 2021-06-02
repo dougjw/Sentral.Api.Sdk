@@ -10,9 +10,8 @@ using Sentral.API.Model.StaffAbsences;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrStaffQualifications")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrStaffQualifications", DefaultParameterSetName = "Singular")]
     [OutputType(typeof(StaffQualification))]
-    [CmdletBinding(DefaultParameterSetName = "Singular")]
     public class GetSntEnrStaffQualifications : SentralPSCmdlet
     {
         [Parameter(
