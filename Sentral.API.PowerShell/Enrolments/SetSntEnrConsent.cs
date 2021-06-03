@@ -34,7 +34,6 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "Consent")]
-        [ValidateRange(1, int.MaxValue)]
         public Consent Consent { get; set; }
 
         [Parameter(Mandatory = false)]

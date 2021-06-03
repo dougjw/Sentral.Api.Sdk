@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Sentral.API.PowerShell.Common
 {
-    public class SentralPSCmdlet : Cmdlet
+    public class SentralPSCmdlet : PSCmdlet
     {
         protected SentralApi SentralApiClient { get; private set; }
 

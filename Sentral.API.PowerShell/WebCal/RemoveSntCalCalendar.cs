@@ -8,25 +8,26 @@ using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
 using Sentral.API.Model.Enrolments.Update;
 
-namespace Sentral.API.PowerShell.Enrolments
+namespace Sentral.API.PowerShell.WebCal
 {
-    [Cmdlet(VerbsCommon.Remove , "SntEnrPersonPhone")]
-    public class RemoveSntEnrPersonPhone : SentralPSCmdlet
+    [Cmdlet(VerbsCommon.Remove , "SntCalCalendar")]
+    public class RemoveSntEnrPersonEmail : SentralPSCmdlet
     {
         
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName ="PersonPhoneId")]
+            ParameterSetName ="PersonEmailId")]
         [ValidateRange(1, int.MaxValue)]
-        public int PersonPhoneId { get; set; }
+        public int PersonEmailId { get; set; }
 
 
         [Parameter(
             Mandatory = true,
             ValueFromPipeline = true,
-            ParameterSetName = "PersonPhoneObject")]
-        public PersonPhone PersonPhone { get; set; }
+            ParameterSetName = "PersonEmailObject")]
+        [ValidateRange(1, int.MaxValue)]
+        public PersonEmail PersonEmail { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
@@ -37,20 +38,20 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void ProcessRecord()
         {
-            int personPhoneId = GetId();
+            int personEmailId = GetId();
             
-            SentralApiClient.Enrolments.DeletePersonPhone(personPhoneId);
+            SentralApiClient.Enrolments.DeletePersonEmail(personEmailId);
         }
 
         private int GetId()
         {
-            if (PersonPhoneId > 0)
+            if (PersonEmailId > 0)
             {
-                return PersonPhoneId;
+                return PersonEmailId;
             }
-            if(PersonPhone != null)
+            if(PersonEmail != null)
             {
-                return PersonPhone.ID;
+                return PersonEmail.ID;
             }
 
             return 0;

@@ -39,7 +39,6 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "PersonPhoneObject")]
-        [ValidateRange(1, int.MaxValue)]
         public PersonPhone PersonPhone { get; set; }
 
         [Parameter(Mandatory = false)]

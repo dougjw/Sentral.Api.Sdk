@@ -26,7 +26,6 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "Consent")]
-        [ValidateRange(1, int.MaxValue)]
         public Consent Consent { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing

@@ -8,9 +8,9 @@ using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
 using Sentral.API.Model.Enrolments.Update;
 
-namespace Sentral.API.PowerShell.Enrolments
+namespace Sentral.API.PowerShell.WebCal
 {
-    [Cmdlet(VerbsCommon.Set,"SntEnrPersonEmail")]
+    [Cmdlet(VerbsCommon.Set, "SntCalCalendar")]
     [OutputType(typeof(PersonEmail))]
     public class SetSntEnrPersonEmail : SentralPSCmdlet
     {
@@ -34,6 +34,7 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "PersonEmailObject")]
+        [ValidateRange(1, int.MaxValue)]
         public PersonEmail PersonEmail { get; set; }
 
         [Parameter(Mandatory = false)]

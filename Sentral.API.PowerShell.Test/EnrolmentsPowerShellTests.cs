@@ -6,6 +6,9 @@ using Sentral.API.PowerShell.Enrolments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.Management.Automation.Runspaces;
+using System.Management.Automation;
 
 namespace Sentral.API.PowerShell.Test
 {
@@ -16,24 +19,17 @@ namespace Sentral.API.PowerShell.Test
         [TestMethod]
         public void GetManyStudentSPowerShellTest()
         {
-            List<Student> students = new List<Student>();
-
-            var studentsCmd = new Enrolments.GetSntEnrStudent
-            {
-                StudentIds = new int[] { 1, 2 }
-            };
-
-            var enumerator = studentsCmd.Invoke<List<Student>>().GetEnumerator();
-
-            while (enumerator.MoveNext())
-            {
-                foreach (var student in enumerator.Current) {
-                    students.Add(student);
-                };
-            }
 
 
-            Assert.IsTrue(students.Count == 2);
+            var students = RunScript<Collection<Student>>(
+                "Get-SntEnrStudent",
+                new Dictionary<string, object>()
+                    {
+                        { "StudentIds", new int[]{1, 2 } }
+                    }
+                );
+
+            Assert.IsTrue(students.Count == 1 && students[0].Count == 2);
         }
 
         [TestMethod]
@@ -42,38 +38,36 @@ namespace Sentral.API.PowerShell.Test
             if (IsTestSite)
             {
                 Staff staff = null;
-
                 Staff updatedStaff = null;
 
-                var studentsCmd = new GetSntEnrStaff
+                var getResponse = RunScript<Staff>(
+                    "Get-SntEnrStaff",
+                    new Dictionary<string, object>()
+                        {
+                            { "StaffId", 1 }
+                        }
+                    );
+
+                if(getResponse.Count == 1)
                 {
-                    StaffId = 1
-                };
-
-
-                var enumerator = studentsCmd.Invoke<Staff>().GetEnumerator();
-
-                while (enumerator.MoveNext())
-                {
-                    staff = enumerator.Current;
+                    staff = getResponse[0];
                 }
 
                 var updateValue = staff != null && staff.TimetableCode != null && staff.TimetableCode != "T999" ? "A000" : "T999";
 
+                var updateResponse = RunScript<Staff>(
+                    "Set-SntEnrStaff",
+                    new Dictionary<string, object>()
+                        {
+                            { "StaffId", 1 },
+                            { "TimetableCode", updateValue },
+                        }
+                    );
 
-                var updateStudentsCmd = new SetSntEnrStaff()
+                if(updateResponse.Count == 1)
                 {
-                    StaffId = 1,
-                    TimetableCode = updateValue
-                };
-
-                enumerator = updateStudentsCmd.Invoke<Staff>().GetEnumerator();
-
-                while (enumerator.MoveNext())
-                {
-                    updatedStaff = enumerator.Current;
+                    updatedStaff = updateResponse[0];
                 }
-
 
                 Assert.IsTrue(updatedStaff != null && updatedStaff.ID == 1 && updatedStaff.TimetableCode == updateValue);
             }
@@ -84,36 +78,36 @@ namespace Sentral.API.PowerShell.Test
         {
             if (IsTestSite) {
                 Student student = null;
-
                 Student updatedStudent = null;
 
-                var studentsCmd = new Enrolments.GetSntEnrStudent
+
+                var getResponse = RunScript<Student>(
+                    "Get-SntEnrStudent",
+                    new Dictionary<string, object>()
+                        {
+                            { "StudentId", 1 }
+                        }
+                    );
+
+                if(getResponse.Count == 1)
                 {
-                    StudentId = 1
-                };
-
-
-                var enumerator = studentsCmd.Invoke<Student>().GetEnumerator();
-
-                while (enumerator.MoveNext())
-                {
-                    student = enumerator.Current;
+                    student = getResponse[0];
                 }
 
                 var updateValue = student != null && student.AcaraId != null && student.AcaraId != "12345" ? "12345" : "67890";
 
+                var updateResponse = RunScript<Student>(
+                    "Set-SntEnrStudent",
+                    new Dictionary<string, object>()
+                        {
+                            { "StudentId", 1 },
+                            { "AcaraId", updateValue }
+                        }
+                    );
 
-                var updateStudentsCmd = new Enrolments.SetSntEnrStudent()
+                if (updateResponse.Count == 1)
                 {
-                    StudentId = 1,
-                    AcaraId = updateValue
-                };
-
-                enumerator = updateStudentsCmd.Invoke<Student>().GetEnumerator();
-
-                while (enumerator.MoveNext())
-                {
-                    updatedStudent = enumerator.Current;
+                    updatedStudent = updateResponse[0];
                 }
 
 
@@ -126,38 +120,36 @@ namespace Sentral.API.PowerShell.Test
         {
             if (IsTestSite) {
                 Enrolment enrolment = null;
-
                 Enrolment updatedEnrolment = null;
 
-                var studentsCmd = new GetSntEnrEnrolment
+                var getResponse = RunScript<Enrolment>(
+                    "Get-SntEnrEnrolment",
+                    new Dictionary<string, object>()
+                        {
+                            { "StudentId", 1 }
+                        }
+                    );
+
+                if (getResponse.Count == 1)
                 {
-                    StudentId = 1
-                };
-
-
-                var enumerator = studentsCmd.Invoke<Enrolment>().GetEnumerator();
-
-                while (enumerator.MoveNext())
-                {
-                    enrolment = enumerator.Current;
+                    enrolment = getResponse[0];
                 }
 
                 var updateValue = !enrolment.IsBoarding;
 
+                var setResponse = RunScript<Enrolment>(
+                    "Set-SntEnrEnrolment",
+                    new Dictionary<string, object>()
+                        {
+                            { "StudentId", 1 },
+                            { "IsBoarding", updateValue }
+                        }
+                    );
 
-                var updateEnrolmentsCmd = new Enrolments.SetSntEnrEnrolment()
+                if (setResponse.Count == 1)
                 {
-                    EnrolmentId = 1,
-                    IsBoarding = updateValue
-                };
-
-                enumerator = updateEnrolmentsCmd.Invoke<Enrolment>().GetEnumerator();
-
-                while (enumerator.MoveNext())
-                {
-                    updatedEnrolment = enumerator.Current;
+                    updatedEnrolment = setResponse[0];
                 }
-
 
                 Assert.IsTrue(updatedEnrolment != null && updatedEnrolment.ID == 1 && updatedEnrolment.IsBoarding == updateValue);
             }
@@ -171,39 +163,40 @@ namespace Sentral.API.PowerShell.Test
             if (IsTestSite)
             {
                 Person person = null;
-
                 Person updatedPerson = null;
 
-                var studentsCmd = new SetSntEnrPerson
+                var getResponse = RunScript<Person>(
+                    "Get-SntEnrPerson",
+                    new Dictionary<string, object>()
+                        {
+                            { "PersonId", 1 }
+                        }
+                    );
+
+                if (getResponse.Count == 1)
                 {
-                    PersonId = 1
-                };
-
-
-                var enumerator = studentsCmd.Invoke<Person>().GetEnumerator();
-
-                while (enumerator.MoveNext())
-                {
-                    person = enumerator.Current;
+                    person = getResponse[0];
                 }
+
 
                 var updateFirstName = person != null && person.FirstName == "Test Emily" ?  "Test Sarah" : "Test Emily";
                 var updateLastName = person != null && person.FirstName == "Test Thompson" ? "Test Smith" : "Test Thompson";
 
-                var updatePersonCmd = new SetSntEnrPerson()
-                {
-                    PersonId = 1,
-                    FirstName = updateFirstName,
-                    LastName = updateLastName
-                };
 
-                enumerator = updatePersonCmd.Invoke<Person>().GetEnumerator();
+                var setResponse = RunScript<Person>(
+                    "Set-SntEnrPerson",
+                    new Dictionary<string, object>()
+                        {
+                            { "PersonId", 1 },
+                            { "FirstName", updateFirstName },
+                            { "LastName", updateLastName }
+                        }
+                    );
 
-                while (enumerator.MoveNext())
+                if (setResponse.Count == 1)
                 {
-                    updatedPerson = enumerator.Current;
+                    updatedPerson = setResponse[0];
                 }
-
 
                 Assert.IsTrue(
                         updatedPerson != null && updatedPerson.ID == 1 && 
@@ -221,48 +214,63 @@ namespace Sentral.API.PowerShell.Test
 
                 var consentType = "Consent to Test";
                 var consentDetails = "This is a detailed description of the Consent to Test.";
-
                 var replacementConsentType = "Consent to Test2";
 
-                var newConsentCmdlet = new NewSntEnrConsent() 
-                {
-                    ConsentType = consentType,
-                    Details = consentDetails
-                };
+                Consent newConsentResponse = null;
+                Consent setConsentResponse = null;
 
-                Consent newConsentResponse = newConsentCmdlet.Invoke<Consent>().FirstOrDefault();
-                
+                var getResponse = RunScript<Consent>(
+                    "New-SntEnrConsent",
+                    new Dictionary<string, object>()
+                        {
+                            { "ConsentType", consentType },
+                            { "Details", consentDetails}
+                        }
+                    );
+
+                if(getResponse.Count == 1)
+                {
+                    newConsentResponse = getResponse[0];
+                }
+
                 // Has been created
                 Assert.IsTrue(newConsentResponse != null && newConsentResponse.ConsentType == consentType && newConsentResponse.Details == consentDetails);
 
 
-                var setConsentCmdlet = new SetSntEnrConsent()
+                var setResponse = RunScript<Consent>(
+                    "Set-SntEnrConsent",
+                    new Dictionary<string, object>()
+                        {
+                            { "Consent", newConsentResponse},
+                            { "ConsentType", replacementConsentType }
+                        }
+                    );
+                if(setResponse.Count == 1)
                 {
-                    Consent = newConsentResponse,
-                    ConsentType = replacementConsentType
-                };
-
-                var setConsentResponse = setConsentCmdlet.Invoke<Consent>().FirstOrDefault();
+                    setConsentResponse = setResponse[0];
+                }
 
                 // Is updated
                 Assert.IsTrue(setConsentResponse != null && setConsentResponse.ConsentType == replacementConsentType);
 
+                RunScript<Consent>(
+                    "Remove-SntEnrConsent",
+                    new Dictionary<string, object>()
+                        {
+                            { "Consent", setConsentResponse}
+                        }
+                    );
 
-                var removeConsentCmdlet = new RemoveSntEnrConsent()
-                {
-                    Consent = setConsentResponse
-                };
-
-                removeConsentCmdlet.Invoke();
-
-
-                var getConsentCmdlet = new GetSntEnrConsent()
-                {
-                    ConsentId = setConsentResponse.ID
-                };
 
                 // Is Deleted
-                Assert.ThrowsException<Exception>(()=> getConsentCmdlet.Invoke<Consent>().FirstOrDefault());
+                Assert.ThrowsException<CmdletInvocationException>(()=> RunScript<Consent>(
+                    "Get-SntEnrConsent",
+                    new Dictionary<string, object>()
+                        {
+                            { "ConsentId", setConsentResponse.ID }
+                        }
+                    )
+                );
 
             }
         }
@@ -274,17 +282,24 @@ namespace Sentral.API.PowerShell.Test
         {
             if (IsTestSite)
             {
+                ConsentLink newConsentLinkResponse = null;
+                ConsentLink setConsentLinkResponse = null;
 
-                var newConsentLinkCmdlet = new NewSntEnrConsentLink()
+                var newResponse = RunScript<ConsentLink>(
+                    "New-SntEnrConsentLink",
+                    new Dictionary<string, object>()
+                        {
+                            { "Person", new Person() { ID = 1 } },
+                            { "Consent", new Consent() { ID = 1 } },
+                            { "ConsentedBy", new Person() { ID = 2 } },
+                            { "ConsentGiven", true }
+                        }
+                    );
+
+                if (newResponse.Count == 1)
                 {
-                    Person = new Person() { ID = 1 },
-                    Consent = new Consent() { ID = 1},
-                    ConsentedBy = new Person() { ID = 2 },
-                    ConsentGiven = true
-                };
-
-
-                ConsentLink newConsentLinkResponse = newConsentLinkCmdlet.Invoke<ConsentLink>().FirstOrDefault();
+                    newConsentLinkResponse = newResponse[0];
+                }
 
                 // Has been created
                 Assert.IsTrue(
@@ -292,14 +307,18 @@ namespace Sentral.API.PowerShell.Test
                         newConsentLinkResponse.ConsentGiven
                     );
 
-
-                var setConsentLinkCmdlet = new SetSntEnrConsentLink()
+                var setResponse = RunScript<ConsentLink>(
+                    "Set-SntEnrConsentLink",
+                    new Dictionary<string, object>()
+                        {
+                            { "ConsentLink", newConsentLinkResponse },
+                            { "ConsentGiven", false }
+                        }
+                    );
+                if(setResponse.Count == 1)
                 {
-                    ConsentLink = newConsentLinkResponse,
-                    ConsentGiven = false
-                };
-
-                var setConsentLinkResponse = setConsentLinkCmdlet.Invoke<ConsentLink>().FirstOrDefault();
+                    setConsentLinkResponse = setResponse[0];
+                }
 
                 // Is updated
                 Assert.IsTrue(
@@ -308,22 +327,24 @@ namespace Sentral.API.PowerShell.Test
                     );
 
 
-                var removeConsentCmdlet = new RemoveSntEnrConsentLink()
-                {
-                    ConsentLink = setConsentLinkResponse
-                };
-
-                removeConsentCmdlet.Invoke<object>().FirstOrDefault();
-
-
-                var getConsentLinkCmdlet = new GetSntEnrConsentLink()
-                {
-                    ConsentLinkId = setConsentLinkResponse.ID
-                };
-
+                RunScript<ConsentLink>(
+                    "Remove-SntEnrConsentLink",
+                    new Dictionary<string, object>()
+                        {
+                            { "ConsentLink", setConsentLinkResponse }
+                        }
+                    );
 
                 // Is Deleted?
-                Assert.ThrowsException<RestClientException>(() => getConsentLinkCmdlet.Invoke<ConsentLink>().FirstOrDefault());
+                Assert.ThrowsException<CmdletInvocationException>(() =>
+                    RunScript<ConsentLink>(
+                        "Get-SntEnrConsentLink",
+                        new Dictionary<string, object>()
+                            {
+                                { "ConsentLinkId", setConsentLinkResponse.ID }
+                            }
+                        )
+                );
 
             }
         }
@@ -333,18 +354,26 @@ namespace Sentral.API.PowerShell.Test
         {
             if (IsTestSite)
             {
+                PersonEmail newPersonEmailResponse = null;
+                PersonEmail setPersonEmailResponse = null;
+
                 var testEmail = "test@testdomain.net";
                 var testUpdatedEmail = "test@testseconddomain.net";
 
-                var newConsentLinkCmdlet = new NewSntEnrPersonEmail()
+                var newResponse = RunScript<PersonEmail>(
+                    "New-SntEnrPersonEmail",
+                    new Dictionary<string, object>()
+                        {
+                            { "Email", testEmail },
+                            { "EmailType", "01" },
+                            { "Owner", new Person() { ID =1 } }
+                        }
+                    );
+
+                if (newResponse.Count == 1)
                 {
-                    Email = testEmail,
-                    EmailType = "01",
-                    Owner = new Person() { ID = 1}
-                };
-
-
-                PersonEmail newPersonEmailResponse = newConsentLinkCmdlet.Invoke<PersonEmail>().FirstOrDefault();
+                    newPersonEmailResponse = newResponse[0];
+                }
 
                 // Has been created
                 Assert.IsTrue(
@@ -353,13 +382,18 @@ namespace Sentral.API.PowerShell.Test
                     );
 
 
-                var setPersonEmailCmdlet = new SetSntEnrPersonEmail()
+                var setResponse = RunScript<PersonEmail>(
+                    "Set-SntEnrPersonEmail",
+                    new Dictionary<string, object>()
+                        {
+                            { "PersonEmail", newPersonEmailResponse },
+                            { "Email", testUpdatedEmail }
+                        }
+                    );
+                if(setResponse.Count == 1)
                 {
-                    PersonEmail = newPersonEmailResponse,
-                    Email = testUpdatedEmail
-                };
-
-                var setPersonEmailResponse = setPersonEmailCmdlet.Invoke<PersonEmail>().FirstOrDefault();
+                    setPersonEmailResponse = setResponse[0];
+                }
 
                 // Is updated
                 Assert.IsTrue(
@@ -368,12 +402,13 @@ namespace Sentral.API.PowerShell.Test
                     );
 
 
-                var removeConsentCmdlet = new RemoveSntEnrPersonEmail()
-                {
-                    PersonEmail = setPersonEmailResponse
-                };
-
-                removeConsentCmdlet.Invoke<object>().FirstOrDefault();
+                RunScript<PersonEmail>(
+                    "Remove-SntEnrPersonEmail",
+                    new Dictionary<string, object>()
+                        {
+                            { "PersonEmail", newPersonEmailResponse }
+                        }
+                    );
 
 
                 var getPersonEmailCmdlet = new GetSntEnrPersonEmail()
@@ -383,7 +418,15 @@ namespace Sentral.API.PowerShell.Test
 
 
                 // Is Deleted?
-                Assert.ThrowsException<RestClientException>(() => getPersonEmailCmdlet.Invoke<PersonEmail>().FirstOrDefault());
+                Assert.ThrowsException<CmdletInvocationException>(() =>
+                    RunScript<PersonEmail>(
+                        "Get-SntEnrPersonEmail",
+                        new Dictionary<string, object>()
+                            {
+                                { "PersonEmailId", setPersonEmailResponse.ID }
+                            }
+                        )
+                );
 
             }
         }
@@ -393,21 +436,28 @@ namespace Sentral.API.PowerShell.Test
         {
             if (IsTestSite)
             {
+                StaffQualification newStaffQualificationResponse = null;
+                StaffQualification setStaffQualificationResponse = null;
+
                 var testCert = "Some Test Cert";
                 var testUpdatedCert = "A better Test Cert";
 
-                var newConsentLinkCmdlet = new NewSntEnrQualification()
+                var newResponse = RunScript<StaffQualification>(
+                    "New-SntEnrStaffQualification",
+                    new Dictionary<string, object>()
+                        {
+                            { "Qualification", testCert },
+                            { "QualificationType", EnumStaffQualificiationType.certificate },
+                            { "From", "UTS" },
+                            { "DateAchieved", new DateTime(2010, 10, 15) },
+                            { "Staff", new Staff() { ID = 1} }
+                        }
+                    );
+
+                if (newResponse.Count == 1)
                 {
-                    Qualification = testCert,
-                    QualificationType = EnumStaffQualificiationType.certificate,
-                    From = "UTS",
-                    DateAchieved = new DateTime(2010, 10, 15),
-                    Staff = new Staff() { ID = 1},
-
-                };
-
-
-                StaffQualification newStaffQualificationResponse = newConsentLinkCmdlet.Invoke<StaffQualification>().FirstOrDefault();
+                    newStaffQualificationResponse = newResponse[0];
+                }
 
                 // Has been created
                 Assert.IsTrue(
@@ -416,13 +466,18 @@ namespace Sentral.API.PowerShell.Test
                     );
 
 
-                var setStaffQualificationCmdlet = new SetSntEnrQualification()
+                var setResponse = RunScript<StaffQualification>(
+                    "Set-SntEnrStaffQualification",
+                    new Dictionary<string, object>()
+                        {
+                            { "StaffQualification", newStaffQualificationResponse },
+                            { "Qualification", testUpdatedCert }
+                        }
+                    );
+                if (setResponse.Count == 1)
                 {
-                    StaffQualification = newStaffQualificationResponse,
-                    Qualification = testUpdatedCert
-                };
-
-                var setStaffQualificationResponse = setStaffQualificationCmdlet.Invoke<StaffQualification>().FirstOrDefault();
+                    setStaffQualificationResponse = setResponse[0];
+                }
 
                 // Is updated
                 Assert.IsTrue(
@@ -430,23 +485,24 @@ namespace Sentral.API.PowerShell.Test
                         setStaffQualificationResponse.Qualification == testUpdatedCert
                     );
 
-
-                var removeConsentCmdlet = new RemoveSntEnrQualification()
-                {
-                    StaffQualification = setStaffQualificationResponse
-                };
-
-                removeConsentCmdlet.Invoke<object>().FirstOrDefault();
-
-
-                var getStaffQualificationCmdlet = new GetSntEnrQualification()
-                {
-                    QualificationId = setStaffQualificationResponse.ID
-                };
-
+                RunScript<StaffQualification>(
+                    "Remove-SntEnrStaffQualification",
+                    new Dictionary<string, object>()
+                        {
+                            { "StaffQualification", newStaffQualificationResponse }
+                        }
+                    );
 
                 // Is Deleted?
-                Assert.ThrowsException<RestClientException>(() => getStaffQualificationCmdlet.Invoke<StaffQualification>().FirstOrDefault());
+                Assert.ThrowsException<CmdletInvocationException>(() =>
+                    RunScript<StaffQualification>(
+                        "Get-SntEnrStaffQualification",
+                        new Dictionary<string, object>()
+                            {
+                                { "QualificationId", setStaffQualificationResponse.ID }
+                            }
+                        )
+                );
 
             }
         }
@@ -456,18 +512,28 @@ namespace Sentral.API.PowerShell.Test
         {
             if (IsTestSite)
             {
+                PersonPhone newPersonPhoneResponse = null;
+                PersonPhone setPersonPhoneResponse = null;
+
                 var testPhone = "0400000000";
                 var testUpdatedPhone = "0499999999";
-                var newConsentLinkCmdlet = new NewSntEnrPersonPhone()
+
+
+                var newResponse = RunScript<PersonPhone>(
+                    "New-SntEnrPersonPhone",
+                    new Dictionary<string, object>()
+                        {
+                            { "Number", testPhone },
+                            { "Extension", null },
+                            { "PhoneType", "01" },
+                            { "Owner", new Person() { ID = 1 } }
+                        }
+                    );
+
+                if (newResponse.Count == 1)
                 {
-                    Number = testPhone,
-                    Extension = null,
-                    PhoneType = "01",
-                    Owner = new Person() { ID = 1 }
-                };
-
-
-                PersonPhone newPersonPhoneResponse = newConsentLinkCmdlet.Invoke<PersonPhone>().FirstOrDefault();
+                    newPersonPhoneResponse = newResponse[0];
+                }
 
                 // Has been created
                 Assert.IsTrue(
@@ -475,14 +541,19 @@ namespace Sentral.API.PowerShell.Test
                         newPersonPhoneResponse.Number == testPhone
                     );
 
+                var setResponse = RunScript<PersonPhone>(
+                    "Set-SntEnrPersonPhone",
+                    new Dictionary<string, object>()
+                        {
+                            { "PersonPhone", newPersonPhoneResponse },
+                            { "Number", testUpdatedPhone }
+                        }
+                    );
 
-                var setPersonPhoneCmdlet = new SetSntEnrPersonPhone()
+                if (setResponse.Count == 1)
                 {
-                    PersonPhone = newPersonPhoneResponse,
-                    Phone = testUpdatedPhone
-                };
-
-                var setPersonPhoneResponse = setPersonPhoneCmdlet.Invoke<PersonPhone>().FirstOrDefault();
+                    setPersonPhoneResponse = setResponse[0];
+                }
 
                 // Is updated
                 Assert.IsTrue(
@@ -490,23 +561,24 @@ namespace Sentral.API.PowerShell.Test
                         setPersonPhoneResponse.Number == testUpdatedPhone
                     );
 
-
-                var removeConsentCmdlet = new RemoveSntEnrPersonPhone()
-                {
-                    PersonPhone = setPersonPhoneResponse
-                };
-
-                removeConsentCmdlet.Invoke<object>().FirstOrDefault();
-
-
-                var getPersonPhoneCmdlet = new GetSntEnrPersonPhone()
-                {
-                    PersonPhoneId = setPersonPhoneResponse.ID
-                };
-
+                RunScript<PersonPhone>(
+                    "Remove-SntEnrPersonPhone",
+                    new Dictionary<string, object>()
+                        {
+                            { "PersonPhone", newPersonPhoneResponse }
+                        }
+                    );
 
                 // Is Deleted?
-                Assert.ThrowsException<RestClientException>(() => getPersonPhoneCmdlet.Invoke<ConsentLink>().FirstOrDefault());
+                Assert.ThrowsException<RestClientException>(() =>
+                    RunScript<PersonPhone>(
+                        "Get-SntEnrPersonPhone",
+                        new Dictionary<string, object>()
+                            {
+                                { "PersonPhoneId", setPersonPhoneResponse.ID }
+                            }
+                        )
+                );
 
             }
         }
