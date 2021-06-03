@@ -182,7 +182,7 @@ namespace Sentral.API.DataAccess
                 message = string.Format("Request Failed. Received HTTP {0}", (int)response.StatusCode);
             }
 
-            RestClientException ex = null;
+            RestClientException ex;
             if (webEx != null)
             {
                 ex = new RestClientException(message, webEx);

@@ -11,7 +11,7 @@ namespace Sentral.API.Model.Common
     [JsonConverter(typeof(ToStringJsonConverter<SentralTime>))]
     public class SentralTime : IComparable, IComparable<SentralTime>, IEquatable<SentralTime>, IFormattedStringSerialiser
     {
-        private DateTime _time;
+        private readonly DateTime _time;
 
         public SentralTime() : this (0,0,0)
         {

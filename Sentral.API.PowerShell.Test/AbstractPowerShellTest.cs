@@ -13,7 +13,7 @@ namespace Sentral.API.PowerShell.Test
     {
 
         private readonly bool _isTestSite;
-        private System.Management.Automation.PowerShell _pwrSh;
+        private readonly System.Management.Automation.PowerShell _pwrSh;
 
 
         public AbstractPowerShellTest()
