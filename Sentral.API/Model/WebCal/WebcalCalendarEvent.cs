@@ -10,10 +10,6 @@ namespace Sentral.API.Model.WebCal
 {
     public class WebcalCalendarEvent : IToUpdatable<UpdateWebcalCalendarEvent>
     {
-
-        private SentralTime _startTime;
-        private SentralTime _endTime;
-
         [JsonProperty(propertyName: "id")]
         public int ID { get; set; }
 
@@ -29,37 +25,9 @@ namespace Sentral.API.Model.WebCal
 
         public string Category { get; set; }
 
-        public string StartTime
-        {
-            get
-            {
-                if (_startTime == null)
-                {
-                    return null;
-                }
-                return _startTime.ToString();
-            }
-            set
-            {
-                _startTime = new SentralTime(value);
-            }
-        }
+        public SentralTime StartTime { get; set; }
 
-        public string EndTime
-        {
-            get
-            {
-                if (_endTime == null)
-                {
-                    return null;
-                }
-                return _endTime.ToString();
-            }
-            set
-            {
-                _endTime = new SentralTime(value);
-            }
-        }
+        public SentralTime EndTime { get; set; }
 
         public Relationship<WebcalCalendar> Owner { get; set; }
 
@@ -72,8 +40,8 @@ namespace Sentral.API.Model.WebCal
                 Link = Link,
                 Date = Date,
                 OtherDates = OtherDates,
-                StartTime = new SentralTime(StartTime),
-                EndTime = new SentralTime(EndTime),
+                StartTime = StartTime,
+                EndTime = EndTime,
                 Category = Category
             };
         }

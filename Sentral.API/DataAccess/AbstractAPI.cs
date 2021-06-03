@@ -21,7 +21,7 @@ namespace Sentral.API.DataAccess
 
         private static readonly JsonApiSerializerSettings _settings = new JsonApiSerializerSettings(new SentralResourceObjectConverter());
 
-        public AbstractApi(string baseUrl, string apiKey, string tenantCode) {
+        protected AbstractApi(string baseUrl, string apiKey, string tenantCode) {
             _baseUrl = baseUrl;
             _header = new ApiHeader(apiKey, tenantCode);
         }

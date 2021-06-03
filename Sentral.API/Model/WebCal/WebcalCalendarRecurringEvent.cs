@@ -11,9 +11,6 @@ namespace Sentral.API.Model.WebCal
     public class WebcalCalendarRecurringEvent : IToUpdatable<UpdateWebcalCalendarRecurringEvent>
     {
 
-        private SentralTime _startTime;
-        private SentralTime _endTime;
-
         [JsonProperty(propertyName: "id")]
         public int ID { get; set; }
 
@@ -29,37 +26,9 @@ namespace Sentral.API.Model.WebCal
 
         public DateTime EndDate { get; set; }
 
-        public string StartTime
-        {
-            get
-            {
-                if (_startTime == null)
-                {
-                    return null;
-                }
-                return _startTime.ToString();
-            }
-            set
-            {
-                _startTime = new SentralTime(value);
-            }
-        }
+        public SentralTime StartTime { get; set; }
 
-        public string EndTime
-        {
-            get
-            {
-                if (_endTime == null)
-                {
-                    return null;
-                }
-                return _endTime.ToString();
-            }
-            set
-            {
-                _endTime = new SentralTime(value);
-            }
-        }
+        public SentralTime EndTime { get; set; }
 
         public WebCalRecurrenceType Recurrence { get; set; }
 
@@ -82,8 +51,8 @@ namespace Sentral.API.Model.WebCal
                 Link = Link,
                 StartDate = StartDate,
                 EndDate = EndDate,
-                StartTime = new SentralTime(StartTime),
-                EndTime = new SentralTime(EndTime),
+                StartTime = StartTime,
+                EndTime = EndTime,
                 Recurrence = Recurrence,
                 RecurrenceMonthDay = RecurrenceMonthDay,
                 RecurrenceWeekDay = RecurrenceWeekDay,
