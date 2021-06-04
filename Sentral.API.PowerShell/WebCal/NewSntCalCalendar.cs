@@ -4,26 +4,27 @@ using System.Management.Automation.Runspaces;
 using Sentral.API.Client;
 using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
-using Sentral.API.Model.Enrolments;
+using Sentral.API.Model.WebCal;
 using Sentral.API.PowerShell.Common;
-using Sentral.API.Model.Enrolments.Update;
+using Sentral.API.Model.WebCal.Update;
 using JsonApiSerializer.JsonApi;
+using Sentral.API.Model.Core.Update;
 
 namespace Sentral.API.PowerShell.WebCal
 {
     [Cmdlet(VerbsCommon.New, "SntCalCalendar")]
-    [OutputType(typeof(PersonEmail))]
-    public class NewSntEnrPersonEmail : SentralPSCmdlet
+    [OutputType(typeof(WebcalCalendar))]
+    public class NewSntCalCalendar : SentralPSCmdlet
     {
                   
         [Parameter(Mandatory = true)]
-        public string EmailType { get; set; }
+        public string CalendarName { get; set; }
 
         [Parameter(Mandatory = true)]
-        public string Email { get; set; }
+        public string ExternalSource { get; set; }
 
         [Parameter(Mandatory = true)]
-        public Person Owner { get; set; }
+        public SimpleCoreAdministrativeUserLink Owner { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
@@ -38,24 +39,21 @@ namespace Sentral.API.PowerShell.WebCal
                 throw new ArgumentException("The Owner property cannot be null");
             }
 
-            UpdatePersonEmail personEmail = new UpdatePersonEmail()
+            UpdateWebcalCalendar newRecord = new UpdateWebcalCalendar()
             {
 
-                EmailType = EmailType,
-                Email = Email,
-                Owner = new Relationship<SimplePersonLink>()
+                CalendarName = CalendarName,
+                ExternalSource = ExternalSource,
+                Owner = new Relationship<SimpleCoreAdministrativeUserLink>()
                 {
-                    Data = new SimplePersonLink()
+                    Data = new SimpleCoreAdministrativeUserLink()
                     {
                         ID = Owner.ID
                     }
                 }
             };
 
-            // Populate from student object if object was used.
- 
-
-            var response = SentralApiClient.Enrolments.CreatePersonEmail(personEmail);
+            var response = SentralApiClient.WebCal.CreateWebcalCalendar(newRecord);
 
             WriteObject(response);
         }

@@ -13,7 +13,7 @@ using System.Management.Automation;
 namespace Sentral.API.PowerShell.Test
 {
     [TestClass]
-    public class EnrolmentsPowerShellTests : AbstractPowerShellTest
+    public class EnrolmentsCmdletTests : AbstractPowerShellTest
     {
 
         [TestMethod]

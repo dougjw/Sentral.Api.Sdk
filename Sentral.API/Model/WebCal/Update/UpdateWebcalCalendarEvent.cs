@@ -19,7 +19,7 @@ namespace Sentral.API.Model.WebCal.Update
         private SentralTime _startTime;
         private SentralTime _endTime;
         private string _category;
-        private List<DateTime> _otherDates;
+        private ICollection<DateTime> _otherDates;
         private Relationship<SimpleWebCalCalendarLink> _calendar;
 
 
@@ -197,7 +197,7 @@ namespace Sentral.API.Model.WebCal.Update
         }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public List<DateTime> OtherDates 
+        public ICollection<DateTime> OtherDates 
         {
             get
             {

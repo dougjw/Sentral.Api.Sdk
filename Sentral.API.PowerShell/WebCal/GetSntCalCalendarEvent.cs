@@ -8,9 +8,9 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.WebCal
 {
-    [Cmdlet(VerbsCommon.Get, "SntCalCalendar", DefaultParameterSetName = _singularParamSet)]
-    [OutputType(typeof(WebcalCalendar))]
-    public class GetSntCalCalendar : SentralPSCmdlet
+    [Cmdlet(VerbsCommon.Get, "SntCalCalendarEvent", DefaultParameterSetName = _singularParamSet)]
+    [OutputType(typeof(WebcalCalendarEvent))]
+    public class GetSntCalCalendarEvent : SentralPSCmdlet
     {
         private const string _singularParamSet = "Singular";
         private const string _multipleParamSet = "Multiple";
@@ -20,17 +20,22 @@ namespace Sentral.API.PowerShell.WebCal
             Mandatory = true,
             ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
-        public int? CalendarId { get; set; }
+        public int? CalendarEventId { get; set; }
 
         [Parameter(
             Mandatory = false,
             ParameterSetName = _multipleParamSet)]
-        public int[] CalendarIds { get; set; }
+        public int[] CalendarEventIds { get; set; }
 
         [Parameter(
             Mandatory = false,
             ParameterSetName = _multipleParamSet)]
-        public int[] OwnerIds { get; set; }
+        public int[] CalenderIds { get; set; }
+
+        [Parameter(
+            Mandatory = false,
+            ParameterSetName = _multipleParamSet)]
+        public DateTime[] Dates { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
@@ -49,13 +54,13 @@ namespace Sentral.API.PowerShell.WebCal
         private void ProcessParamsSingular()
         {
             WriteObject(
-                    SentralApiClient.WebCal.GetWebcalCalendar(CalendarId.Value)
+                    SentralApiClient.WebCal.GetWebcalCalendarEvent(CalendarEventId.Value)
                 );
         }
         private void ProcessParamsMultiple()
         {
             WriteObject(
-                    SentralApiClient.WebCal.GetWebcalCalendar()
+                    SentralApiClient.WebCal.GetWebcalCalendarEvent(CalendarEventIds, CalenderIds, Dates)
                 );
         }
 

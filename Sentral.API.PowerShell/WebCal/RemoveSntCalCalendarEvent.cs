@@ -10,8 +10,8 @@ using Sentral.API.Model.Enrolments.Update;
 
 namespace Sentral.API.PowerShell.WebCal
 {
-    [Cmdlet(VerbsCommon.Remove , "SntCalCalendar")]
-    public class RemoveSntCalCalendar : SentralPSCmdlet
+    [Cmdlet(VerbsCommon.Remove , "SntCalCalendarEvent")]
+    public class RemoveSntCalCalendarEvent : SentralPSCmdlet
     {
         private const string _idParamSet = "Id";
         private const string _objectParamSet = "Object";
@@ -21,7 +21,7 @@ namespace Sentral.API.PowerShell.WebCal
             Mandatory = true,
             ParameterSetName = _idParamSet)]
         [ValidateRange(1, int.MaxValue)]
-        public int CalendarId { get; set; }
+        public int CalendarEventId { get; set; }
 
 
         [Parameter(
@@ -29,7 +29,7 @@ namespace Sentral.API.PowerShell.WebCal
             ValueFromPipeline = true,
             ParameterSetName = _objectParamSet)]
         [ValidateRange(1, int.MaxValue)]
-        public WebcalCalendar Calendar { get; set; }
+        public WebcalCalendarEvent CalendarEvent { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
@@ -52,18 +52,18 @@ namespace Sentral.API.PowerShell.WebCal
         }
         private void ProcessParamsId()
         {
-            SentralApiClient.WebCal.DeleteWebcalCalendar(CalendarId);
+            SentralApiClient.WebCal.DeleteWebcalCalendarEvent(CalendarEventId);
         }
         private void ProcessParamsObject()
         {
-            SentralApiClient.WebCal.DeleteWebcalCalendar(GetObjectId());
+            SentralApiClient.WebCal.DeleteWebcalCalendarEvent(GetObjectId());
         }
 
         private int GetObjectId()
         {
-            if(Calendar != null)
+            if(CalendarEvent != null)
             {
-                return Calendar.ID;
+                return CalendarEvent.ID;
             }
 
             return 0;

@@ -6,63 +6,62 @@ using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
 using Sentral.API.Model.Enrolments;
 using Sentral.API.PowerShell.Common;
-using Sentral.API.Model.Enrolments.Update;
+using Sentral.API.Model.WebCal.Update;
 
 namespace Sentral.API.PowerShell.WebCal
 {
     [Cmdlet(VerbsCommon.Set, "SntCalCalendar")]
     [OutputType(typeof(PersonEmail))]
-    public class SetSntEnrPersonEmail : SentralPSCmdlet
+    public class SetSntCalCalendar : SentralPSCmdlet
     {
 
-        private string _emailType;
-        private string _email;
+        private string _calendarName;
+        private string _externalSource;
 
-        private bool _emailTypeProvided;
-        private bool _emailProvided;
+        private bool _calendarNameProvided;
+        private bool _externalSourceProvided;
 
 
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "PersonEmailId")]
+            ParameterSetName = "Id")]
         [ValidateRange(1, int.MaxValue)]
-        public int PersonEmailId { get; set; }
+        public int CalendarId { get; set; }
 
 
         [Parameter(
             Mandatory = true,
             ValueFromPipeline = true,
-            ParameterSetName = "PersonEmailObject")]
+            ParameterSetName = "Object")]
         [ValidateRange(1, int.MaxValue)]
-        public PersonEmail PersonEmail { get; set; }
+        public UpdateWebcalCalendar Calendar { get; set; }
 
         [Parameter(Mandatory = false)]
-        public string EmailType
+        public string CalendarName
         {
             get
             {
-                return _emailType;
+                return _calendarName;
             }
             set
             {
-                _emailType = value;
-                _emailTypeProvided = true;
+                _calendarName = value;
+                _calendarNameProvided = true;
             }
-
         }
 
         [Parameter(Mandatory = false)]
-        public string Email
+        public string ExternalSource
         {
             get
             {
-                return _email;
+                return _externalSource;
             }
             set
             {
-                _email = value;
-                _emailProvided = true;
+                _externalSource = value;
+                _externalSourceProvided = true;
             }
 
         }
@@ -72,32 +71,31 @@ namespace Sentral.API.PowerShell.WebCal
         {
         }
 
-        private UpdatePersonEmail GetInitUpdateModel()
+        private UpdateWebcalCalendar GetInitUpdateModel()
         {
-
-            if (PersonEmail != null)
+            if (Calendar != null)
             {
-                return new UpdatePersonEmail(PersonEmail.ID);
+                return new UpdateWebcalCalendar(Calendar.ID);
             }
-            return new UpdatePersonEmail(PersonEmailId);
+            return new UpdateWebcalCalendar(CalendarId);
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void ProcessRecord()
         {
-            UpdatePersonEmail personEmail = GetInitUpdateModel(); 
+            UpdateWebcalCalendar updateRecord = GetInitUpdateModel(); 
 
             // Populate from student object if object was used.
-            if (_emailProvided)
+            if (_externalSourceProvided)
             {
-                personEmail.Email = _email;
+                updateRecord.ExternalSource = _externalSource;
             };
-            if (_emailTypeProvided)
+            if (_calendarNameProvided)
             {
-                personEmail.EmailType = _emailType;
+                updateRecord.CalendarName = _calendarName;
             }
 
-            var response = SentralApiClient.Enrolments.UpdatePersonEmail(personEmail);
+            var response = SentralApiClient.WebCal.UpdateWebcalCalendar(updateRecord);
 
             WriteObject(response);
         }
