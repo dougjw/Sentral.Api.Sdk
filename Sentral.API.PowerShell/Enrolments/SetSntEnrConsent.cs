@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(Consent))]
     public class SetSntEnrConsent : SentralPSCmdlet
     {
-
         private string _consentType;
         private string _details;
 

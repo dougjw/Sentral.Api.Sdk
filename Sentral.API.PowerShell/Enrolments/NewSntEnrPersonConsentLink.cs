@@ -82,11 +82,6 @@ namespace Sentral.API.PowerShell.Enrolments
 
             }
 
-
-
-            // Populate from student object if object was used.
- 
-
             var response = SentralApiClient.Enrolments.CreatePersonConsentLink(consentLink);
 
             WriteObject(response);

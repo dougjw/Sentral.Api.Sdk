@@ -10,14 +10,16 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrStudentEnrolment", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrStudentEnrolment", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(Enrolment))]
     public class GetSntEnrStudentEnrolment : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentId { get; set; }
 
@@ -41,14 +43,24 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            ProcessParamsSingular();
+        }
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentEnrolment(StudentId.Value, GetIncludeOptions())
+                );
+        }
 
+        private List<EnrolmentIncludeOptions> GetIncludeOptions()
+        {
             List<EnrolmentIncludeOptions> include = new List<EnrolmentIncludeOptions>();
 
-            if(IncludeStudent.IsPresent)
+            if (IncludeStudent.IsPresent)
             {
                 include.Add(EnrolmentIncludeOptions.Student);
             }
-            if(IncludeHouse.IsPresent)
+            if (IncludeHouse.IsPresent)
             {
                 include.Add(EnrolmentIncludeOptions.House);
             }
@@ -65,14 +77,7 @@ namespace Sentral.API.PowerShell.Enrolments
                 include.Add(EnrolmentIncludeOptions.Campus);
             }
 
-
-            // Singular mode chosen
-            if (StudentId.HasValue && StudentId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentEnrolment(StudentId.Value, include)
-                    );
-            }
+            return include;
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

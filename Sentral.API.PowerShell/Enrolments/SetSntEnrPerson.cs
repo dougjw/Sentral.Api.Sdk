@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [CmdletBinding()]
     public class SetSntEnrPerson : SentralPSCmdlet
     {
-
         private string _contactCode;
         private string _title;
         private string _firstName;

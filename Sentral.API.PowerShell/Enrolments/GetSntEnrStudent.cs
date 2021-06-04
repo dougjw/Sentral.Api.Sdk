@@ -10,14 +10,20 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrStudent", DefaultParameterSetName = "SingularStudentId")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrStudent", DefaultParameterSetName = _singularStudentIdParamSet)]
     [OutputType(typeof(Student))]
     public class GetSntEnrStudent : SentralPSCmdlet
     {
+        private const string _singularStudentIdParamSet = "SingularStudentId";
+        private const string _singularContactIdParamSet = "SingularContactId";
+        private const string _singularHouseholdIdParamSet = "SingularHouseholdId";
+        private const string _singularPersonIdParamSet = "SingularPersonId";
+        private const string _multipleParamSet = "Multiple";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularStudentId")]
+            ParameterSetName = _singularStudentIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentId { get; set; }
 
@@ -25,21 +31,21 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularStudentContactId")]
+            ParameterSetName = _singularContactIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentContactId { get; set; }
 
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularStudentHouseholdId")]
+            ParameterSetName = _singularHouseholdIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentHouseholdId { get; set; }
 
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "SingularPersonId")]
+            ParameterSetName = _singularPersonIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? PersonId { get; set; }
 
@@ -47,55 +53,55 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 1,
             Mandatory = false,
-            ParameterSetName = "SingularPersonId")]
+            ParameterSetName = _singularPersonIdParamSet)]
         public SwitchParameter WithPortalAccess { get; set; }
 
         [Parameter(
             Position = 2,
             Mandatory = false,
-            ParameterSetName = "SingularPersonId")]
+            ParameterSetName = _singularPersonIdParamSet)]
         public SwitchParameter WithPastEnrolment { get; set; }
 
         [Parameter(
             Position = 3,
             Mandatory = false,
-            ParameterSetName = "SingularPersonId")]
+            ParameterSetName = _singularPersonIdParamSet)]
         public SwitchParameter WithCurrentEnrolment { get; set; }
 
 
         [Parameter(
             Position = 4,
             Mandatory = false,
-            ParameterSetName = "SingularPersonId")]
+            ParameterSetName = _singularPersonIdParamSet)]
         public SwitchParameter WithFutureEnrolment { get; set; }
 
         [Parameter(
             Position = 5,
             Mandatory = false,
-            ParameterSetName = "SingularPersonId")]
+            ParameterSetName = _singularPersonIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public SwitchParameter WithOtherEnrolment { get; set; }
 
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public int[] StudentIds { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public string[] StudentCodes { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public string[] ExamCodes { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public string[] RefIds { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public string[] ContactCodes { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public int[] ExternalIds { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public int[] AcademicPeriodIds { get; set; }
 
 
@@ -133,18 +139,82 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(Mandatory = false)]
         public SwitchParameter IncludeSchoolHistory { get; set; }
 
-
-
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            switch (ParameterSetName)
+            {
+                case _singularStudentIdParamSet:
+                    ProcessParamsStudentIdSingular();
+                    break;
+                case _singularContactIdParamSet:
+                    ProcessParamsContactIdSingular();
+                    break;
+                case _singularHouseholdIdParamSet:
+                    ProcessParamsHouseholdIdSingular();
+                    break;
+                case _singularPersonIdParamSet:
+                    ProcessParamsPersonIdSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
+            }
+        }
+
+        private void ProcessParamsStudentIdSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudent(StudentId.Value, GetIncludeOptions())
+                );
+        }
+
+        private void ProcessParamsContactIdSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentContactStudent(StudentContactId.Value, GetIncludeOptions())
+                );
+        }
+
+        private void ProcessParamsHouseholdIdSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentHouseholdStudents(StudentHouseholdId.Value, GetIncludeOptions())
+                );
+        }
+
+        private void ProcessParamsPersonIdSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetPersonAssociatedStudentsByPersonId(
+                        PersonId.Value,
+                        WithPortalAccess.IsPresent,
+                        WithPastEnrolment.IsPresent,
+                        WithCurrentEnrolment.IsPresent,
+                        WithFutureEnrolment.IsPresent,
+                        WithOtherEnrolment.IsPresent
+                    )
+                );
+        }
+
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudent(GetIncludeOptions(), StudentIds, StudentCodes, ExamCodes, RefIds,
+                        ContactCodes, ExternalIds, AcademicPeriodIds)
+                );
+        }
+
+        private List<StudentIncludeOptions> GetIncludeOptions()
+        {
             List<StudentIncludeOptions> include = new List<StudentIncludeOptions>();
 
-            if(IncludePrimaryEnrolment.IsPresent)
+            if (IncludePrimaryEnrolment.IsPresent)
             {
                 include.Add(StudentIncludeOptions.PrimaryEnrolment);
             }
-            if(IncludePerson.IsPresent)
+            if (IncludePerson.IsPresent)
             {
                 include.Add(StudentIncludeOptions.Person);
             }
@@ -185,51 +255,9 @@ namespace Sentral.API.PowerShell.Enrolments
                 include.Add(StudentIncludeOptions.SchoolHistory);
             }
 
-            // Singular mode Student ID chosen
-            if (StudentId.HasValue && StudentId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudent(StudentId.Value, include)
-                    );
-            }
-            // Singular mode Student Contact ID chosen
-            else if (StudentContactId.HasValue && StudentContactId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentContactStudent(StudentContactId.Value, include)
-                    );
-            }
-
-            // Singular mode Student Household ID chosen
-            else if (StudentHouseholdId.HasValue && StudentHouseholdId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentHouseholdStudents(StudentHouseholdId.Value, include)
-                    );
-            }
-            // Singular mode, Person ID chosen
-            else if (PersonId.HasValue && PersonId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetPersonAssociatedStudentsByPersonId(
-                            PersonId.Value,
-                            WithPortalAccess.IsPresent,
-                            WithPastEnrolment.IsPresent,
-                            WithCurrentEnrolment.IsPresent,
-                            WithFutureEnrolment.IsPresent,
-                            WithOtherEnrolment.IsPresent
-                        )
-                    );
-            }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudent(include, StudentIds, StudentCodes, ExamCodes, RefIds,
-                            ContactCodes, ExternalIds, AcademicPeriodIds)
-                    );
-            }
+            return include;
         }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

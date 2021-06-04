@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(PersonPhone))]
     public class SetSntEnrPersonPhone : SentralPSCmdlet
     {
-
         private string _phoneType;
         private string _number;
         private string _extension;

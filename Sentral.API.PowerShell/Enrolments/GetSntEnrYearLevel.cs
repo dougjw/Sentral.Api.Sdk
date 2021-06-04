@@ -9,52 +9,62 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrYearLevel", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrYearLevel", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(Tenant))]
     public class GetSntEnrYearLevel : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? YearLevelId { get; set; }
-
 
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int[] YearLevelIds { get; set; }
-
 
         [Parameter(
             Position = 1,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int[] SchoolIds { get; set; }
-
-
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
-            // Singular mode chosen
-            if(YearLevelId.HasValue && YearLevelId.Value > 0)
+            switch (ParameterSetName)
             {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetYearLevel(YearLevelId.Value)
-                    );
-            }
-            else 
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetYearLevel(YearLevelIds, SchoolIds)
-                    );
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
             }
         }
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetYearLevel(YearLevelId.Value)
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetYearLevel(YearLevelIds, SchoolIds)
+                );
+        }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(Student))]
     public class SetSntEnrStudent : SentralPSCmdlet
     {
-
         private bool _permissionToPhotograph;
         private string _usiId;
         private string _barcode;

@@ -10,37 +10,36 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrStaff", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrStaff", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(Staff))]
     public class GetSntEnrStaff : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? StaffId { get; set; }
 
-
-
-
-
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public int[] StaffIds { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public string[] Barcodes { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public string[] StaffCodes { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public Guid[] RefIds { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public string[] ContactCodes { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public string[] ExternalIds { get; set; }
 
 
@@ -58,12 +57,41 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            switch (ParameterSetName)
+            {
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
+            }
+        }
+
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStaff(StaffId.Value, GetIncludeOptions())
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStaff(GetIncludeOptions(), StaffIds, Barcodes, StaffCodes, RefIds,
+                        ContactCodes, ExternalIds)
+                );
+        }
+
+        private List<StaffIncludeOptions> GetIncludeOptions()
+        {
             List<StaffIncludeOptions> include = new List<StaffIncludeOptions>();
-            if (IncludePerson.IsPresent) 
+            if (IncludePerson.IsPresent)
             {
                 include.Add(StaffIncludeOptions.Person);
             }
-            if(IncludeQualifications.IsPresent)
+            if (IncludeQualifications.IsPresent)
             {
                 include.Add(StaffIncludeOptions.Qualifications);
             }
@@ -72,22 +100,9 @@ namespace Sentral.API.PowerShell.Enrolments
                 include.Add(StaffIncludeOptions.Employments);
             }
 
-            // Singular mode chosen
-            if (StaffId.HasValue && StaffId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStaff(StaffId.Value, include)
-                    );
-            }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStaff(include, StaffIds, Barcodes, StaffCodes, RefIds,
-                            ContactCodes, ExternalIds)
-                    );
-            }
+            return include;
         }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

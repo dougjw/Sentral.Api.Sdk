@@ -9,15 +9,17 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrHousehold", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrHousehold", DefaultParameterSetName = _singularHouseholdIdParamSet)]
     [OutputType(typeof(Household))]
     public class GetSntEnrHousehold : SentralPSCmdlet
     {
+        private const string _singularHouseholdIdParamSet = "SingularHouseholdId";
+        private const string _singularStudentHouseholdIdParamSet = "SingularStudendHouseholdId";
 
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "SingularHouseholdId")]
+            ParameterSetName = _singularHouseholdIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? HouseholdId { get; set; }
 
@@ -25,7 +27,7 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "SingularStudendHouseholdId")]
+            ParameterSetName = _singularStudentHouseholdIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentHouseholdId { get; set; }
 
@@ -33,30 +35,39 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
-
-            // Singular mode chosen
-            if(HouseholdId.HasValue && HouseholdId.Value > 0)
+            switch (ParameterSetName)
             {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetHousehold(HouseholdId.Value)
-                    );
+                case _singularHouseholdIdParamSet:
+                    ProcessParamsHouseholdId();
+                    break;
+                case _singularStudentHouseholdIdParamSet:
+                    ProcessParamsStudentHouseholdId();
+                    break;
+                default:
+                    ProcessParamsMultiple();
+                    break;
             }
-            // Singular mode chosen
-            else if (StudentHouseholdId.HasValue && StudentHouseholdId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentHouseholdDetails(StudentHouseholdId.Value)
-                    );
-            }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetHousehold()
-                    );
-            }
-
         }
+
+        private void ProcessParamsHouseholdId()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetHousehold(HouseholdId.Value)
+                );
+        }
+        private void ProcessParamsStudentHouseholdId()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentHouseholdDetails(StudentHouseholdId.Value)
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetHousehold()
+                );
+        }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

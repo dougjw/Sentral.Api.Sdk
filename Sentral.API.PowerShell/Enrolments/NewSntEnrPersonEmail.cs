@@ -15,7 +15,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(PersonEmail))]
     public class NewSntEnrPersonEmail : SentralPSCmdlet
     {
-                  
         [Parameter(Mandatory = true)]
         public string EmailType { get; set; }
 

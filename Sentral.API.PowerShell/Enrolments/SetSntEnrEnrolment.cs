@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(Enrolment))]
     public class SetSntEnrEnrolment : SentralPSCmdlet
     {
-
         private bool _isBoarding;
 
         private bool _isBoardingProvided;
@@ -51,8 +50,6 @@ namespace Sentral.API.PowerShell.Enrolments
             }
                 
         }
-
-
 
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing

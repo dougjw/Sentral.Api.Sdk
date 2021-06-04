@@ -9,16 +9,18 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrClass", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrClass", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(Class))]
     [CmdletBinding()]
     public class GetSntEnrClass : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
 
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? ClassId { get; set; }
 
@@ -27,35 +29,43 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         public int[] ClassIds { get; set; }
 
 
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         public int[] SubjectIds { get; set; }
 
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            switch (ParameterSetName)
+            {
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
+            }
+        }
 
-            // Singular mode chosen
-            if(ClassId.HasValue && ClassId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetClass(ClassId.Value)
-                    );
-            }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetClass(ClassIds, SubjectIds)
-                    );
-            }
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetClass(ClassId.Value)
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetClass(ClassIds, SubjectIds)
+                );
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

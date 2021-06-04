@@ -10,14 +10,16 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrPersonStudentContacts", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrPersonStudentContacts", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(StudentPersonRelationship))]
     public class GetSntEnrPersonStudentContacts : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? PersonId { get; set; }
 
@@ -35,9 +37,20 @@ namespace Sentral.API.PowerShell.Enrolments
         public SwitchParameter IncludeStudentPerson { get; set; }
         
 
-
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
+        {
+            ProcessParamsSingular();
+        }
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetPersonStudentContacts(PersonId.Value, GetIncludeOptions())
+                );
+        }
+
+        private List<StudentContactIncludeOptions> GetIncludeOptions()
         {
             List<StudentContactIncludeOptions> include = new List<StudentContactIncludeOptions>();
 
@@ -45,7 +58,7 @@ namespace Sentral.API.PowerShell.Enrolments
             {
                 include.Add(StudentContactIncludeOptions.Student);
             }
-            if(IncludePerson.IsPresent)
+            if (IncludePerson.IsPresent)
             {
                 include.Add(StudentContactIncludeOptions.Person);
             }
@@ -53,14 +66,10 @@ namespace Sentral.API.PowerShell.Enrolments
             {
                 include.Add(StudentContactIncludeOptions.StudentPerson);
             }
-            // Singular mode chosen
-            if (PersonId.HasValue && PersonId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetPersonStudentContacts(PersonId.Value, include)
-                    );
-            }
+
+            return include;
         }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

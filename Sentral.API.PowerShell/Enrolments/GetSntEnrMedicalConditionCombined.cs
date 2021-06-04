@@ -13,10 +13,13 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(AbstractMedicalCondition))]
     public class GetSntEnrMedicalConditionCombined : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? MedicalConditionId { get; set; }
 
@@ -24,43 +27,52 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int[] MedicalConditionIds { get; set; }
 
         [Parameter(
             Position = 1,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public string[] Names { get; set; }
 
         [Parameter(
             Position = 2,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int[] PersonIds { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
-
-
-            // Singular modechosen
-            if(MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
+            switch (ParameterSetName)
             {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditions(MedicalConditionId.Value)
-                    );
-            }
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditions(MedicalConditionIds, Names, PersonIds)
-                    );
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
             }
         }
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditions(MedicalConditionId.Value)
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditions(MedicalConditionIds, Names, PersonIds)
+                );
+        }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

@@ -9,14 +9,17 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrSchoolHistory", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrSchoolHistory", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(StudentHistory))]
     public class GetSntEnrSchoolHistory : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? SchoolHistoryId { get; set; }
 
@@ -24,7 +27,7 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int[] SchoolHistoryIds { get; set; }
 
@@ -32,7 +35,7 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 1,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int[] StudentIds { get; set; }
 
@@ -40,21 +43,31 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
-            // Singular mode chosen
-            if(SchoolHistoryId.HasValue && SchoolHistoryId.Value > 0)
+            switch (ParameterSetName)
             {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentSchoolHistory(SchoolHistoryId.Value)
-                    );
-            }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentSchoolHistory(SchoolHistoryIds, StudentIds)
-                    );
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
             }
         }
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentSchoolHistory(SchoolHistoryId.Value)
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentSchoolHistory(SchoolHistoryIds, StudentIds)
+                );
+        }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

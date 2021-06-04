@@ -15,7 +15,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(ConsentLink))]
     public class SetSntEnrConsentLink : SentralPSCmdlet
     {
-
         private bool _consentGiven;
         private Person _consentedBy;
 

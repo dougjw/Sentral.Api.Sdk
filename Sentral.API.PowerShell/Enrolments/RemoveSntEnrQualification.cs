@@ -13,11 +13,13 @@ namespace Sentral.API.PowerShell.Enrolments
     [Cmdlet(VerbsCommon.Remove , "SntEnrStaffQualification")]
     public class RemoveSntEnrQualification : SentralPSCmdlet
     {
-        
+        private const string _idParamSet = "Id";
+        private const string _objectParamSet = "Object";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName ="QualificationId")]
+            ParameterSetName = _idParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int QualificationId { get; set; }
 
@@ -25,7 +27,7 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Mandatory = true,
             ValueFromPipeline = true,
-            ParameterSetName = "StaffQualification")]
+            ParameterSetName = _objectParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public StaffQualification StaffQualification { get; set; }
         
@@ -38,17 +40,29 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void ProcessRecord()
         {
-            int staffQualificationId = GetStaffQualificationId();
+            switch (ParameterSetName)
+            {
+                case _idParamSet:
+                    ProcessParamsId();
+                    break;
+                case _objectParamSet:
+                    ProcessParamsObject();
+                    break;
+            }
             
-            SentralApiClient.Enrolments.DeleteQualification(staffQualificationId);
         }
 
-        private int GetStaffQualificationId()
+        private void ProcessParamsId()
         {
-            if (QualificationId > 0)
-            {
-                return QualificationId;
-            }
+            SentralApiClient.Enrolments.DeleteQualification(QualificationId);
+        }
+        private void ProcessParamsObject()
+        {
+            SentralApiClient.Enrolments.DeleteQualification(GetObjectId());
+        }
+
+        private int GetObjectId()
+        {
             if(StaffQualification != null)
             {
                 return StaffQualification.ID;
@@ -56,6 +70,7 @@ namespace Sentral.API.PowerShell.Enrolments
 
             return 0;
         }
+
 
         // This method will be called once at the end of pipeline execution; if no input is received, this method is not called
         protected override void EndProcessing()

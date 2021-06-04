@@ -9,7 +9,7 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.WebCal
 {
-    [Cmdlet(VerbsCommon.Get, "SntCalCalendar", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get, "SntCalCalendar", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(WebcalCalendar))]
     public class GetSntCalCalendar : SentralPSCmdlet
     {
