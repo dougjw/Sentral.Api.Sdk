@@ -8,6 +8,7 @@ using Sentral.API.Model.WebCal;
 using Sentral.API.PowerShell.Common;
 using Sentral.API.Model.WebCal.Update;
 using JsonApiSerializer.JsonApi;
+using Sentral.API.Model.Core;
 using Sentral.API.Model.Core.Update;
 
 namespace Sentral.API.PowerShell.WebCal
@@ -24,7 +25,7 @@ namespace Sentral.API.PowerShell.WebCal
         public string ExternalSource { get; set; }
 
         [Parameter(Mandatory = true)]
-        public SimpleCoreAdministrativeUserLink Owner { get; set; }
+        public CoreAdministrativeUser Owner { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()

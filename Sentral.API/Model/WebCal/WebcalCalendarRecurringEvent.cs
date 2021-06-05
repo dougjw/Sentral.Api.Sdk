@@ -30,7 +30,7 @@ namespace Sentral.API.Model.WebCal
 
         public SentralTime EndTime { get; set; }
 
-        public WebCalRecurrenceType Recurrence { get; set; }
+        public WebCalRecurrenceType? Recurrence { get; set; }
 
         public int? RecurrenceMonth { get; set; }
 

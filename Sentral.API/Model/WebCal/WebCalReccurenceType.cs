@@ -16,8 +16,6 @@ namespace Sentral.API.Model.WebCal
         day5,
         week,
         fortnight_even,
-        fortnight_odd,
-        month,
-        year
+        fortnight_odd
     }
 }

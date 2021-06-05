@@ -4,7 +4,7 @@ using System.Management.Automation.Runspaces;
 using Sentral.API.Client;
 using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
-using Sentral.API.Model.Enrolments;
+using Sentral.API.Model.WebCal;
 using Sentral.API.PowerShell.Common;
 using Sentral.API.Model.WebCal.Update;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using Sentral.API.Model.Common;
 namespace Sentral.API.PowerShell.WebCal
 {
     [Cmdlet(VerbsCommon.Set, "SntCalCalendarEvent")]
-    [OutputType(typeof(PersonEmail))]
+    [OutputType(typeof(WebcalCalendarEvent))]
     public class SetSntCalCalendarEvent : SentralPSCmdlet
     {
         private string _title;
@@ -47,8 +47,7 @@ namespace Sentral.API.PowerShell.WebCal
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "Object")]
-        [ValidateRange(1, int.MaxValue)]
-        public UpdateWebcalCalendarEvent CalendarEvents { get; set; }
+        public WebcalCalendarEvent CalendarEvent { get; set; }
 
         [Parameter(Mandatory = false)]
         public string Title
@@ -171,9 +170,9 @@ namespace Sentral.API.PowerShell.WebCal
 
         private UpdateWebcalCalendarEvent GetInitUpdateModel()
         {
-            if (CalendarEvents != null)
+            if (CalendarEvent != null)
             {
-                return new UpdateWebcalCalendarEvent(CalendarEvents.ID);
+                return new UpdateWebcalCalendarEvent(CalendarEvent.ID);
             }
             return new UpdateWebcalCalendarEvent(CalendarEventId);
         }

@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace Sentral.API.PowerShell.WebCal
 {
     [Cmdlet(VerbsCommon.New, "SntCalCalendarEvent")]
-    [OutputType(typeof(WebcalCalendar))]
+    [OutputType(typeof(WebcalCalendarEvent))]
     public class NewSntCalCalendarEvent : SentralPSCmdlet
     {
                   
@@ -31,7 +31,7 @@ namespace Sentral.API.PowerShell.WebCal
         [Parameter(Mandatory = false)]
         public string Category { get; set; }
 
-        [Parameter(Mandatory = false)]
+        [Parameter(Mandatory = true)]
         public DateTime Date { get; set; }
 
         [Parameter(Mandatory = false)]
@@ -42,7 +42,8 @@ namespace Sentral.API.PowerShell.WebCal
         [ValidatePattern(TimePattern)]
         public string EndTime { get; set; }
 
-        public List<DateTime> OtherDates { get; set; }
+        [Parameter(Mandatory = false)]
+        public ICollection<DateTime> OtherDates { get; set; }
 
 
         [Parameter(Mandatory = true)]
@@ -58,7 +59,7 @@ namespace Sentral.API.PowerShell.WebCal
         {
             if(Calendar == null)
             {
-                throw new ArgumentException("The Owner property cannot be null");
+                throw new ArgumentException("The Calendar property cannot be null");
             }
 
             UpdateWebcalCalendarEvent newRecord = new UpdateWebcalCalendarEvent()

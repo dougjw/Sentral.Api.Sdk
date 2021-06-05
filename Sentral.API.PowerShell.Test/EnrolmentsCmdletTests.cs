@@ -13,11 +13,11 @@ using System.Management.Automation;
 namespace Sentral.API.PowerShell.Test
 {
     [TestClass]
-    public class EnrolmentsCmdletTests : AbstractPowerShellTest
+    public class EnrolmentsCmdletTests : AbstractCmdletTest
     {
 
         [TestMethod]
-        public void GetManyStudentSPowerShellTest()
+        public void GetManyStudentsCmdletTest()
         {
 
 
@@ -33,7 +33,7 @@ namespace Sentral.API.PowerShell.Test
         }
 
         [TestMethod]
-        public void SetOneStaffPowerShellTest()
+        public void SetOneStaffCmdletTest()
         {
             if (IsTestSite)
             {
@@ -74,7 +74,7 @@ namespace Sentral.API.PowerShell.Test
         }
 
         [TestMethod]
-        public void SetOneStudentPowerShellTest()
+        public void SetOneStudentCmdletTest()
         {
             if (IsTestSite) {
                 Student student = null;
@@ -116,7 +116,7 @@ namespace Sentral.API.PowerShell.Test
         }
         
         [TestMethod]
-        public void SetOneEnrolmentPowerShellTest()
+        public void SetOneEnrolmentCmdletTest()
         {
             if (IsTestSite) {
                 Enrolment enrolment = null;
@@ -158,7 +158,7 @@ namespace Sentral.API.PowerShell.Test
 
 
         [TestMethod]
-        public void SetOnePersonPowerShellTest()
+        public void SetOnePersonCmdletTest()
         {
             if (IsTestSite)
             {
@@ -207,7 +207,7 @@ namespace Sentral.API.PowerShell.Test
         }
 
         [TestMethod]
-        public void NewSetDelConsentPowerShellTest()
+        public void NewSetDelConsentCmdletTest()
         {
             if (IsTestSite)
             {
@@ -278,7 +278,7 @@ namespace Sentral.API.PowerShell.Test
 
 
         [TestMethod]
-        public void NewSetDelConsentLinkPowerShellTest()
+        public void NewSetDelConsentLinkCmdletTest()
         {
             if (IsTestSite)
             {
@@ -350,7 +350,7 @@ namespace Sentral.API.PowerShell.Test
         }
 
         [TestMethod]
-        public void NewSetDelPersonEmailPowerShellTest()
+        public void NewSetDelPersonEmailCmdletTest()
         {
             if (IsTestSite)
             {
@@ -432,7 +432,7 @@ namespace Sentral.API.PowerShell.Test
         }
 
         [TestMethod]
-        public void NewSetDelStaffQualificationPowerShellTest()
+        public void NewSetDelStaffQualificationCmdletTest()
         {
             if (IsTestSite)
             {
@@ -508,7 +508,7 @@ namespace Sentral.API.PowerShell.Test
         }
 
         [TestMethod]
-        public void NewSetDelPersonPhonePowerShellTest()
+        public void NewSetDelPersonPhoneCmdletTest()
         {
             if (IsTestSite)
             {

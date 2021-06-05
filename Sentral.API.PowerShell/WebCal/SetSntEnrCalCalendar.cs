@@ -4,14 +4,14 @@ using System.Management.Automation.Runspaces;
 using Sentral.API.Client;
 using Sentral.API.Model.Enrolments.Include;
 using Sentral.API.PowerShell;
-using Sentral.API.Model.Enrolments;
+using Sentral.API.Model.WebCal;
 using Sentral.API.PowerShell.Common;
 using Sentral.API.Model.WebCal.Update;
 
 namespace Sentral.API.PowerShell.WebCal
 {
     [Cmdlet(VerbsCommon.Set, "SntCalCalendar")]
-    [OutputType(typeof(PersonEmail))]
+    [OutputType(typeof(WebcalCalendar))]
     public class SetSntCalCalendar : SentralPSCmdlet
     {
 
@@ -34,8 +34,7 @@ namespace Sentral.API.PowerShell.WebCal
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "Object")]
-        [ValidateRange(1, int.MaxValue)]
-        public UpdateWebcalCalendar Calendar { get; set; }
+        public WebcalCalendar Calendar { get; set; }
 
         [Parameter(Mandatory = false)]
         public string CalendarName

@@ -10,8 +10,8 @@ using Sentral.API.Model.Enrolments.Update;
 
 namespace Sentral.API.PowerShell.WebCal
 {
-    [Cmdlet(VerbsCommon.Remove , "SntCalCalendarEvent")]
-    public class RemoveSntCalCalendarEvent : SentralPSCmdlet
+    [Cmdlet(VerbsCommon.Remove , "SntCalCalendarRecurringEvent")]
+    public class RemoveSntCalCalendarRecurringEvent : SentralPSCmdlet
     {
         private const string _idParamSet = "Id";
         private const string _objectParamSet = "Object";
@@ -21,14 +21,14 @@ namespace Sentral.API.PowerShell.WebCal
             Mandatory = true,
             ParameterSetName = _idParamSet)]
         [ValidateRange(1, int.MaxValue)]
-        public int CalendarEventId { get; set; }
+        public int CalendarRecurringEventId { get; set; }
 
 
         [Parameter(
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = _objectParamSet)]
-        public WebcalCalendarEvent CalendarEvent { get; set; }
+        public WebcalCalendarRecurringEvent CalendarRecurringEvent { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void BeginProcessing()
@@ -51,18 +51,18 @@ namespace Sentral.API.PowerShell.WebCal
         }
         private void ProcessParamsId()
         {
-            SentralApiClient.WebCal.DeleteWebcalCalendarEvent(CalendarEventId);
+            SentralApiClient.WebCal.DeleteWebcalCalendarRecurringEvent(CalendarRecurringEventId);
         }
         private void ProcessParamsObject()
         {
-            SentralApiClient.WebCal.DeleteWebcalCalendarEvent(GetObjectId());
+            SentralApiClient.WebCal.DeleteWebcalCalendarRecurringEvent(GetObjectId());
         }
 
         private int GetObjectId()
         {
-            if(CalendarEvent != null)
+            if(CalendarRecurringEvent != null)
             {
-                return CalendarEvent.ID;
+                return CalendarRecurringEvent.ID;
             }
 
             return 0;

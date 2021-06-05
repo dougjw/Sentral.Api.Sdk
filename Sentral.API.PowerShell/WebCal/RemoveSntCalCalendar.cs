@@ -28,7 +28,6 @@ namespace Sentral.API.PowerShell.WebCal
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = _objectParamSet)]
-        [ValidateRange(1, int.MaxValue)]
         public WebcalCalendar Calendar { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing

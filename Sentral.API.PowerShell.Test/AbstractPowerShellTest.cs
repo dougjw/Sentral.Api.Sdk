@@ -9,14 +9,14 @@ using System.Collections.ObjectModel;
 
 namespace Sentral.API.PowerShell.Test
 {
-    public abstract class AbstractPowerShellTest : IDisposable
+    public abstract class AbstractCmdletTest : IDisposable
     {
 
         private readonly bool _isTestSite;
         private readonly System.Management.Automation.PowerShell _pwrSh;
 
 
-        public AbstractPowerShellTest()
+        public AbstractCmdletTest()
         {
 
             _pwrSh = System.Management.Automation.PowerShell.Create();
