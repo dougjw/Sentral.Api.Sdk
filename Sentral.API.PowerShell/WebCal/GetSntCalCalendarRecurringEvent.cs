@@ -20,7 +20,7 @@ namespace Sentral.API.PowerShell.WebCal
             Mandatory = true,
             ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
-        public int? CalendarEventId { get; set; }
+        public int? CalendarRecurringEventId { get; set; }
 
         [Parameter(
             Mandatory = false,
@@ -45,7 +45,7 @@ namespace Sentral.API.PowerShell.WebCal
         private void ProcessParamsSingular()
         {
             WriteObject(
-                    SentralApiClient.WebCal.GetWebcalCalendarRecurringEvent(CalendarEventId.Value)
+                    SentralApiClient.WebCal.GetWebcalCalendarRecurringEvent(CalendarRecurringEventId.Value)
                 );
         }
         private void ProcessParamsMultiple()

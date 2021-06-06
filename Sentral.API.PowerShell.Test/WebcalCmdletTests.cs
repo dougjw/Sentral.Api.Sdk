@@ -192,7 +192,7 @@ namespace Sentral.API.PowerShell.Test
                     "New-SntCalCalendarRecurringEvent",
                     new Dictionary<string, object>()
                         {
-                            { "RecurranceDaily" , null},
+                            { "RecurranceDay1" , new SwitchParameter(true)},
                             { "Title", calEventTitle },
                             { "Notes", notes},
                             { "Link", "https://www.google.com" },

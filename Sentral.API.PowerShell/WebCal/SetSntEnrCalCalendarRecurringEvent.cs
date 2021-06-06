@@ -12,7 +12,7 @@ using Sentral.API.Model.Common;
 
 namespace Sentral.API.PowerShell.WebCal
 {
-    [Cmdlet(VerbsCommon.Set, "SntCalCalendarRecurringEvent")]
+    [Cmdlet(VerbsCommon.Set, "SntCalCalendarRecurringEvent", DefaultParameterSetName = _idBasicParmSet)]
     [OutputType(typeof(WebcalCalendarRecurringEvent))]
     public class SetSntCalCalendarRecurringEvent : SentralPSCmdlet
     {
@@ -45,48 +45,48 @@ namespace Sentral.API.PowerShell.WebCal
         private const string _objRecurringYearParamSet = "RecurrenceYearByObj";
 
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringDailyParmSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringDailyParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringDailyParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringDailyParmSet)]
         public SwitchParameter RecurranceDaily { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringDay1ParmSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringDay1ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringDay1ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringDay1ParmSet)]
         public SwitchParameter RecurranceDay1 { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringDay2ParmSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringDay2ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringDay2ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringDay2ParmSet)]
         public SwitchParameter RecurranceDay2 { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringDay3ParmSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringDay3ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringDay3ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringDay3ParmSet)]
         public SwitchParameter RecurranceDay3 { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringDay4ParmSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringDay4ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringDay4ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringDay4ParmSet)]
         public SwitchParameter RecurranceDay4 { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringDay5ParmSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringDay5ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringDay5ParmSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringDay5ParmSet)]
         public SwitchParameter RecurranceDay5 { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringWeekParamSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringWeekParamSet)]
+        [Parameter(Mandatory = true, ParameterSetName = _idRecurringWeekParamSet)]
+        [Parameter(Mandatory = true, ParameterSetName = _objRecurringWeekParamSet)]
         public SwitchParameter RecurranceWeek { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringFortnightEvenParamSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringFortnightEvenParamSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringFortnightEvenParamSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringFortnightEvenParamSet)]
         public SwitchParameter RecurranceFortnightEven { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringFortnightOddParamSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringFortnightOddParamSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringFortnightOddParamSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringFortnightOddParamSet)]
         public SwitchParameter RecurranceFortnightOdd { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringMonthParamSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringMonthParamSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringMonthParamSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringMonthParamSet)]
         public SwitchParameter RecurranceMonth { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = _idRecurringYearParamSet)]
-        [Parameter(Mandatory = false, ParameterSetName = _objRecurringYearParamSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _idRecurringYearParamSet)]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = _objRecurringYearParamSet)]
         public SwitchParameter RecurranceYear { get; set; }
 
 
