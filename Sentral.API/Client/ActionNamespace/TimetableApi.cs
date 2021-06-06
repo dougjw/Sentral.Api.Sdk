@@ -55,7 +55,7 @@ namespace Sentral.API.Client.ActionNamespace
         }
 
 
-        public List<TimetableCalendarDate> GetTimetableCalendarDate(int[] ids = null,
+        public List<TimetableCalendarDate> GetTimetableCalendarDate(DateTime[] ids = null,
             DateTime? from = null, DateTime? to = null)
         {
             var p = new Dictionary<string, object>
@@ -68,9 +68,9 @@ namespace Sentral.API.Client.ActionNamespace
             return GetAllData<TimetableCalendarDate>(uri);
         }
 
-        public TimetableCalendarDate TimetableCalendarDate(int id)
+        public TimetableCalendarDate GetTimetableCalendarDate(DateTime id)
         {
-            var uri = string.Format("/v1/timetables/timetable-calendar-date/{0}", id);
+            var uri = string.Format("/v1/timetables/timetable-calendar-date/{0}", id.ToString("yyyy-MM-dd"));
             return GetData<TimetableCalendarDate>(uri);
         }
 
