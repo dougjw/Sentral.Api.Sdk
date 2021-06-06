@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Sentral.API.Common
 {
-    public class ToStringJsonConverter : JsonConverter
+    public class ToStringJsonConverter<T> : JsonConverter where T: IFormattedStringSerialiser, new()
     {
         public override bool CanConvert(Type objectType)
         {
@@ -19,12 +19,13 @@ namespace Sentral.API.Common
 
         public override bool CanRead
         {
-            get { return false; }
+            get { return true; }
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            T objectTemplate = new T();
+            return objectTemplate.DeserialiseText((string)reader.Value);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(PersonPhone))]
     public class SetSntEnrPersonPhone : SentralPSCmdlet
     {
-
         private string _phoneType;
         private string _number;
         private string _extension;
@@ -39,7 +38,6 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "PersonPhoneObject")]
-        [ValidateRange(1, int.MaxValue)]
         public PersonPhone PersonPhone { get; set; }
 
         [Parameter(Mandatory = false)]

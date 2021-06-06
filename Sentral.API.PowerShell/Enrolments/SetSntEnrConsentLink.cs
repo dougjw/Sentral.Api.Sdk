@@ -15,7 +15,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(ConsentLink))]
     public class SetSntEnrConsentLink : SentralPSCmdlet
     {
-
         private bool _consentGiven;
         private Person _consentedBy;
 
@@ -35,7 +34,6 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "ConsentLinkObject")]
-        [ValidateRange(1, int.MaxValue)]
         public ConsentLink ConsentLink { get; set; }
 
         [Parameter(Mandatory = false)]

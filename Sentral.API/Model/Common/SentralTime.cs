@@ -8,11 +8,14 @@ using System.Text.RegularExpressions;
 
 namespace Sentral.API.Model.Common
 {
-    [JsonConverter(typeof(ToStringJsonConverter))]
-    public class SentralTime : IComparable, IComparable<SentralTime>, IEquatable<SentralTime>
+    [JsonConverter(typeof(ToStringJsonConverter<SentralTime>))]
+    public class SentralTime : IComparable, IComparable<SentralTime>, IEquatable<SentralTime>, IFormattedStringSerialiser
     {
-        private DateTime _time;
+        private readonly DateTime _time;
 
+        public SentralTime() : this (0,0,0)
+        {
+        }
 
         public SentralTime(int hours, int minutes, int seconds)
         {
@@ -71,10 +74,21 @@ namespace Sentral.API.Model.Common
             return _time.ToString("HH:mm:ss");
         }
 
+
         private DateTime GetDateTimeValue{
             get {
                 return _time;
             }
+        }
+
+        public object DeserialiseText(string time)
+        {
+            return new SentralTime(time);
+        }
+
+        public string SerialiseText()
+        {
+            return ToString();
         }
     }
 }

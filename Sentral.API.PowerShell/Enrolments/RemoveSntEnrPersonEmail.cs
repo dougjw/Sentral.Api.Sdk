@@ -13,11 +13,13 @@ namespace Sentral.API.PowerShell.Enrolments
     [Cmdlet(VerbsCommon.Remove , "SntEnrPersonEmail")]
     public class RemoveSntEnrPersonEmail : SentralPSCmdlet
     {
-        
+        private const string _idParamSet = "Id";
+        private const string _objectParamSet = "Object";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName ="PersonEmailId")]
+            ParameterSetName = _idParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int PersonEmailId { get; set; }
 
@@ -25,8 +27,7 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Mandatory = true,
             ValueFromPipeline = true,
-            ParameterSetName = "PersonEmailObject")]
-        [ValidateRange(1, int.MaxValue)]
+            ParameterSetName = _objectParamSet)]
         public PersonEmail PersonEmail { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
@@ -38,17 +39,28 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void ProcessRecord()
         {
-            int personEmailId = GetId();
-            
-            SentralApiClient.Enrolments.DeletePersonEmail(personEmailId);
+            switch (ParameterSetName)
+            {
+                case _idParamSet:
+                    ProcessParamsId();
+                    break;
+                case _objectParamSet:
+                    ProcessParamsObject();
+                    break;
+            }
         }
 
-        private int GetId()
+        private void ProcessParamsId()
         {
-            if (PersonEmailId > 0)
-            {
-                return PersonEmailId;
-            }
+            SentralApiClient.Enrolments.DeletePersonEmail(PersonEmailId);
+        }
+        private void ProcessParamsObject()
+        {
+            SentralApiClient.Enrolments.DeletePersonEmail(GetObjectId());
+        }
+
+        private int GetObjectId()
+        {
             if(PersonEmail != null)
             {
                 return PersonEmail.ID;

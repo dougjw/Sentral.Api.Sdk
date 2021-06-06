@@ -9,15 +9,17 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrAbility", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrAbility", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(Ability))]
     public class GetSntEnrAbility : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
 
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? AcademicPeriodId { get; set; }
 
@@ -26,27 +28,37 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         public DateTime? Date { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            switch (ParameterSetName)
+            {
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
+            }
+        }
 
-            // Singular mode chosen
-            if(AcademicPeriodId.HasValue && AcademicPeriodId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetAcademicPeriod(AcademicPeriodId.Value)
-                    );
-            }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetAcademicPeriod(Date)
-                    );
-            }
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetAcademicPeriod(AcademicPeriodId.Value)
+                );
+
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetAcademicPeriod(Date)
+                );
+
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

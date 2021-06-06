@@ -9,15 +9,16 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrAcademicPeriod", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrAcademicPeriod", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(AcademicPeriod))]
     public class GetSntEnrAcademicPeriod : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
 
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? AcademicPeriodId { get; set; }
 
@@ -25,21 +26,27 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
-
-            // Singular mode chosen
-            if(AcademicPeriodId.HasValue && AcademicPeriodId.Value > 0)
+            switch (ParameterSetName)
             {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetAcademicPeriod(AcademicPeriodId.Value)
-                    );
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                default:
+                    ProcessParamsMultiple();
+                    break;
             }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetAcademicPeriod()
-                    );
-            }
+        }
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                SentralApiClient.Enrolments.GetAcademicPeriod(AcademicPeriodId.Value)
+            );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                SentralApiClient.Enrolments.GetAcademicPeriod()
+            );
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

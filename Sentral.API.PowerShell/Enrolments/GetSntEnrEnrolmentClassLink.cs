@@ -9,48 +9,59 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrEnrolmentClassLink", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrEnrolmentClassLink", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(EnrolmentClassLink))]
     public class GetSntEnrEnrolmentClassLink : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
 
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? EnrolmentClassLinkId { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public int[] EnrolmentClassLinkIds { get; set; }
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public int[] EnrolmentIds { get; set; }
 
 
-        [Parameter(Mandatory = false, ParameterSetName = "Multiple")]
+        [Parameter(Mandatory = false, ParameterSetName = _multipleParamSet)]
         public int[] ClassIds { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
-
-            // Singular mode chosen
-            if(EnrolmentClassLinkId.HasValue && EnrolmentClassLinkId.Value > 0)
+            switch (ParameterSetName)
             {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetEnrolmentClassLink(EnrolmentClassLinkId.Value)
-                    );
-            }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetEnrolmentClassLink(EnrolmentClassLinkIds, EnrolmentIds, ClassIds)
-                    );
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
             }
 
         }
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetEnrolmentClassLink(EnrolmentClassLinkId.Value)
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetEnrolmentClassLink(EnrolmentClassLinkIds, EnrolmentIds, ClassIds)
+                );
+        }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

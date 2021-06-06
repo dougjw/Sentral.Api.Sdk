@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(Consent))]
     public class SetSntEnrConsent : SentralPSCmdlet
     {
-
         private string _consentType;
         private string _details;
 
@@ -34,7 +33,6 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "Consent")]
-        [ValidateRange(1, int.MaxValue)]
         public Consent Consent { get; set; }
 
         [Parameter(Mandatory = false)]

@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(Consent))]
     public class NewSntEnrConsent : SentralPSCmdlet
     {
-                  
         [Parameter(Mandatory = true)]
         public string ConsentType { get; set; }
 
@@ -35,9 +34,6 @@ namespace Sentral.API.PowerShell.Enrolments
                 Details = Details,
                 ConsentType = ConsentType
             };
-
-            // Populate from student object if object was used.
- 
 
             var response = SentralApiClient.Enrolments.CreateConsent(consent);
 

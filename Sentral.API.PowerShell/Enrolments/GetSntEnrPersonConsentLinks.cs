@@ -10,14 +10,16 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrPersonGivenConsentLinks", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrPersonGivenConsentLinks", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(ConsentLink))]
     public class GetSntEnrPersonGivenConsentLinks : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? PersonId { get; set; }
 
@@ -35,13 +37,24 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            ProcessParamsSingular();
+        }
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetPersonGivenConsentLinks(PersonId.Value, GetIncludeOptions())
+                );
+        }
+
+        private List<PersonConsentIncludeOptions> GetIncludeOptions()
+        {
             List<PersonConsentIncludeOptions> include = new List<PersonConsentIncludeOptions>();
 
             if (IncludePerson.IsPresent)
             {
                 include.Add(PersonConsentIncludeOptions.Person);
             }
-            if(IncludeConsent.IsPresent)
+            if (IncludeConsent.IsPresent)
             {
                 include.Add(PersonConsentIncludeOptions.Consent);
             }
@@ -50,14 +63,7 @@ namespace Sentral.API.PowerShell.Enrolments
                 include.Add(PersonConsentIncludeOptions.ConsentedBy);
             }
 
-
-            // Singular mode chosen
-            if (PersonId.HasValue && PersonId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetPersonGivenConsentLinks(PersonId.Value, include)
-                    );
-            }
+            return include;
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

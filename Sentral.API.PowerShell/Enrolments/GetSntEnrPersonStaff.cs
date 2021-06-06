@@ -10,20 +10,18 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrPersonStaff", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrPersonStaff", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(Staff))]
     public class GetSntEnrPersonStaff : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? PersonId { get; set; }
-
-
-        // bool person = false, bool qualifications = false, bool employments = false
-
 
         [Parameter(Mandatory = false)]
         public SwitchParameter IncludePerson { get; set; }
@@ -37,8 +35,20 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            ProcessParamsSingular();
+        }
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetPersonStaff(PersonId.Value, GetIncludeOptions())
+                );
+        }
+
+        private List<StaffIncludeOptions> GetIncludeOptions()
+        {
             List<StaffIncludeOptions> include = new List<StaffIncludeOptions>();
-            if (IncludePerson.IsPresent) 
+            if (IncludePerson.IsPresent)
             {
                 include.Add(StaffIncludeOptions.Person);
             }
@@ -51,14 +61,9 @@ namespace Sentral.API.PowerShell.Enrolments
                 include.Add(StaffIncludeOptions.Employments);
             }
 
-            // Singular mode chosen
-            if(PersonId.HasValue && PersonId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetPersonStaff(PersonId.Value, include)
-                    );
-            }
+            return include;
         }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

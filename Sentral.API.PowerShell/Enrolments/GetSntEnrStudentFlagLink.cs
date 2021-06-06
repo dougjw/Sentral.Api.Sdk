@@ -10,26 +10,28 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrStudentFlagLinks", DefaultParameterSetName = "SingularStudentFlagId")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrStudentFlagLinks", DefaultParameterSetName = _multipleParamSet)]
     [OutputType(typeof(StudentFlagLink))]
     public class GetSntEnrStudentFlagLinks : SentralPSCmdlet
     {
+        private const string _singularStudentFlagIdParamSet = "SingularStudentFlagId";
+        private const string _singularStudentIdParamSet = "SingularStudentId";
+        private const string _multipleParamSet = "Multiple";
+
 
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "SingularIdStudentFlagId")]
+            ParameterSetName = _singularStudentFlagIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentFlagId { get; set; }
 
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "SingularIdStudentId")]
+            ParameterSetName = _singularStudentIdParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? StudentId { get; set; }
-
-
 
         [Parameter(Mandatory = false)]
         public SwitchParameter IncludeStudent { get; set; }
@@ -37,42 +39,59 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(Mandatory = false)]
         public SwitchParameter IncludeFlag { get; set; }
 
-
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            switch (ParameterSetName)
+            {
+                case _singularStudentFlagIdParamSet:
+                    ProcessParamsStudentFlagIdSingular();
+                    break;
+                case _singularStudentIdParamSet:
+                    ProcessParamsStudentIdSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
+            }
+        }
 
+        private void ProcessParamsStudentIdSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentFlagLinkByStudentId(StudentId.Value, GetIncludeOptions())
+                );
+        }
+        private void ProcessParamsStudentFlagIdSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentFlagLink(StudentFlagId.Value, GetIncludeOptions())
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetStudentFlagLink(GetIncludeOptions())
+                );
+        }
+
+        private List<StudentFlagLinkIncludeOptions> GetIncludeOptions()
+        {
             List<StudentFlagLinkIncludeOptions> include = new List<StudentFlagLinkIncludeOptions>();
 
-            if(IncludeStudent.IsPresent)
+            if (IncludeStudent.IsPresent)
             {
                 include.Add(StudentFlagLinkIncludeOptions.Student);
             }
-            if(IncludeFlag.IsPresent)
+            if (IncludeFlag.IsPresent)
             {
                 include.Add(StudentFlagLinkIncludeOptions.Flag);
             }
 
-            // Singular mode chosen
-            if (StudentId.HasValue && StudentId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentFlagLinkByStudentId(StudentId.Value, include)
-                    );
-            }
-            else if (StudentFlagId.HasValue && StudentFlagId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentFlagLink(StudentFlagId.Value, include)
-                    );
-            }
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetStudentFlagLink(include)
-                    );
-            }
+            return include;
         }
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

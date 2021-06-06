@@ -9,15 +9,16 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrEnrolmentRollclass", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrEnrolmentRollclass", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(Rollclass))]
     public class GetSntEnrEnrolmentRollclass : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
 
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? EnrolmentId { get; set; }
 
@@ -26,14 +27,15 @@ namespace Sentral.API.PowerShell.Enrolments
         protected override void ProcessRecord()
         {
 
-            // Singular mode chosen
-            if(EnrolmentId.HasValue && EnrolmentId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetEnrolmentRollclass(EnrolmentId.Value)
-                    );
-            }
+            ProcessParamsSingular();
 
+        }
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetEnrolmentRollclass(EnrolmentId.Value)
+                );
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

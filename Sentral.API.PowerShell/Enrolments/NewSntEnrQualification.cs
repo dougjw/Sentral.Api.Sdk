@@ -15,7 +15,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(StaffQualification))]
     public class NewSntEnrQualification : SentralPSCmdlet
     {
-                  
         [Parameter(Mandatory = true)]
         public string Qualification { get; set; }
 
@@ -68,14 +67,10 @@ namespace Sentral.API.PowerShell.Enrolments
 
             };
 
-            // Populate from student object if object was used.
- 
-
             var response = SentralApiClient.Enrolments.CreateQualification(staffQualification);
 
             WriteObject(response);
         }
-
 
         // This method will be called once at the end of pipeline execution; if no input is received, this method is not called
         protected override void EndProcessing()

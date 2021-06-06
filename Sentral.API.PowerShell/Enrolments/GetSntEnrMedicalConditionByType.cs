@@ -14,49 +14,50 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(AbstractMedicalCondition))]
     public class GetSntEnrMedicalConditionByType : SentralPSCmdlet
     {
+        private const string _singularADDParamSet = "SingularADD";
+        private const string _multipleADDParamSet = "MultipleADD";
+        private const string _singularAllergyParamSet = "SingularAllergy";
+        private const string _multipleAllergyParamSet = "MultipleAllergy";
+        private const string _singularAsthmaParamSet = "SingularAsthma";
+        private const string _multipleAsthmaParamSet = "MultipleAsthma";
+        private const string _singularDiabetesParamSet = "SingularDiabetes";
+        private const string _multipleDiabetesParamSet = "MultipleDiabetes";
+        private const string _singularEpilepsyParamSet = "SingularEpilepsy";
+        private const string _multipleEpilepsyParamSet = "MultipleEpilepsy";
+        private const string _singularOtherParamSet = "SingularOther";
+        private const string _multipleOtherParamSet = "MultipleOther";
 
-        [Parameter(
-            Position = 1,
-            Mandatory = false)]
+        [Parameter(Position = 1, Mandatory = true, ParameterSetName = _singularADDParamSet)]
+        [Parameter(Position = 1, Mandatory = true, ParameterSetName = _singularAllergyParamSet)]
+        [Parameter(Position = 1, Mandatory = true, ParameterSetName = _singularAsthmaParamSet)]
+        [Parameter(Position = 1, Mandatory = true, ParameterSetName = _singularDiabetesParamSet)]
+        [Parameter(Position = 1, Mandatory = true, ParameterSetName = _singularEpilepsyParamSet)]
+        [Parameter(Position = 1, Mandatory = true, ParameterSetName = _singularOtherParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? MedicalConditionId { get; set; }
 
-        [Parameter(
-            Position = 0,
-            Mandatory = true,
-            ParameterSetName = "ADD")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _singularADDParamSet)]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _multipleADDParamSet)]
         public SwitchParameter ADD { get; set; }
 
-
-        [Parameter(
-            Position = 0,
-            Mandatory = true,
-            ParameterSetName = "Allergy")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _singularAllergyParamSet)]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _multipleAllergyParamSet)]
         public SwitchParameter Allergy { get; set; }
 
-
-        [Parameter(
-            Position = 0,
-            Mandatory = true,
-            ParameterSetName = "Asthma")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _singularAsthmaParamSet)]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _multipleAsthmaParamSet)]
         public SwitchParameter Asthma { get; set; }
 
-        [Parameter(
-            Position = 0,
-            Mandatory = true,
-            ParameterSetName = "Diabetes")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _singularDiabetesParamSet)]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _multipleDiabetesParamSet)]
         public SwitchParameter Diabetes { get; set; }
 
-        [Parameter(
-            Position = 0,
-            Mandatory = true,
-            ParameterSetName = "Epilepsy")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _singularEpilepsyParamSet)]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _multipleEpilepsyParamSet)]
         public SwitchParameter Epilepsy { get; set; }
 
-        [Parameter(
-            Position = 0,
-            Mandatory = true,
-            ParameterSetName = "Other")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _singularOtherParamSet)]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = _multipleOtherParamSet)]
         public SwitchParameter Other { get; set; }
 
         [Parameter(
@@ -67,138 +68,141 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
-
-            MedicalConditionsIncludeOptions[] include = null;
-            if (IncludePerson.IsPresent) 
+            switch (ParameterSetName)
             {
-                include = new MedicalConditionsIncludeOptions[] 
+                case _singularOtherParamSet:
+                    GetSingularOther();
+                    break;
+                case _multipleOtherParamSet:
+                    GetMultilpleOther();
+                    break;
+                case _singularADDParamSet:
+                    GetSingularADD();
+                    break;
+                case _multipleADDParamSet:
+                    GetMultipleADD();
+                    break;
+                case _singularAllergyParamSet:
+                    GetSingularAllergy();
+                    break;
+                case _multipleAllergyParamSet:
+                    GetMultipleAllergy();
+                    break;
+                case _singularAsthmaParamSet:
+                    GetSingularAsthma();
+                    break;
+                case _multipleAsthmaParamSet:
+                    GetMultipleAsthma();
+                    break;
+                case _singularDiabetesParamSet:
+                    GetSingularDiabetes();
+                    break;
+                case _multipleDiabetesParamSet:
+                    GetMultipleDiabetes();
+                    break;
+                case _singularEpilepsyParamSet:
+                    GetSingularEpilepsy();
+                    break;
+                case _multipleEpilepsyParamSet:
+                    GetMultipleEpilepsy();
+                    break;
+            }
+        }
+
+        private MedicalConditionsIncludeOptions[] GetIncludeOptions()
+        {
+            MedicalConditionsIncludeOptions[] include = null;
+            if (IncludePerson.IsPresent)
+            {
+                include = new MedicalConditionsIncludeOptions[]
                     {
                         MedicalConditionsIncludeOptions.Person
                     };
             }
 
-            if(ADD.IsPresent)
-            {
-                GetMedicalDataAdd(include);
-                return;
-            }
-            if (Allergy.IsPresent)
-            {
-                GetMedicalDataAllergy(include);
-                return;
-            }
-            if (Asthma.IsPresent)
-            {
-                GetMedicalDataAsthma(include);
-                return;
-            }
-            if (Diabetes.IsPresent)
-            {
-                GetMedicalDataDiabetes(include);
-                return;
-            }
-            if (Epilepsy.IsPresent)
-            {
-                GetMedicalDataEpilepsy(include);
-                return;
-            }
-            if (Other.IsPresent)
-            {
-                GetMedicalDataOther(include);
-                return;
-            }
-
+            return include;
         }
 
-        private void GetMedicalDataAdd(ICollection<MedicalConditionsIncludeOptions> include = null)
-        {            // Singular modechosen
-            if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionAdd(MedicalConditionId.Value, include)
-                    );
-            }
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionAdd(include)
-                    );
-            }
+        private void GetSingularADD()
+        { 
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionAdd(MedicalConditionId.Value, GetIncludeOptions())
+                );
         }
-        private void GetMedicalDataAllergy(ICollection<MedicalConditionsIncludeOptions> include = null)
-        {            // Singular modechosen
-            if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionAllergy(MedicalConditionId.Value, include)
-                    );
-            }
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionAllergy(include)
-                    );
-            }
+        private void GetMultipleADD()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionAdd(GetIncludeOptions())
+                );
         }
-        private void GetMedicalDataAsthma(ICollection<MedicalConditionsIncludeOptions> include = null)
-        {            // Singular modechosen
-            if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionAsthma(MedicalConditionId.Value, include)
-                    );
-            }
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionAsthma(include)
-                    );
-            }
+
+        private void GetSingularAllergy()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionAllergy(MedicalConditionId.Value, GetIncludeOptions())
+                );
         }
-        private void GetMedicalDataDiabetes(ICollection<MedicalConditionsIncludeOptions> include = null)
-        {            // Singular modechosen
-            if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionDiabetes(MedicalConditionId.Value, include)
-                    );
-            }
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionDiabetes(include)
-                    );
-            }
+
+        private void GetMultipleAllergy()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionAllergy(GetIncludeOptions())
+                );
         }
-        private void GetMedicalDataEpilepsy(ICollection<MedicalConditionsIncludeOptions> include = null)
-        {            // Singular modechosen
-            if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionEpilepsy(MedicalConditionId.Value, include)
-                    );
-            }
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionEpilepsy(include)
-                    );
-            }
+
+        private void GetSingularAsthma()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionAsthma(MedicalConditionId.Value, GetIncludeOptions())
+                );
         }
-        private void GetMedicalDataOther(ICollection<MedicalConditionsIncludeOptions> include = null)
-        {            // Singular modechosen
-            if (MedicalConditionId.HasValue && MedicalConditionId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionOther(MedicalConditionId.Value, include)
-                    );
-            }
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetMedicalConditionOther(include)
-                    );
-            }
+
+        private void GetMultipleAsthma()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionAsthma(MedicalConditionId.Value, GetIncludeOptions())
+                );
+        }
+
+
+        private void GetSingularDiabetes()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionDiabetes(MedicalConditionId.Value, GetIncludeOptions())
+                );
+        }
+
+        private void GetMultipleDiabetes()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionDiabetes(GetIncludeOptions())
+                );
+        }
+
+        private void GetSingularEpilepsy()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionEpilepsy(MedicalConditionId.Value, GetIncludeOptions())
+                );
+        }
+        private void GetMultipleEpilepsy()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionEpilepsy(GetIncludeOptions())
+                );
+        }
+
+        private void GetSingularOther()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionOther(MedicalConditionId.Value, GetIncludeOptions())
+                );
+        }
+        private void GetMultilpleOther()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetMedicalConditionOther(GetIncludeOptions())
+                );
         }
 
 

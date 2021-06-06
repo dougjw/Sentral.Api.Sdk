@@ -1,20 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Sentral.API.Client;
 using Sentral.API.PowerShell.Enrolments;
+using System.Management.Automation.Runspaces;
+using System.Collections.ObjectModel;
 
 namespace Sentral.API.PowerShell.Test
 {
-    public abstract class AbstractPowerShellTest
+    public abstract class AbstractCmdletTest : IDisposable
     {
 
-        private bool _isTestSite;
+        private readonly bool _isTestSite;
+        private readonly System.Management.Automation.PowerShell _pwrSh;
 
 
-        public AbstractPowerShellTest()
+        public AbstractCmdletTest()
         {
-            var settings = TestSettings.LoadSettings();
+
+            _pwrSh = System.Management.Automation.PowerShell.Create();
+            // Import Module
+            _pwrSh.AddCommand("import-module");
+            _pwrSh.AddParameter("Name", "./Sentral.Api.PowerShell.dll");
+            _pwrSh.Invoke();
+            _pwrSh.Commands.Clear();
+            
+
+                var settings = TestSettings.LoadSettings();
 
             try
             {
@@ -44,6 +57,27 @@ namespace Sentral.API.PowerShell.Test
             {
                 return _isTestSite;
             }
+        }
+
+        public void Dispose()
+        {
+            _pwrSh.Dispose();
+        }
+
+        protected Collection<T> RunScript<T>(string cmdletName, Dictionary<string, object> scriptParameters)
+        {
+
+
+            // specify the script code to run.
+            _pwrSh.AddCommand(cmdletName);
+            // specify the parameters to pass into the script.
+            _pwrSh.AddParameters(scriptParameters);
+            // execute the script and await the result.
+            Collection<T> results = _pwrSh.Invoke<T>();
+            // Reset for next
+            _pwrSh.Commands.Clear();
+
+            return results;
         }
     }
 }

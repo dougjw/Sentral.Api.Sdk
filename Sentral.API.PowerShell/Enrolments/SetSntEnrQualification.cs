@@ -15,7 +15,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(Consent))]
     public class SetSntEnrQualification : SentralPSCmdlet
     {
-
         private string _qualification;
         private string _from;
         private EnumStaffQualificiationType _qualificationType;

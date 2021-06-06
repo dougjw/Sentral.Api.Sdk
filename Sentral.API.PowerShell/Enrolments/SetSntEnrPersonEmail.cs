@@ -14,7 +14,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(PersonEmail))]
     public class SetSntEnrPersonEmail : SentralPSCmdlet
     {
-
         private string _emailType;
         private string _email;
 
@@ -34,7 +33,6 @@ namespace Sentral.API.PowerShell.Enrolments
             Mandatory = true,
             ValueFromPipeline = true,
             ParameterSetName = "PersonEmailObject")]
-        [ValidateRange(1, int.MaxValue)]
         public PersonEmail PersonEmail { get; set; }
 
         [Parameter(Mandatory = false)]
@@ -101,6 +99,7 @@ namespace Sentral.API.PowerShell.Enrolments
 
             WriteObject(response);
         }
+
 
         // This method will be called once at the end of pipeline execution; if no input is received, this method is not called
         protected override void EndProcessing()

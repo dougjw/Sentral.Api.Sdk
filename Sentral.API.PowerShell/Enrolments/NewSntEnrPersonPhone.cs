@@ -15,7 +15,6 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(PersonPhone))]
     public class NewSntEnrPersonPhone : SentralPSCmdlet
     {
-                  
         [Parameter(Mandatory = true)]
         public string PhoneType { get; set; }
 
@@ -65,9 +64,6 @@ namespace Sentral.API.PowerShell.Enrolments
                     }
                 }
             };
-
-            // Populate from student object if object was used.
- 
 
             var response = SentralApiClient.Enrolments.CreatePersonPhone(personPhone);
 

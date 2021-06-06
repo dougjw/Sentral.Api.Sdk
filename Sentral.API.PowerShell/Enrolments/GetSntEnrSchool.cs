@@ -10,14 +10,17 @@ using System.Collections.Generic;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrSchool", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrSchool", DefaultParameterSetName = _multipleParamSet)]
     [OutputType(typeof(School))]
     public class GetSntEnrSchool : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
+
         [Parameter(
             Position = 0,
-            Mandatory = false,
-            ParameterSetName = "Singular")]
+            Mandatory = true,
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? SchoolId { get; set; }
 
@@ -28,27 +31,43 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            switch (ParameterSetName)
+            {
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
+            }
+        }
+
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetSchool(SchoolId.Value, GetIncludeOptions())
+                );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetSchool(GetIncludeOptions())
+                );
+        }
+
+        private List<SchoolIncludeOptions> GetIncludeOptions()
+        {
             List<SchoolIncludeOptions> include = new List<SchoolIncludeOptions>();
             if (IncludeTenant.IsPresent)
             {
                 include.Add(SchoolIncludeOptions.Tenant);
             }
 
-            // Singular mode chosen
-            if(SchoolId.HasValue && SchoolId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetSchool(SchoolId.Value, include)
-                    );
-            }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetSchool(include)
-                    );
-            }
+            return include;
         }
+
+
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void BeginProcessing()

@@ -13,6 +13,8 @@ namespace Sentral.API.PowerShell.Enrolments
     [OutputType(typeof(Campus))]
     public class GetSntEnrCampus : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+        private const string _multipleParamSet = "Multiple";
 
         [Parameter(
             Position = 0,
@@ -26,41 +28,46 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         public int[] CampusIds { get; set; }
 
 
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         public int[] SchoolIds { get; set; }
 
 
         [Parameter(
             Position = 0,
             Mandatory = false,
-            ParameterSetName = "Multiple")]
+            ParameterSetName = _multipleParamSet)]
         public bool? IncludeInactive { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
-
-            // Singular mode chosen
-            if(CampusId.HasValue && CampusId.Value > 0)
+            switch (ParameterSetName)
             {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetCampus(CampusId.Value)
-                    );
+                case _singularParamSet:
+                    ProcessParamsSingular();
+                    break;
+                case _multipleParamSet:
+                default:
+                    ProcessParamsMultiple();
+                    break;
             }
-            // Multiple mode chosen
-            else
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetCampus(CampusIds, SchoolIds, IncludeInactive)
-                    );
-            }
+        }
+        private void ProcessParamsSingular()
+        {
+            WriteObject( SentralApiClient.Enrolments.GetCampus(CampusId.Value) );
+        }
+        private void ProcessParamsMultiple()
+        {
+            WriteObject( 
+                SentralApiClient.Enrolments.GetCampus(CampusIds, SchoolIds, IncludeInactive)
+                );
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

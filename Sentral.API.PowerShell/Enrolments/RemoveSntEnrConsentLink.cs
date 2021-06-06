@@ -13,11 +13,14 @@ namespace Sentral.API.PowerShell.Enrolments
     [Cmdlet(VerbsCommon.Remove , "SntEnrConsentLink")]
     public class RemoveSntEnrConsentLink : SentralPSCmdlet
     {
-        
+        private const string _idParamSet = "Id";
+        private const string _objectParamSet = "Object";
+
+
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName ="ConsentLinkId")]
+            ParameterSetName = _idParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int ConsentLinkId { get; set; }
 
@@ -25,8 +28,7 @@ namespace Sentral.API.PowerShell.Enrolments
         [Parameter(
             Mandatory = true,
             ValueFromPipeline = true,
-            ParameterSetName = "ConsentLinkObject")]
-        [ValidateRange(1, int.MaxValue)]
+            ParameterSetName = _objectParamSet)]
         public ConsentLink ConsentLink { get; set; }
         
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
@@ -38,24 +40,36 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called
         protected override void ProcessRecord()
         {
-            int consentId = GetConsentId();
-            
-            SentralApiClient.Enrolments.DeletePersonConsentLink(consentId);
+            switch (ParameterSetName)
+            {
+                case _idParamSet:
+                    ProcessParamsId();
+                    break;
+                case _objectParamSet:
+                    ProcessParamsObject();
+                    break;
+            }
         }
 
-        private int GetConsentId()
+        private void ProcessParamsId()
         {
-            if (ConsentLinkId > 0)
-            {
-                return ConsentLinkId;
-            }
+            SentralApiClient.Enrolments.DeletePersonConsentLink(ConsentLinkId);
+        }
+        private void ProcessParamsObject()
+        {
+            SentralApiClient.Enrolments.DeletePersonConsentLink(GetObjectId());
+        }
+
+        private int GetObjectId()
+        {
             if(ConsentLink != null)
             {
                 return ConsentLink.ID;
             }
-
             return 0;
         }
+
+
 
         // This method will be called once at the end of pipeline execution; if no input is received, this method is not called
         protected override void EndProcessing()

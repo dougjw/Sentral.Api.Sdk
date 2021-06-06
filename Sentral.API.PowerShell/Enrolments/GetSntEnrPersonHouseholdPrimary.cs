@@ -9,10 +9,12 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get,"SntEnrPersonHouseholdOthers", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get,"SntEnrPersonHouseholdOthers", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(Household))]
     public class GetSntEnrPersonHouseholdOthers : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
+
         [Parameter(
             Position = 0,
             Mandatory = true,
@@ -24,15 +26,14 @@ namespace Sentral.API.PowerShell.Enrolments
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            ProcessParamsSingular();
+        }
 
-
-            // Singular mode chosen
-            if(PersonId.HasValue && PersonId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetPersonHouseholdOthers(PersonId.Value)
-                    );
-            }
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetPersonHouseholdOthers(PersonId.Value)
+                );
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

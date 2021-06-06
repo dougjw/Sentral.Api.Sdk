@@ -9,30 +9,30 @@ using Sentral.API.PowerShell.Common;
 
 namespace Sentral.API.PowerShell.Enrolments
 {
-    [Cmdlet(VerbsCommon.Get, "SntEnrFlagSchool", DefaultParameterSetName = "Singular")]
+    [Cmdlet(VerbsCommon.Get, "SntEnrFlagSchool", DefaultParameterSetName = _singularParamSet)]
     [OutputType(typeof(School))]
     public class GetSntEnrFlagSchool : SentralPSCmdlet
     {
+        private const string _singularParamSet = "Singular";
 
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ParameterSetName = "Singular")]
+            ParameterSetName = _singularParamSet)]
         [ValidateRange(1, int.MaxValue)]
         public int? FlagId { get; set; }
 
         // This method gets called once for each cmdlet in the pipeline when the pipeline starts executing
         protected override void ProcessRecord()
         {
+            ProcessParamsSingular();
+        }
 
-            // Singular mode chosen
-            if(FlagId.HasValue && FlagId.Value > 0)
-            {
-                WriteObject(
-                        SentralApiClient.Enrolments.GetFlagSchool(FlagId.Value)
-                    );
-            }
-
+        private void ProcessParamsSingular()
+        {
+            WriteObject(
+                    SentralApiClient.Enrolments.GetFlagSchool(FlagId.Value)
+                );
         }
 
         // This method will be called for each input received from the pipeline to this cmdlet; if no input is received, this method is not called

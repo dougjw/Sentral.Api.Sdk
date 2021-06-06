@@ -7,8 +7,6 @@ namespace Sentral.API.Model.Attendance
 {
     public class FutureAbsence
     {
-        private SentralTime _startTime;
-        private SentralTime _endTime;
 
         [JsonProperty(propertyName: "id")]
         public int ID { get; set; }
@@ -18,39 +16,11 @@ namespace Sentral.API.Model.Attendance
         public DateTime? Date { get; set; }
 
         [JsonProperty(propertyName: "start")]
-        public string StartTime
-        {
-            get
-            {
-                if (_startTime == null)
-                {
-                    return null;
-                }
-                return _startTime.ToString();
-            }
-            set
-            {
-                _startTime = new SentralTime(value);
-            }
-        }
+        public SentralTime StartTime { get; set; }
 
 
         [JsonProperty(propertyName: "end")]
-        public string EndTime
-        {
-            get
-            {
-                if (_endTime == null)
-                {
-                    return null;
-                }
-                return _endTime.ToString();
-            }
-            set
-            {
-                _endTime = new SentralTime(value);
-            }
-        }
+        public SentralTime EndTime { get; set; }
 
         public string Comment { get; set; }
         public string Explainer { get; set; }
