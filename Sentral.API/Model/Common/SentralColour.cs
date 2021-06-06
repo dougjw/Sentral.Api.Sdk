@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
+using Sentral.API.Common;
 
 namespace Sentral.API.Model.Common
 {
@@ -23,9 +24,9 @@ namespace Sentral.API.Model.Common
         public SentralColour(byte red, byte green, byte blue)
         {
             _colourCode = string.Format("#{0}{1}{2}",
-                    red.ToString(),
-                    green.ToString(),
-                    blue.ToString()
+                    red.ToHexString(),
+                    green.ToHexString(),
+                    blue.ToHexString()
                 );
 
         }
