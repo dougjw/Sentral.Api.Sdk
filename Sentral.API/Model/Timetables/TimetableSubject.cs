@@ -1,4 +1,4 @@
-﻿namespace Sentral.API.Model.Timetable
+﻿namespace Sentral.API.Model.Timetables
 {
     public class TimetableSubject
     {

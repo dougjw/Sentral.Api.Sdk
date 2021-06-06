@@ -25,6 +25,6 @@ namespace Sentral.API.Model.Core
 
         public Relationship<List<CoreStaff>> AssignedStaff { get; set; }
         public Relationship<List<CoreStudent>> AssignedStudents { get; set; }
-        public Relationship<List<Timetable.TimetableClass>> TimetableClass { get; set; }
+        public Relationship<List<Timetables.TimetableClass>> TimetableClass { get; set; }
     }
 }
