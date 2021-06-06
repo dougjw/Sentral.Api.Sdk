@@ -13,7 +13,7 @@ namespace Sentral.API.Model.Common
     {
         private const string ValidColourPattern = "^#[0-9A-F]{6}$";
 
-        private string _colourCode;
+        private readonly string _colourCode;
 
 
         public SentralColour() : this (0,0,0)

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sentral.API.Model.Timetables.Include
 {
-    public enum TimetableDailyLessonIncludeOptions
+    public enum TimetableLessonIncludeOptions
     {
         Class,
         PeriodInDay,
