@@ -122,7 +122,7 @@ namespace Sentral.API.Client.ActionNamespace
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/timetables/timetable-class-lesson/{0}", id),p);
+            var uri = GetEndpointParameters<TimetableLessonIncludeOptions>(string.Format("/v1/timetables/timetable-class-lesson/{0}", id),p);
             return GetData<TimetableClassLesson>(uri);
         }
 
@@ -173,7 +173,7 @@ namespace Sentral.API.Client.ActionNamespace
             {
                 ["include"] = include
             };
-            var uri = GetEndpointParameters(string.Format("/v1/timetables/timetable-daily-lesson/{0}", id), p);
+            var uri = GetEndpointParameters<TimetableLessonIncludeOptions>(string.Format("/v1/timetables/timetable-daily-lesson/{0}", id), p);
             return GetData<TimetableDailyLesson>(uri);
         }
 
