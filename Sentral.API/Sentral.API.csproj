@@ -8,9 +8,11 @@
     <LangVersion>7.3</LangVersion>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	<Authors>Indie School Tech</Authors>
+	<Authors>IndieEduTech</Authors>
 	<Product>Sentral.API.Sdk</Product>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageId>IndieEdutech.Sentral.Api</PackageId>
+    <Company>IndieEduTech</Company>
   </PropertyGroup>
 
   <ItemGroup>
