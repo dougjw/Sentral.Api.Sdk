@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sentral.API.Model.Timetable
+namespace Sentral.API.Model.Timetables
 {
     public class TimetableClass
     {

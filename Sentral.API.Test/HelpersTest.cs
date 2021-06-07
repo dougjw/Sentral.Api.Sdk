@@ -114,5 +114,13 @@ namespace Sentral.API.Test
 
             Assert.AreEqual(valueEnrolmentJson, "{\"data\":{\"type\":\"personConsentLink\",\"attributes\":{\"consentGiven\":true},\"relationships\":{\"consentedBy\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"person\":{\"data\":{\"id\":\"1\",\"type\":\"person\"}},\"consent\":{\"data\":{\"id\":\"1\",\"type\":\"consent\"}}}}}", valueEnrolmentJson);
         }
+
+
+        [TestMethod]
+        public void CreateObjectSentralColor()
+        {
+            SentralColour colour = new SentralColour(255, 255, 255);
+            Assert.IsTrue(colour.ColourCode == "#FFFFFF");
+        }
     }
 }
