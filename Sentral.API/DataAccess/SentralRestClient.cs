@@ -1,7 +1,9 @@
-﻿using Sentral.API.DataAccess.Exceptions;
+﻿using Sentral.API.Common;
+using Sentral.API.DataAccess.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -56,7 +58,12 @@ namespace Sentral.API.DataAccess
             return Invoke(1, BinaryResponseMethod);
         }
 
-        private delegate T DelReturnType<T>(Stream steam);
+        public BinaryFile InvokeBinaryResponse()
+        {
+            return Invoke(1, BinaryFileResponseMethod);
+        }
+
+        private delegate T DelReturnType<T>(Stream steam, string header);
 
         // Deal with code clones later
         private T Invoke<T>(int retryNumber, DelReturnType<T> streamMethod)
@@ -100,7 +107,7 @@ namespace Sentral.API.DataAccess
                     {
                         if (responseStream != null)
                         {
-                            return streamMethod(responseStream);
+                            return streamMethod(responseStream, response.ContentType);
                         }
 
                     }
@@ -132,7 +139,7 @@ namespace Sentral.API.DataAccess
             }
         }
 
-        private byte[] BinaryResponseMethod(Stream stream)
+        private byte[] BinaryResponseMethod(Stream stream, string header)
         {
             byte[] buffer = new byte[4096];
             using (MemoryStream memoryStream = new MemoryStream())
@@ -150,7 +157,17 @@ namespace Sentral.API.DataAccess
 
         }
 
-        private string StringResponseMethod(Stream stream)
+        private BinaryFile BinaryFileResponseMethod(Stream stream, string contentType)
+        {
+            string filename = RandomStringBuilder.RandomString(10) + MimeTypeMap.GetExtension(contentType);
+
+            return new BinaryFile(
+                    filename,
+                    BinaryResponseMethod(stream, contentType)
+                );
+        }
+
+        private string StringResponseMethod(Stream stream, string header)
         {
             using (var reader = new StreamReader(stream))
             {

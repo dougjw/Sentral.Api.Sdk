@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractPowerShellTest.cs" />
+    <Compile Include="CoreCmdletTests.cs" />
     <Compile Include="WebcalCmdletTests.cs" />
     <Compile Include="EnrolmentsCmdletTests.cs" />
     <Compile Include="GetRestClientException.cs" />

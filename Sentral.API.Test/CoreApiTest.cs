@@ -144,6 +144,16 @@ namespace Sentral.API.Test
 
 
         [TestMethod]
+        public void GetOneStudentPhoto()
+        {
+
+            var x = SAPI.Core.GetStudentPhoto(1);
+
+            Assert.IsTrue(x != null && x.GetFileName().Length == 14 && x.GetFileData().Length > 0);
+        }
+
+
+        [TestMethod]
         public void GetCoreStudentAttendedClasses()
         {
 

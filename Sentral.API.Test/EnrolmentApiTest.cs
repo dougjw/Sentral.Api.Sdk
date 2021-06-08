@@ -702,6 +702,16 @@ namespace Sentral.API.Test
             Assert.IsTrue(x != null && x.ID == 1 && !string.IsNullOrWhiteSpace(x.PreviousSchool));
         }
 
+
+        [TestMethod]
+        public void GetOneStudentPhoto()
+        {
+
+            var x = SAPI.Enrolments.GetStudentPhoto(1);
+
+            Assert.IsTrue(x != null && x.GetFileName().Length == 14 && x.GetFileData().Length > 0);
+        }
+
         [TestMethod]
         public void GetOneStudentRelationshipTest()
         {

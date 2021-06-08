@@ -90,6 +90,12 @@ namespace Sentral.API.DataAccess
             return client.InvokeBinary();
         }
 
+        protected BinaryFile GetBinaryFile(string endpoint)
+        {
+            var client = new SentralRestClient(GetUri(endpoint), _header, ApiMethod.GET, null);
+            return client.InvokeBinaryResponse();
+        }
+
 
         protected string GetApiResponse(string endpoint, ApiMethod method)
         {

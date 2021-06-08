@@ -1190,7 +1190,18 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<Person>(uri);
         }
 
-        // TODO Student Photo (Binary stream?)
+        public BinaryFile GetStudentPhoto(int studentId, int? width = null, int? height = null)
+        {
+            var p = new Dictionary<string, object>
+            {
+                ["width"] = width,
+                ["height"] = height,
+            };
+
+            var uri = GetEndpointParameters(string.Format("/v1/enrolments/student/{0}/photo", studentId),p);
+
+            return GetBinaryFile(uri);
+        }
 
         public Enrolment GetStudentPrimaryEnrolment(int studentId, ICollection<EnrolmentIncludeOptions> include = null)
         {
