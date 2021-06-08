@@ -122,5 +122,12 @@ namespace Sentral.API.Test
             SentralColour colour = new SentralColour(255, 255, 255);
             Assert.IsTrue(colour.ColourCode == "#FFFFFF");
         }
+
+        [TestMethod]
+        public void GetMimeTypeTxt()
+        {
+            Assert.AreEqual(MimeTypeMap.GetExtension("text/plain"), ".txt");
+        }
+
     }
 }

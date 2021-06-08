@@ -251,7 +251,19 @@ namespace Sentral.API.Client.ActionNamespace
             return GetData<CoreStudentRelationship>(uri);
         }
 
-        // TODO: Implement Binary handler for core-student/:id/photo
+        public BinaryFile GetStudentPhoto(int studentId, int? width = null, int? height = null)
+        {
+            var p = new Dictionary<string, object>
+            {
+                ["width"] = width,
+                ["height"] = height,
+            };
+
+            var uri = GetEndpointParameters(string.Format("/v1/core/core-student/{0}/photo", studentId), p);
+
+            return GetBinaryFile(uri);
+        }
+
         public List<CoreSubject> GetCoreSubject(int[] ids = null, bool? includeInactive = null)
         {
             var p = new Dictionary<string, object>

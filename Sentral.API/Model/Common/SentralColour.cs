@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
-using Sentral.API.Common;
 
 namespace Sentral.API.Model.Common
 {
