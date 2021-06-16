@@ -8,23 +8,22 @@ using System.Text.RegularExpressions;
 
 namespace Sentral.API.Model.Common
 {
-    [JsonConverter(typeof(ToStringJsonConverter<SentralColour>))]
-    public sealed class SentralColour : AbstractSentralColour
+    [JsonConverter(typeof(ToStringJsonConverter<SentralColour2>))]
+    public sealed class SentralColour2 : AbstractSentralColour
     {
-        private const string ValidColourPattern = "^#[0-9A-F]{6}$";
-
-        public SentralColour() : base(ColourCodePrefix, 0, 0, 0)
+        private const string ValidColourPattern = "^[0-9A-F]{6}$";
+        
+        public SentralColour2() : base(ColourCodePrefix, 0, 0, 0)
         {
         }
 
-        public SentralColour(byte red, byte green, byte blue) : base(ColourCodePrefix, red, green, blue)
+        private SentralColour2(byte red, byte green, byte blue) : base("", red, green, blue)
         {
         }
 
-        public SentralColour(string colourCode) : base(colourCode)
+        private SentralColour2(string colourCode) : base(colourCode)
         {
         }
-
         protected override bool ColourValid(string colourCode)
         {
             return Regex.IsMatch(colourCode, ValidColourPattern);
@@ -32,12 +31,12 @@ namespace Sentral.API.Model.Common
 
         protected override AbstractSentralColour New(string colour)
         {
-            return new SentralColour(colour);
+            return new SentralColour2(colour);
         }
 
         public override object DeserialiseText(string objectData)
         {
-            return DeserialiseText<SentralColour>(objectData);
+            return DeserialiseText<SentralColour2>(objectData);
         }
     }
 }
